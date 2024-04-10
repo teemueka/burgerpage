@@ -1,8 +1,92 @@
-body{
 
+
+.josefin-sans-<uniquifier> {
+                 font-family: "Josefin Sans", sans-serif;
+                 font-optical-sizing: auto;
+                 font-weight: <weight>;
+                 font-style: normal;
+               }
+
+body{
   --highlight: #65AFD1ff;
 
   --secondary: #484538ff;
 
   --primary: #f2f4f3ff;
+  margin: 0;
+  padding: 0;
+}
+
+.header{
+  background-color: var(--primary);
+  color: var(--primary);
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+.nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-inline-end: 1rem;
+  height: 30px;
+  width: auto;
+}
+.nav a{
+  color: var(--secondary);
+  background-color: var(--highlight);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 25px;
+  scale: 1.6;
+  font-family: "Josefin Sans", sans-serif;
+}
+.nav a:hover{
+  background-color: var(--secondary);
+  color: var(--highlight);
+}
+.nav-right{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-right a{
+  color: var(--secondary);
+  background-color: var(--highlight);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 5px;
+  scale: 1;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.logo-container a{
+  all:initial;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  height: 30px;
+  width: auto;
+  color: white;
+  background-color: var(--primary);
+  cursor: pointer;
+}
+.logo-container a:hover{
+  background-color: var(--primary);
+}
+
+
+.logo{
+  display: block;
+
+}
+
+.logo:hover{
+  filter: invert(1);
 }
