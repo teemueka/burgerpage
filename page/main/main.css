@@ -1,1 +1,82 @@
 
+#welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50rem;
+  width: 100%;
+}
+
+.welcome-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.welcome-other-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--secondary);
+  height: calc(100vh - 55.9rem);
+}
+.welcome-other-info h2{
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 50px;
+  font-weight: 400;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.welcome-other-info{
+  color: var(--primary);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 30px;
+  font-weight: 200;
+  text-align: center;
+  padding: 0;
+
+}
+
+.welcome-other-info a{
+  color: var(--primary);
+  background-color: var(--highlight);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 40px;
+  border-radius: 20px ;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  }
+
+.welcome-other-info a:hover{
+  color: var(--highlight);
+  background-color: var(--primary);
+}
+.welcome-content{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+#YepsBurgerText{
+  color: var(--highlight);
+}
+
+.welcome-content h1{
+  color: var(--primary);
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 150px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+
+

@@ -1,11 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400;700&display=swap');
+.josefin-sans-thin {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 100;
+}
 
+.josefin-sans-light {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+}
 
-.josefin-sans-<uniquifier> {
-                 font-family: "Josefin Sans", sans-serif;
-                 font-optical-sizing: auto;
-                 font-weight: <weight>;
-                 font-style: normal;
-               }
+.josefin-sans-normal {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 400;
+}
+
+.josefin-sans-bold {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+}
+
 
 body{
   --highlight: #65AFD1ff;
@@ -70,7 +83,6 @@ body{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
   height: 30px;
   width: auto;
   color: white;
@@ -78,15 +90,16 @@ body{
   cursor: pointer;
 }
 .logo-container a:hover{
+  all:initial;
   background-color: var(--primary);
 }
 
 
-.logo{
+#logo{
   display: block;
 
 }
 
-.logo:hover{
+#logo:hover{
   filter: invert(1);
 }

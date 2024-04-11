@@ -7,11 +7,11 @@ const createHeader = () => {
   const logoContainer = document.createElement('div');
   logoContainer.className = 'logo-container';
   const logoLink = document.createElement('a');
-  logoLink.href = '/page/main/main.html';
+  logoLink.href = '/burgerpage/page/main/main.html';
   const logo = document.createElement('img');
   logo.src = '/page/media/logo.png';
   logo.alt = 'Logo';
-  logo.className = 'logo';
+  logo.id = 'logo';
   logo.herf = '/page/main/main.html';
   logo.style.height = 120 + 'px';
   logoLink.appendChild(logo);
@@ -20,12 +20,13 @@ const createHeader = () => {
   nav.appendChild(logoContainer);
 
   const homeButton = document.createElement('a');
-  homeButton.href = '/page/main/main.html';
+  homeButton.href = '/burgerpage/page/main/main.html';
+  homeButton.textContent = 'Home';
   homeButton.textContent = 'Home';
   nav.appendChild(homeButton);
 
   const menuButton = document.createElement('a');
-  menuButton.href = '/page/menu/menu.html';
+  menuButton.href = '/burgerpage/page/menu/menu.html';
   menuButton.textContent = 'Menu';
   nav.appendChild(menuButton);
 
@@ -33,12 +34,12 @@ const createHeader = () => {
   navRight.className = 'nav-right';
 
   const loginButton = document.createElement('a');
-  loginButton.href = '/page/profile/profile.html';
+  loginButton.href = '/burgerpage/page/profile/profile.html';
   loginButton.textContent = 'Login';
   navRight.appendChild(loginButton);
 
   const cartButton = document.createElement('a');
-  cartButton.href = '/page/order/order.html';
+  cartButton.href = '/burgerpage/page/order/order.html';
   cartButton.textContent = 'Cart';
   navRight.appendChild(cartButton);
 
@@ -48,15 +49,15 @@ const createHeader = () => {
   languageButton.textContent = 'Language';
   languageDropdown.appendChild(languageButton);
 
-
   navRight.appendChild(languageDropdown);
 
   nav.appendChild(navRight);
 
   header.appendChild(nav);
-}
+};
+
 async function generateHeader() {
- await createHeader();
+  await createHeader();
 }
 
 generateHeader();
