@@ -11,17 +11,14 @@ const createHeader = () => {
   const logo = document.createElement('img');
   logo.src = '/page/media/logo.png';
   logo.alt = 'Logo';
-  logo.id = 'logo';
-  logo.herf = '/page/main/main.html';
+  logo.className = 'logo';
   logo.style.height = 120 + 'px';
   logoLink.appendChild(logo);
-  logoContainer.herf = '/page/main/main.html';
   logoContainer.appendChild(logoLink);
   nav.appendChild(logoContainer);
 
   const homeButton = document.createElement('a');
   homeButton.href = '/burgerpage/page/main/main.html';
-  homeButton.textContent = 'Home';
   homeButton.textContent = 'Home';
   nav.appendChild(homeButton);
 

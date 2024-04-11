@@ -37,6 +37,14 @@ body{
   text-align: center;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
+#logo:hover{
+  filter: invert(1);
+}
+
+#logo{
+  display: block;
+}
+
 .nav{
   display: flex;
   justify-content: space-between;
@@ -95,11 +103,5 @@ body{
 }
 
 
-#logo{
-  display: block;
 
-}
 
-#logo:hover{
-  filter: invert(1);
-}
