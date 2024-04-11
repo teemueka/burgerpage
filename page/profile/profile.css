@@ -1,17 +1,16 @@
 body {
   font-family: sans-serif;
-  background-color: var(--secondary);
+  background-color: var(--primary);
   height: 100vh;
 }
 
 #form {
-  background-color: var(--primary);
+  background-color: rgba(128, 126, 123, 0.28);
   width: 300px;
   margin: 20vh auto 0 auto;
   padding: 20px;
   border-radius: 4px;
   font-size: 12px;
-  box-shadow: 8px 8px 10px rgb(0 0 0 / 50%);
 }
 
 #form h1 {
