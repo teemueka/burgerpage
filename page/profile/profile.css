@@ -1,0 +1,89 @@
+body {
+  font-family: sans-serif;
+  background-color: var(--secondary);
+  height: 100vh;
+}
+
+#form {
+  background-color: var(--primary);
+  width: 300px;
+  margin: 20vh auto 0 auto;
+  padding: 20px;
+  border-radius: 4px;
+  font-size: 12px;
+  box-shadow: 8px 8px 10px rgb(0 0 0 / 50%);
+}
+
+#form h1 {
+  color: var(--highlight);
+  text-align: center;
+}
+
+#form button {
+  background-color: var(--highlight);
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+}
+
+#form button:hover {
+  background-color: #4588a8;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+
+.input-control {
+  display: flex;
+  flex-direction: column;
+  padding-right: 20px;
+  padding-top: 10px;
+}
+
+.input-control input {
+  display: block;
+  font-size: 12px;
+  padding: 10px;
+  width: 100%;
+}
+
+.alreadyUser {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.alreadyUser {
+  margin-top: 10px;
+}
+
+.alreadyUser p,
+.alreadyUser a {
+  margin: 0;
+  padding: 5px;
+}
+
+.alreadyUser a {
+  color: var(--highlight);
+  text-decoration: none;
+}
+
+.alreadyUser a:hover {
+  color: #4588a8;
+}
+
+.error p {
+  margin-top: 0;
+  color: red;
+}
+
+.input-control label {
+  padding-bottom: 2px;
+}
