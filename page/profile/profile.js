@@ -1,3 +1,5 @@
+import {generateHeader} from '../default.js';
+
 const form = document.getElementById('form');
 const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
@@ -28,8 +30,7 @@ const registration = () => {
     <button type="submit" >Register</button>`;
 
   document.getElementById('switchToLogin').addEventListener('click', login);
-
-}
+};
 
 const login = () => {
   form.innerHTML = `
@@ -50,9 +51,10 @@ const login = () => {
     </div>
     <button type="submit">Log in</button>`;
 
-  document.getElementById('switchToRegistration').addEventListener('click', registration);
-
-}
+  document
+    .getElementById('switchToRegistration')
+    .addEventListener('click', registration);
+};
 
 const validateEmail = (email) => {
   const regex =
@@ -65,4 +67,4 @@ const validatePassword = (password) => {
   return regex.test(password);
 };
 
-registration();
+login();
