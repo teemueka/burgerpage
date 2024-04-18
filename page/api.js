@@ -1,6 +1,6 @@
 const getProducts = async () => {
   try {
-    const response = await fetch(`https://10.120.32.57/app/api/v1/products`);
+    const response = await fetch(`http://10.120.32.57/app/api/v1/products`);
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
     }
@@ -13,7 +13,7 @@ const getProducts = async () => {
 const getProductsById = async (id) => {
   try {
     const response = await fetch(
-      `https://10.120.32.57/app/api/v1/products/${id}`
+      `http://10.120.32.57/app/api/v1/products/${id}`
     );
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
@@ -25,7 +25,7 @@ const getProductsById = async (id) => {
 };
 
 const addProduct = async (name, ingredients, type, price) => {
-  const url = `https://10.120.32.57/app/api/v1/products`;
+  const url = `http://10.120.32.57/app/api/v1/products`;
 
   const requestData = {
     name: name,
@@ -55,7 +55,7 @@ const addProduct = async (name, ingredients, type, price) => {
 };
 
 const updateProduct = async (product) => {
-  const url = `https://10.120.32.57/app/api/v1/products/${id}`;
+  const url = `http://10.120.32.57/app/api/v1/products/${id}`;
 
   try {
     const response = await fetch(url, {
@@ -78,7 +78,7 @@ const updateProduct = async (product) => {
 };
 
 const deleteProduct = async (id) => {
-  const url = `https://10.120.32.57/app/api/v1/products/${id}`;
+  const url = `http://10.120.32.57/app/api/v1/products/${id}`;
 
   try {
     const response = await fetch(url, {
@@ -100,7 +100,7 @@ const deleteProduct = async (id) => {
 };
 
 const userLogin = async (username, password) => {
-  const url = 'https://10.120.32.57/restaurant/api/v1/auth/login';
+  const url = 'http://10.120.32.57/restaurant/api/v1/auth/login';
 
   const requestData = {
     username: username,
@@ -130,7 +130,7 @@ const userLogin = async (username, password) => {
 
 const getUsers = async () => {
   try {
-    const response = await fetch(`https://10.120.32.57/app/api/v1/users`);
+    const response = await fetch(`http://10.120.32.57/app/api/v1/users`);
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
     }
@@ -142,7 +142,7 @@ const getUsers = async () => {
 
 const getUserById = async (id) => {
   try {
-    const response = await fetch(`https://10.120.32.57/app/api/v1/users/${id}`);
+    const response = await fetch(`http://10.120.32.57/app/api/v1/users/${id}`);
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
     }
@@ -153,7 +153,7 @@ const getUserById = async (id) => {
 };
 
 const createUser = async (userData) => {
-  const url = `https://10.120.32.57/app/api/v1/users`;
+  const url = `http://10.120.32.57/app/api/v1/users`;
 
   try {
     const response = await fetch(url, {
@@ -178,7 +178,7 @@ const createUser = async (userData) => {
 };
 
 const updateUser = async (userData) => {
-  const url = 'https://10.120.32.57/app/api/v1/users';
+  const url = 'http://10.120.32.57/app/api/v1/users';
 
   try {
     const response = await fetch(url, {
@@ -201,7 +201,7 @@ const updateUser = async (userData) => {
 };
 
 const deleteUser = async (id) => {
-  const url = 'https://10.120.32.57/app/api/v1/users';
+  const url = 'http://10.120.32.57/app/api/v1/users';
 
   try {
     const response = await fetch(url, {
