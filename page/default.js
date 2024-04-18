@@ -7,9 +7,9 @@ const createHeader = () => {
   const logoContainer = document.createElement('div');
   logoContainer.className = 'logo-container';
   const logoLink = document.createElement('a');
-  logoLink.href = '/burgerpage/page/main/main.html';
+  logoLink.href = '../main/main.html';
   const logo = document.createElement('img');
-  logo.src = '/page/media/logo.png';
+  logo.src = '../media/Logo.png';
   logo.alt = 'Logo';
   logo.className = 'logo';
   logo.style.height = 120 + 'px';
@@ -18,12 +18,12 @@ const createHeader = () => {
   nav.appendChild(logoContainer);
 
   const homeButton = document.createElement('a');
-  homeButton.href = '/burgerpage/page/main/main.html';
+  homeButton.href = '../main/main.html';
   homeButton.textContent = 'Home';
   nav.appendChild(homeButton);
 
   const menuButton = document.createElement('a');
-  menuButton.href = '/burgerpage/page/menu/menu.html';
+  menuButton.href = '../menu/menu.html';
   menuButton.textContent = 'Menu';
   nav.appendChild(menuButton);
 
@@ -31,12 +31,12 @@ const createHeader = () => {
   navRight.className = 'nav-right';
 
   const loginButton = document.createElement('a');
-  loginButton.href = '/burgerpage/page/profile/profile.html';
+  loginButton.href = '../profile/profile.html';
   loginButton.textContent = 'Login';
   navRight.appendChild(loginButton);
 
   const cartButton = document.createElement('a');
-  cartButton.href = '/burgerpage/page/order/order.html';
+  cartButton.href = '../order/order.html';
   cartButton.textContent = 'Cart';
   navRight.appendChild(cartButton);
 
