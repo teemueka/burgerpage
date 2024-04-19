@@ -1,0 +1,122 @@
+#adminContainer h1 {
+  padding-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+#adminNav {
+  justify-content: center;
+  display: flex;
+  gap: 0.5em;
+  padding-bottom: 1em;
+}
+
+#adminNav button {
+  background-color: #4588a8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+#adminNav button:hover {
+  background-color: var(--highlight);
+}
+
+#adminContainer {
+  background-color: rgba(128, 126, 123, 0.28);
+  background-size: 100vh;
+}
+
+#adminInputs{
+  height: 100vh;
+}
+
+#adminSearch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+#userBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#productHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#adminProductContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+.addProduct-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-container {
+  max-width: 80vw;
+  max-height: 40vh;
+  background-color: whitesmoke;
+  overflow-y: auto;
+}
+
+.user-container button {
+  width: 50%;
+  border: none;
+}
+
+.products-container {
+  max-width: 80vw;
+  max-height: 40vh;
+  background-color: whitesmoke;
+  overflow-y: auto;
+}
+
+#productImage {
+
+}
+
+.products-container button {
+  width: 50%;
+  border: none;
+}
+
+#deleteButton {
+  background-color: #e5d8d8;
+}
+
+#deleteButton:hover {
+  background-color: #e1a2a2;
+}
+
+#updateButton {
+  background-color: #b4c4b4;
+}
+
+#updateButton:hover {
+  background-color: #98af98;
+}
+
+#singleUser {
+  background-color: #87b4b4;
+}
+
+#singleProduct {
+  background-color: #87b4b4;
+}
