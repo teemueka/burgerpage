@@ -4,7 +4,7 @@ import {
   validateUsername,
   validatePassword,
   validateEmail,
-} from '../validators/validator.js';
+} from '../validators/userValidator.js';
 
 const currentUser = JSON.parse(localStorage.getItem('user'));
 console.log(currentUser);

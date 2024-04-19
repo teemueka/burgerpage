@@ -12,6 +12,8 @@ import {
   deleteUser,
   getAvatar,
 } from '../api.js';
+import {productErrors} from '../validators/adminValidator.js';
+
 const adminContent = document.getElementById('adminInputs');
 const usersButton = document.getElementById('usersBtn');
 const productsButton = document.getElementById('productsBtn');
@@ -87,8 +89,10 @@ const adminProductsContent = async () => {
       <label for="productPrice">Price</label>
       <input id="productPrice" type="text">
       <label for="productImage">Image</label>
-      <input id="productImage" type="file">`;
+      <input id="productImage" type="file">
+           <div class="error"></div>`;
 
+  const errors = document.querySelector('.error');
   const addProductBtn = document.createElement('button');
   addProductBtn.id = 'addProdBtn';
   addProductBtn.innerText = 'Add product';
@@ -98,7 +102,12 @@ const adminProductsContent = async () => {
       price: document.getElementById('productPrice').value,
       image: document.getElementById('productImage').files[0],
     };
-    await addProduct(productData);
+    if (!productErrors(productData)) {
+      errors.innerHTML = '';
+      await addProduct(productData);
+    } else {
+      errors.innerHTML = `<p>Invalid inputs</p>`;
+    }
   });
 
   addProductContainer.appendChild(addProductBtn);
