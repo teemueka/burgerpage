@@ -6,26 +6,30 @@ const burgers = document.getElementById('burgers');
 const sides = document.getElementById('sides');
 const desserts = document.getElementById('desserts');
 
-for (let i = 0; i < 3; i++) {
-  burgers.innerHTML += `<div class="menu-item">
-<img src="https://placehold.co/300x300">
-<h5>yummy burger <span>10€</span></h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, animi!</p>
-</div>`;
-}
+(async () => {
+  const response = await (
+    await fetch('http://10.120.32.57/app/api/v1/products')
+  ).json();
 
-for (let i = 0; i < 3; i++) {
-  sides.innerHTML += `<div class="menu-item">
-<img src="https://placehold.co/300x300">
-<h5>yummy side <span>5€</span></h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, animi!</p>
-</div>`;
-}
+  for (const product of response) {
+    const category = document.getElementById(product.category);
+    const div = document.createElement('div');
+    div.classList.add('menu-item');
 
-for (let i = 0; i < 3; i++) {
-  desserts.innerHTML += `<div class="menu-item">
-<img src="https://placehold.co/300x300">
-<h5>yummy dessert <span>4€</span></h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, animi!</p>
-</div>`;
-}
+    const img = document.createElement('img');
+    img.src = `http://10.120.32.57/app/api/v1/uploads/${product.image}`;
+
+    const h5 = document.createElement('h5');
+    h5.textContent = `${product.name}`;
+    const price = document.createElement('p');
+    price.textContent = `${product.price}€`;
+    const p = document.createElement('p');
+    p.textContent = `${product.ingredients}`;
+
+    div.appendChild(img);
+    div.appendChild(h5);
+    div.appendChild(price);
+    div.appendChild(p);
+    category.appendChild(div);
+  }
+})();
