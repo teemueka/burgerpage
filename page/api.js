@@ -24,27 +24,23 @@ const getProductsById = async (id) => {
   }
 };
 
-const addProduct = async (name, ingredients, type, price) => {
-  const url = `http://10.120.32.57/app/api/v1/products`;
+const addProduct = async (productData) => {
+  const url = `http://localhost:3000/api/v1/products`;
 
-  const requestData = {
-    name: name,
-    ingredients: ingredients,
-    type: type,
-    price: price,
-  };
+  const formData = new FormData();
+  formData.append('name', productData.name);
+  formData.append('price', productData.price);
+  formData.append('file', productData.image);
 
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestData),
+      body: formData,
     });
 
     const responseData = await response.json();
     if (response.ok) {
+      console.log('product added', responseData);
       return responseData;
     } else {
       console.log('failed to add product', responseData.message);
@@ -55,7 +51,12 @@ const addProduct = async (name, ingredients, type, price) => {
 };
 
 const updateProduct = async (product) => {
-  const url = `http://10.120.32.57/app/api/v1/products/${id}`;
+  const url = `http://localhost:3000/api/v1/products/${product.id}`;
+
+  const productInfo = {
+    name: product.name,
+    price: product.price,
+  };
 
   try {
     const response = await fetch(url, {
@@ -63,11 +64,12 @@ const updateProduct = async (product) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(productInfo),
     });
 
     const responseData = await response.json();
     if (response.ok) {
+      console.log('update', responseData);
       return responseData;
     } else {
       console.log('failed to update product', responseData.message);
@@ -177,7 +179,7 @@ const createUser = async (userData) => {
   }
 };
 
-const updateUser = async (userData) => {
+const updateUser = async (userData, accessToken) => {
   const url = 'http://10.120.32.57/app/api/v1/users';
 
   try {
@@ -185,6 +187,7 @@ const updateUser = async (userData) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(userData),
     });
