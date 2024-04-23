@@ -28,6 +28,28 @@ const productErrors = (productData) => {
   }
 };
 
+const ingredientErrors = (ingredientData) => {
+  const {name, cal} = ingredientData;
+
+  let hasErrors = false;
+
+  if (name.trim() === '') {
+    hasErrors = true;
+  }
+
+  if (cal <= 0) {
+    hasErrors = true;
+  }
+
+  if (hasErrors) {
+    console.log('ingredient data invalid');
+    return true;
+  } else {
+    console.log('yep');
+    return false;
+  }
+};
+
 const userErrors = (userData) => {
   const {username, password, email, role} = userData;
 
@@ -55,4 +77,4 @@ const userErrors = (userData) => {
   }
 };
 
-export {productErrors, userErrors};
+export {productErrors, userErrors, ingredientErrors};
