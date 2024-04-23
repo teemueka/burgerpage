@@ -42,7 +42,11 @@
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  padding-bottom: 0.5em;
+  padding-bottom: 1em;
+}
+
+.addUser-container h5 {
+  margin-top: 0;
 }
 
 #userBox {
@@ -64,6 +68,10 @@
   gap: 3rem;
 }
 
+#userBox {
+  gap: 3em;
+}
+
 .addProduct-container {
   display: flex;
   flex-direction: column;
@@ -81,6 +89,11 @@
 .user-container button {
   width: 50%;
   border: none;
+}
+
+.addUser-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .products-container {
@@ -117,4 +130,15 @@
 
 #singleProduct {
   background-color: #87b4b4;
+}
+
+.adminProductImg {
+  width: 50px;
+  height: 50px;
+}
+
+#singleProduct img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
 }
