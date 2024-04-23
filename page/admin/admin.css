@@ -86,6 +86,13 @@
   overflow-y: auto;
 }
 
+.ingredients-container {
+  max-width: 80vw;
+  max-height: 40vh;
+  background-color: whitesmoke;
+  overflow-y: auto;
+}
+
 .user-container button {
   width: 50%;
   border: none;
@@ -104,6 +111,11 @@
 }
 
 .products-container button {
+  width: 50%;
+  border: none;
+}
+
+.ingredients-container button {
   width: 50%;
   border: none;
 }
@@ -129,6 +141,10 @@
 }
 
 #singleProduct {
+  background-color: #87b4b4;
+}
+
+#singleIngredient {
   background-color: #87b4b4;
 }
 

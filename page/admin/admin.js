@@ -13,7 +13,11 @@ import {
   getAvatar,
   getIngredients,
 } from '../api.js';
-import {productErrors, userErrors} from '../validators/adminValidator.js';
+import {
+  ingredientErrors,
+  productErrors,
+  userErrors
+} from "../validators/adminValidator.js";
 
 const adminContent = document.getElementById('adminInputs');
 const usersButton = document.getElementById('usersBtn');
@@ -117,7 +121,6 @@ const adminUsersContent = async () => {
 };
 
 const adminProductsContent = async () => {
-  console.log(await getIngredients());
   const addProductContainer = document.querySelector('.addProduct-container');
   addProductContainer.innerHTML = '';
   const ingredientsContainer = document.createElement('div');
@@ -174,8 +177,8 @@ const adminProductsContent = async () => {
 
   addProductContainer.innerHTML = `
               <h5>Add product</h5>
-      <label for="productName">Product name</label>
-      <input id="addProduct" type="text">
+      <label for="addProductName">Product name</label>
+      <input id="addProductName" type="text">
       <label for="productPrice">Price</label>
       <input id="productPrice" type="text">
       <label for="productImage">Image</label>
@@ -189,12 +192,11 @@ const adminProductsContent = async () => {
   addProductBtn.innerText = 'Add product';
   addProductBtn.addEventListener('click', async () => {
     const productData = {
-      name: document.getElementById('addProduct').value,
+      name: document.getElementById('addProductName').value,
       price: document.getElementById('productPrice').value,
       ingredients: JSON.stringify(ingredientArray.toString()),
       image: document.getElementById('productImage').files[0],
     };
-    console.log('cock2', JSON.stringify(ingredientArray.toString()));
     if (!productErrors(productData)) {
       errors.innerHTML = '';
       await addProduct(productData);
@@ -245,31 +247,69 @@ const adminProductsContent = async () => {
 };
 
 const adminIngredientsContent = async () => {
-  // ADD INGREDIENTS CONTENT
+  const ingredientContainer = document.querySelector('.ingredients-container');
+  ingredientContainer.innerHTML = '';
+  const ingredients = await getIngredients();
+  ingredients.forEach((ingredient) => {
+    const singleIngredient = document.createElement('div');
+    singleIngredient.id = 'singleIngredient';
+    singleIngredient.innerHTML = '';
+    singleIngredient.innerHTML = `
+      <h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}</h5>
+      <p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
+
+    const updateBtn = document.createElement('button');
+    updateBtn.id = 'updateButton';
+    updateBtn.innerText = 'update';
+    const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'deleteButton';
+    deleteBtn.innerText = 'delete';
+    singleIngredient.appendChild(updateBtn);
+    singleIngredient.appendChild(deleteBtn);
+    ingredientContainer.appendChild(singleIngredient);
+    updateBtn.addEventListener('click', async () => {
+      const updatedIngredient = {
+        id: ingredient.id,
+        name: document.getElementById(`ingredientName-${ingredient.id}`).innerText,
+        price: document.getElementById(`cal-${ingredient.id}`).innerText,
+      };
+      await updateIngredient(updatedIngredient);
+    });
+    deleteBtn.addEventListener('click', async () => {
+      await deleteIngredient(ingredient.id);
+      singleIngredient.remove();
+    });
+  });
+
   const addIngredientContainer = document.querySelector(
     '.addIngredient-container'
   );
   addIngredientContainer.innerHTML = '';
   addIngredientContainer.innerHTML = `
-  <h5>Ingredients</h5>
-   <label for="ingredientName">Ingredient name</label>
+              <h5>Add ingredient</h5>
+      <label for="ingredientName">Ingredient name</label>
       <input id="ingredientName" type="text">
-      <label for="ingredientCal">Cal</label>
-      <input id="ingredientCal" type="text">`;
+      <label for="ingredientCal">Calories</label>
+      <input id="ingredientCal" type="text">
+           <div class="error"></div>`;
 
-  const addIngredientButton = document.createElement('button');
-  addIngredientButton.id = 'ingredientAddBtn';
-  addIngredientButton.innerText = 'Add ingredient';
-  addIngredientButton.addEventListener('click', async () => {
-    console.log('cock');
+  const errors = document.querySelector('.error');
+  const addIngredientBtn = document.createElement('button');
+  addIngredientBtn.id = 'addIngredientBtn';
+  addIngredientBtn.innerText = 'Add ingredient';
+  addIngredientBtn.addEventListener('click', async () => {
+    const ingredientData = {
+      name: document.getElementById('ingredientName').value,
+      cal: document.getElementById('ingredientCal').value,
+    };
+    if (!ingredientErrors(ingredientData)) {
+      errors.innerHTML = '';
+      await addIngredient(ingredientData);
+    } else {
+      errors.innerHTML = `<p>Invalid inputs</p>`;
+    }
   });
-
-  addIngredientContainer.appendChild(addIngredientButton);
-
-  // LIST CURRENT INGREDIENTS (in progress)
-  const ingredientsContainer = document.querySelector('.ingredients-container');
-  ingredientsContainer.innerHTML = '';
-  // const ingredients = await get
+  addIngredientContainer.appendChild(addIngredientBtn);
 };
 
 const adminUsers = async () => {
@@ -289,7 +329,6 @@ const adminUsers = async () => {
 const adminProducts = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `<div id="adminProducts">
-    <h3 id="productHeader">Products</h3>
     <div id="adminProductContent">
     <div class="products-container"></div>
     <div class="addProduct-container"></div>
@@ -301,7 +340,6 @@ const adminProducts = async () => {
 const adminIngredients = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `<div id="adminIngredients">
-    <h3 id="ingredientHeader">Ingredients</h3>
     <div id="ingredientContent">
     <div class="ingredients-container"></div>
     <div class="addIngredient-container"></div>
@@ -336,4 +374,4 @@ const adminOrders = () => {
   </div>`;
 };
 
-await adminUsers();
+await adminIngredients();
