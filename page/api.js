@@ -24,12 +24,27 @@ const getProductsById = async (id) => {
   }
 };
 
+const getIngredients = async () => {
+  const url = `http://10.120.32.57/app/api/v1/ingredients`;
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.log('error', response.message);
+    }
+  } catch (error) {
+    console.log('error fetching ingredients');
+  }
+};
+
 const addProduct = async (productData) => {
-  const url = `http://localhost:3000/api/v1/products`;
+  const url = `http://10.120.32.57/app/api/v1/products`;
 
   const formData = new FormData();
   formData.append('name', productData.name);
   formData.append('price', productData.price);
+  formData.append('ingredients', productData.ingredients);
   formData.append('file', productData.image);
 
   try {
@@ -252,4 +267,5 @@ export {
   updateUser,
   deleteUser,
   getAvatar,
+  getIngredients,
 };
