@@ -20,13 +20,14 @@ form.addEventListener('submit', async (event) => {
   const profilePasswordInput = document.getElementById('profilePassword');
 
   if (regEmailInput && regPasswordInput) {
-    console.log('cock');
     const email = regEmailInput.value.trim();
     const password = regPasswordInput.value.trim();
+
     let hasErrors = false;
 
     if (!validateEmail(email)) {
       document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
+      console.log('emailerror');
       hasErrors = true;
     } else {
       document.getElementById('email-error').innerHTML = '';
@@ -58,13 +59,17 @@ form.addEventListener('submit', async (event) => {
     const email = loginEmailInput.value;
     const password = loginPasswordInput.value.trim();
 
+    const userData = {
+      email: email,
+      password: password,
+    };
+
     try {
-      await userLogin(email, password);
+      await userLogin(userData);
       window.location.href = '../../page/main/main.html';
     } catch (error) {
       document.getElementById('password-error').innerHTML =
         '<p>Incorrect email or password</p>';
-      console.log('error logging in', error);
     }
   } else {
     const email = profileEmailInput.value.trim();
@@ -193,10 +198,8 @@ const profile = () => {
 </div>`;
 };
 
-// if (currentUser !== null) {
-//   profile();
-// } else {
-//   registration();
-// }
-
-login();
+if (currentUser !== null) {
+  profile();
+} else {
+  registration();
+}
