@@ -12,12 +12,14 @@ import {
   deleteUser,
   getAvatar,
   getIngredients,
+  updateIngredient,
+  addIngredient,
 } from '../api.js';
 import {
   ingredientErrors,
   productErrors,
-  userErrors
-} from "../validators/adminValidator.js";
+  userErrors,
+} from '../validators/adminValidator.js';
 
 const adminContent = document.getElementById('adminInputs');
 const usersButton = document.getElementById('usersBtn');
@@ -42,7 +44,7 @@ ordersButton.addEventListener('click', async () => {
 });
 
 const adminUsersContent = async () => {
-  const addUsersContainer = document.querySelector('.addUser-container');
+  const addUsersContainer = document.getElementById('addUser-container');
   addUsersContainer.innerHTML = '';
   addUsersContainer.innerHTML = `<h5>Add new user</h5>
 <label for="addUserName">Username</label><input id="addUserName" type="text" required>
@@ -50,7 +52,6 @@ const adminUsersContent = async () => {
 <label for="addUserEmail">Email</label><input id="addUserEmail" type="text" required>
 <label for="addUserAddress">Address</label><input id="addUserAddress" type="text">
 <label for="addUserAvatar">Avatar</label><input id="addUserAvatar" type="text">
-<label for="addUserRole">Role</label><input id="addUserRole" type="text" required>
 <div class="error"></div>
 `;
 
@@ -60,12 +61,11 @@ const adminUsersContent = async () => {
   addUserBtn.innerText = 'Add new user';
   addUserBtn.addEventListener('click', async () => {
     const newUser = {
-      username: document.getElementById('addUserName').innerText,
-      password: document.getElementById('addUserPass').innerText,
-      email: document.getElementById('addUserEmail').innerText,
-      address: document.getElementById('addUserAddress').innerText,
-      avatar: document.getElementById('addUserAvatar').innerText,
-      role: document.getElementById('addUserRole').innerText,
+      username: document.getElementById('addUserName').value,
+      password: document.getElementById('addUserPass').value,
+      email: document.getElementById('addUserEmail').value,
+      address: document.getElementById('addUserAddress').value,
+      file: document.getElementById('addUserAvatar').value,
     };
     if (!userErrors(newUser)) {
       errors.innerHTML = '';
@@ -76,61 +76,77 @@ const adminUsersContent = async () => {
   });
   addUsersContainer.appendChild(addUserBtn);
 
-  const mainContainer = document.querySelector('.user-container');
+  const mainContainer = document.getElementById('users-container');
   mainContainer.innerHTML = '';
   const users = await getUsers();
   // http://10.120.32.57/app/${user.avatar}
 
   users.forEach((user) => {
     const userContainer = document.createElement('div');
+    userContainer.className = 'adminContainer';
     userContainer.id = 'singleUser';
-    userContainer.innerHTML = '';
     userContainer.innerHTML = `
-      <h5 contenteditable="true" id="username-${user.id}">${user.username}</h5>
-      <p>Email: <span contenteditable="true" id="email-${user.id}">${user.email}</span></p>
-      <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
-      <img src="http://10.120.32.57/app/uploads${user.avatar}" alt="User Avatar" class="adminProductImglol">
-      <span contenteditable="true">http://10.120.32.57/app/${user.avatar}</span>
-      <p>Role: <span contenteditable="true" id="role-${user.id}">${user.role}</span></p>`;
+    <h5 contenteditable="true" id="username-${user.id}">${user.username}</h5>
+    <p>Email: <span contenteditable="true" id="email-${user.id}">${user.email}</span></p>
+    <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
+    <img src="http://10.120.32.57/app/uploads${user.avatar}" alt="User Avatar" class="adminProductImglol">
+    <input type="file" id="avatar-${user.id}" accept="image/*">  <!-- Added file input -->
+    <p>Role: <span contenteditable="true" id="role-${user.id}">${user.role}</span></p>`;
+
     const updateBtn = document.createElement('button');
-    updateBtn.id = 'updateButton';
-    updateBtn.innerText = 'update';
+    updateBtn.className = 'containerBtn';
+    updateBtn.innerText = 'Update';
+
     const deleteBtn = document.createElement('button');
-    deleteBtn.id = 'deleteButton';
-    deleteBtn.innerText = 'delete';
-    userContainer.appendChild(updateBtn);
-    userContainer.appendChild(deleteBtn);
+    deleteBtn.className = 'containerBtn';
+    deleteBtn.innerText = 'Delete';
+
+    userContainer.append(updateBtn, deleteBtn);
     mainContainer.appendChild(userContainer);
+
     updateBtn.addEventListener('click', async () => {
+      const avatarElement = document.getElementById(`avatar-${user.id}`);
       const updatedUser = {
         id: user.id,
         username: document.getElementById(`username-${user.id}`).innerText,
         email: document.getElementById(`email-${user.id}`).innerText,
         address: document.getElementById(`address-${user.id}`).innerText,
-        avatar: document.getElementById(`avatar-${user.id}`).innerText,
+        avatar: avatarElement.files.length > 0 ? avatarElement.files[0] : null,
         role: document.getElementById(`role-${user.id}`).innerText,
       };
       console.log('Updated User:', updatedUser);
       await updateUser(updatedUser);
     });
+
     deleteBtn.addEventListener('click', async () => {
-      await deleteProduct(user.id);
+      await deleteUser(user.id); // Function name adjusted to match the intended action
       userContainer.remove();
     });
   });
+
 };
 
 const adminProductsContent = async () => {
-  const addProductContainer = document.querySelector('.addProduct-container');
+  const addProductContainer = document.getElementById('addProduct-container');
   addProductContainer.innerHTML = '';
   const ingredientsContainer = document.createElement('div');
+  ingredientsContainer.id = 'adminIngredientsSubAdd';
   ingredientsContainer.innerHTML = '';
-  ingredientsContainer.innerHTML = `<h5>Ingredients</h5>`;
   const ingredients = await getIngredients();
   const ingredientArray = [];
   ingredients.forEach((ingredient) => {
     const singleIngredient = document.createElement('div');
+    singleIngredient.className = 'singleIngredientControl';
     singleIngredient.innerHTML = '';
+
+    const ingredientName = document.createElement('p');
+    ingredientName.innerText = `${ingredient.name}`;
+    singleIngredient.appendChild(ingredientName);
+
+    const ingredientAmount = document.createElement('span');
+    ingredientAmount.id = `amount-${ingredient.id}`;
+    ingredientAmount.innerText = '0';
+    singleIngredient.appendChild(ingredientAmount);
 
     const increaseIngredient = document.createElement('button');
     increaseIngredient.id = `add-${ingredient.id}`;
@@ -145,15 +161,6 @@ const adminProductsContent = async () => {
         ingredientAmount.innerText = amount.toString();
       }
     });
-
-    const ingredientName = document.createElement('p');
-    ingredientName.innerText = `${ingredient.name}`;
-    singleIngredient.appendChild(ingredientName);
-
-    const ingredientAmount = document.createElement('span');
-    ingredientAmount.id = `amount-${ingredient.id}`;
-    ingredientAmount.innerText = '0';
-    singleIngredient.appendChild(ingredientAmount);
 
     const decreaseIngredient = document.createElement('button');
     decreaseIngredient.id = `dec-${ingredient.id}`;
@@ -207,13 +214,14 @@ const adminProductsContent = async () => {
 
   addProductContainer.appendChild(addProductBtn);
 
-  const productContainer = document.querySelector('.products-container');
+  const productContainer = document.getElementById('products-container');
   productContainer.innerHTML = '';
   const products = await getProducts();
 
   products.forEach((product) => {
     const singleProduct = document.createElement('div');
     singleProduct.id = 'singleProduct';
+    singleProduct.className = 'adminContainer';
     singleProduct.innerHTML = '';
     singleProduct.innerHTML = `
       <h5 contenteditable="true" id="productName-${product.id}">${product.name}</h5>
@@ -222,9 +230,11 @@ const adminProductsContent = async () => {
       <p>image: <span contenteditable="true" id="image-${product.id}">$product.image}</span></p>`;
 
     const updateBtn = document.createElement('button');
+    updateBtn.className = 'containerBtn';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
     const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'containerBtn';
     deleteBtn.id = 'deleteButton';
     deleteBtn.innerText = 'delete';
     singleProduct.appendChild(updateBtn);
@@ -247,11 +257,13 @@ const adminProductsContent = async () => {
 };
 
 const adminIngredientsContent = async () => {
-  const ingredientContainer = document.querySelector('.ingredients-container');
+  const ingredientContainer = document.getElementById('ingredients-container');
   ingredientContainer.innerHTML = '';
   const ingredients = await getIngredients();
+  console.log(ingredients);
   ingredients.forEach((ingredient) => {
     const singleIngredient = document.createElement('div');
+    singleIngredient.className = 'adminContainer';
     singleIngredient.id = 'singleIngredient';
     singleIngredient.innerHTML = '';
     singleIngredient.innerHTML = `
@@ -259,30 +271,33 @@ const adminIngredientsContent = async () => {
       <p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
 
     const updateBtn = document.createElement('button');
+    updateBtn.className = 'containerBtnSingle';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
-    const deleteBtn = document.createElement('button');
-    deleteBtn.id = 'deleteButton';
-    deleteBtn.innerText = 'delete';
+    // const deleteBtn = document.createElement('button');
+    // deleteBtn.className = 'containerBtn';
+    // deleteBtn.id = 'deleteButton';
+    // deleteBtn.innerText = 'delete';
     singleIngredient.appendChild(updateBtn);
-    singleIngredient.appendChild(deleteBtn);
+    // singleIngredient.appendChild(deleteBtn);
     ingredientContainer.appendChild(singleIngredient);
     updateBtn.addEventListener('click', async () => {
       const updatedIngredient = {
         id: ingredient.id,
-        name: document.getElementById(`ingredientName-${ingredient.id}`).innerText,
+        name: document.getElementById(`ingredientName-${ingredient.id}`)
+          .innerText,
         price: document.getElementById(`cal-${ingredient.id}`).innerText,
       };
       await updateIngredient(updatedIngredient);
     });
-    deleteBtn.addEventListener('click', async () => {
-      await deleteIngredient(ingredient.id);
-      singleIngredient.remove();
-    });
+    // deleteBtn.addEventListener('click', async () => {
+    // await deleteIngredient(ingredient.id);
+    // singleIngredient.remove();
+    // });
   });
 
-  const addIngredientContainer = document.querySelector(
-    '.addIngredient-container'
+  const addIngredientContainer = document.getElementById(
+    'addIngredient-container'
   );
   addIngredientContainer.innerHTML = '';
   addIngredientContainer.innerHTML = `
@@ -320,8 +335,8 @@ const adminUsers = async () => {
 <button id="adminSearchButton">Search</button>
 </div>
 <div id="userBox">
-<div class="user-container"></div>
-<div class="addUser-container"></div>
+<div id="users-container" class="adminContentControl"></div>
+<div id="addUser-container" class="addUser-container"></div>
 </div>`;
   await adminUsersContent();
 };
@@ -330,8 +345,8 @@ const adminProducts = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `<div id="adminProducts">
     <div id="adminProductContent">
-    <div class="products-container"></div>
-    <div class="addProduct-container"></div>
+    <div id="products-container" class="adminContentControl"></div>
+    <div id="addProduct-container" class="addProduct-container"></div>
     </div>
     </div>`;
   await adminProductsContent();
@@ -341,8 +356,8 @@ const adminIngredients = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `<div id="adminIngredients">
     <div id="ingredientContent">
-    <div class="ingredients-container"></div>
-    <div class="addIngredient-container"></div>
+    <div id="ingredients-container" class="adminContentControl"></div>
+    <div id="addIngredient-container" class="addIngredient-container"></div>
     </div>
   </div>`;
   await adminIngredientsContent();
@@ -374,4 +389,4 @@ const adminOrders = () => {
   </div>`;
 };
 
-await adminIngredients();
+await adminUsers();
