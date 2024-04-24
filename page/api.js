@@ -170,13 +170,8 @@ const deleteProduct = async (id) => {
   }
 };
 
-const userLogin = async (username, password) => {
-  const url = 'http://10.120.32.57/restaurant/api/v1/auth/login';
-
-  const requestData = {
-    username: username,
-    password: password,
-  };
+const userLogin = async (userData) => {
+  const url = 'http://10.120.32.57/app/api/v1/auth/login';
 
   try {
     const response = await fetch(url, {
@@ -184,18 +179,20 @@ const userLogin = async (username, password) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestData),
+      body: JSON.stringify(userData),
     });
 
     const responseData = await response.json();
     if (response.ok) {
+      console.log('login success', responseData);
+      localStorage.setItem('user', JSON.stringify(responseData.user));
+      localStorage.setItem('token', responseData.token);
       return responseData;
     } else {
       throw new Error(responseData.message || 'Failed to log in.');
     }
   } catch (error) {
-    console.error('Error logging in:', error.message);
-    throw error;
+    console.log(error.message);
   }
 };
 
