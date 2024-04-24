@@ -65,7 +65,7 @@ const userErrors = (userData) => {
   if (!validateEmail(email)) {
     hasErrors = true;
   }
-  if (role !== 'admin' || role !== 'admin') {
+  if (role !== 'user' && role !== 'admin') {
     hasErrors = true;
   }
   if (hasErrors) {
