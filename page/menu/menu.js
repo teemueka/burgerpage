@@ -6,26 +6,48 @@ const burgers = document.getElementById('burgers');
 const sides = document.getElementById('sides');
 const desserts = document.getElementById('desserts');
 
-for (let i = 0; i < 3; i++) {
-  burgers.innerHTML += `<div class="menu-item">
-<img src="https://placehold.co/300x300">
-<h5>yummy burger <span>10€</span></h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, animi!</p>
-</div>`;
-}
+(async () => {
+  const response = await (
+    await fetch('http://localhost:3000/api/v1/products')
+  ).json();
+  for (const product of response) {
+    if (!product.categories) {
+      continue;
+    }
+    console.log(product.categories);
+    product.categories.forEach((categoryl) => {
+      if (
+        categoryl.name === 'burger' ||
+        categoryl.name === 'side' ||
+        categoryl.name === 'dessert'
+      ) {
+        console.log(`'${categoryl.name}'`);
+        const category = document.getElementById(categoryl.name);
+        if (!category) {
+          console.log(`No element found with ID '${categoryl.name}'`);
+          return;
+        }
 
-for (let i = 0; i < 3; i++) {
-  sides.innerHTML += `<div class="menu-item">
-<img src="https://placehold.co/300x300">
-<h5>yummy side <span>5€</span></h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, animi!</p>
-</div>`;
-}
+        console.log(product);
+        const div = document.createElement('div');
+        div.classList.add('menu-item');
 
-for (let i = 0; i < 3; i++) {
-  desserts.innerHTML += `<div class="menu-item">
-<img src="https://placehold.co/300x300">
-<h5>yummy dessert <span>4€</span></h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, animi!</p>
-</div>`;
-}
+        const img = document.createElement('img');
+        img.src = `http://10.120.32.57/app/uploads/${product.image}`;
+
+        const h5 = document.createElement('h5');
+        h5.textContent = `${product.name}`;
+        const price = document.createElement('p');
+        price.textContent = `${product.price}€`;
+        const p = document.createElement('p');
+        p.textContent = `${product.ingredients ? product.ingredients.map((ingredient) => ingredient.name).join(', ') : ''}`;
+
+        div.appendChild(img);
+        div.appendChild(h5);
+        div.appendChild(price);
+        div.appendChild(p);
+        category.appendChild(div);
+      }
+    });
+  }
+})();
