@@ -1,41 +1,29 @@
 import {generateHeader} from '../default.js';
 
-import {
-  validateUsername,
-  validatePassword,
-  validateEmail,
-} from '../validators/validator.js';
-
+import {validatePassword, validateEmail} from '../validators/validator.js';
+import {createUser, updateUser, userLogin} from '../api.js';
 const currentUser = JSON.parse(localStorage.getItem('user'));
-console.log(currentUser);
+const token = localStorage.getItem('token');
+console.log('current user', currentUser);
+console.log('token', token);
 const form = document.getElementById('form');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const regUsernameInput = document.getElementById('reg-username');
   const regEmailInput = document.getElementById('reg-email');
   const regPasswordInput = document.getElementById('reg-password');
 
-  const loginUsernameInput = document.getElementById('login-username');
+  const loginEmailInput = document.getElementById('login-email');
   const loginPasswordInput = document.getElementById('login-password');
 
-  const profileUsernameInput = document.getElementById('profileUsername');
   const profileEmailInput = document.getElementById('profileEmail');
   const profilePasswordInput = document.getElementById('profilePassword');
 
-  if (regUsernameInput && regEmailInput && regPasswordInput) {
-    const username = regUsernameInput.value;
+  if (regEmailInput && regPasswordInput) {
+    console.log('cock');
     const email = regEmailInput.value.trim();
     const password = regPasswordInput.value.trim();
     let hasErrors = false;
-
-    if (!validateUsername(username)) {
-      document.getElementById('username-error').innerHTML =
-        '<p>Username must be at least 5 characters long</p>';
-      hasErrors = true;
-    } else {
-      document.getElementById('username-error').innerHTML = '';
-    }
 
     if (!validateEmail(email)) {
       document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
@@ -57,7 +45,6 @@ form.addEventListener('submit', async (event) => {
     }
 
     const userData = {
-      username: username,
       email: email,
       password: password,
     };
@@ -67,30 +54,23 @@ form.addEventListener('submit', async (event) => {
     } catch (error) {
       console.error('Error registering user:', error.message);
     }
-  } else if (loginUsernameInput && loginPasswordInput) {
-    const username = loginUsernameInput.value;
+  } else if (loginEmailInput && loginPasswordInput) {
+    const email = loginEmailInput.value;
     const password = loginPasswordInput.value.trim();
 
     try {
-      await userLogin(username, password);
+      await userLogin(email, password);
       window.location.href = '../../page/main/main.html';
     } catch (error) {
       document.getElementById('password-error').innerHTML =
-        '<p>Incorrect username or password</p>';
+        '<p>Incorrect email or password</p>';
       console.log('error logging in', error);
     }
   } else {
-    const username = profileUsernameInput.value;
     const email = profileEmailInput.value.trim();
     const password = profilePasswordInput.value.trim();
 
     let hasErrors = false;
-
-    if (!validateUsername(username)) {
-      document.getElementById('username-error').innerHTML =
-        '<p>Username must be at least 5 characters long</p>';
-      hasErrors = true;
-    }
 
     if (!validateEmail(email)) {
       document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
@@ -112,17 +92,13 @@ form.addEventListener('submit', async (event) => {
     }
 
     const userData = {
-      username: username,
       email: email,
       password: password,
     };
 
     try {
-      const responseData = await updateUser(userData, userToken);
-      if (responseData !== undefined) {
-        document.getElementById('userName').innerHTML =
-          responseData.data.username;
-      }
+      const responseData = await updateUser(userData, token);
+      console.log(responseData);
     } catch (error) {
       console.error('Update failed', error);
     }
@@ -132,8 +108,8 @@ form.addEventListener('submit', async (event) => {
 const handleRegistration = async (userData) => {
   try {
     await createUser(userData);
-    const {username, password} = userData;
-    await userLogin(username, password);
+    const {email, password} = userData;
+    await userLogin(email, password);
     window.location.href = '../../page/main/main.html';
   } catch (error) {
     console.error('Error registering user: ', error.message);
@@ -149,11 +125,6 @@ const handleRegistration = async (userData) => {
 const registration = () => {
   form.innerHTML = `
     <h1>Registration</h1>
-    <div class="input-control">
-      <label for="reg-username">Username</label>
-      <input id="reg-username" name="username" type="text" required />
-      <div class="error" id="username-error"></div>
-    </div>
     <div class="input-control">
       <label for="reg-email">Email</label>
       <input id="reg-email" name="email" type="text" required />
@@ -177,9 +148,9 @@ const login = () => {
   form.innerHTML = `
     <h1>Login</h1>
     <div class="input-control">
-      <label for="login-username">Username</label>
-      <input id="login-username" name="username" type="text" required />
-      <div class="error" id="username-error"></div>
+      <label for="login-email">Email</label>
+      <input id="login-email" name="email" type="email" required />
+      <div class="error" id="email-error"></div>
     </div>
     <div class="input-control">
       <label for="login-password">Password</label>
@@ -202,11 +173,6 @@ const profile = () => {
   <form id="updateUserForm" method="POST">
     <h2>Update profile</h2>
     <div class="profile-inputs">
-      <label for="profileUsername">Username</label>
-      <input id="profileUsername" name="profileUsername" type="text">
-      <div class="error" id="username-error"></div>
-    </div>
-    <div class="profile-inputs">
       <label for="profileEmail">Email</label>
       <input id="profileEmail" name="profileEmail" type="text">
       <div class="error" id="email-error"></div>
@@ -227,8 +193,10 @@ const profile = () => {
 </div>`;
 };
 
-if (currentUser !== null) {
-  profile();
-} else {
-  registration();
-}
+// if (currentUser !== null) {
+//   profile();
+// } else {
+//   registration();
+// }
+
+login();
