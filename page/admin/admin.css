@@ -1,0 +1,176 @@
+#adminContainer h1 {
+  padding-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+#adminNav {
+  justify-content: center;
+  display: flex;
+  gap: 0.5em;
+  padding-bottom: 1em;
+}
+
+#adminNav button {
+  background-color: #4588a8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+#adminNav button:hover {
+  background-color: var(--highlight);
+}
+
+#adminContainer {
+  background-color: rgba(128, 126, 123, 0.28);
+  background-size: 100vh;
+}
+
+.error p {
+  color: red;
+}
+
+#adminInputs{
+  height: 100vh;
+}
+
+#adminSearch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  padding-bottom: 1em;
+}
+
+.addUser-container h5 {
+  margin-top: 0;
+}
+
+#userBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#productHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#adminProductContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+#ingredientContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+#addIngredient-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#userBox {
+  gap: 3em;
+}
+
+.addProduct-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.addUser-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.adminContentControl {
+  max-width: 80vw;
+  max-height: 40vh;
+  background-color: whitesmoke;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.adminContentControl > :first-child h5 {
+  margin-top: 0;
+}
+
+#adminIngredientsSubAdd > :first-child p {
+  margin-top: 0;
+}
+
+.adminContentControl > :last-child {
+  margin-bottom: 0;
+}
+
+.adminContainer {
+  background-color: #87b4b4;
+}
+
+.singleIngredientControl {
+  margin: 1rem;
+}
+
+.containerBtn {
+  width: 50%;
+  border: none;
+}
+
+.containerBtnSingle {
+  width: 100%;
+  border: none;
+}
+
+#adminIngredientsSubAdd {
+  background-color: rgba(84, 83, 81, 0.28);
+  margin-top: 1rem;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+#addProdBtn {
+  margin-top: 1rem;
+}
+
+#deleteButton {
+  background-color: #e5d8d8;
+}
+
+#deleteButton:hover {
+  background-color: #e1a2a2;
+}
+
+#updateButton {
+  background-color: #b4c4b4;
+}
+
+#updateButton:hover {
+  background-color: #98af98;
+}
+
+
+.adminProductImg {
+  width: 50px;
+  height: 50px;
+}
+
+#singleProduct img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}

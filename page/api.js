@@ -24,15 +24,22 @@ const getProductsById = async (id) => {
   }
 };
 
-const addProduct = async (name, ingredients, type, price) => {
-  const url = `http://10.120.32.57/app/api/v1/products`;
+const getIngredients = async () => {
+  const url = `http://10.120.32.57/app/api/v1/ingredients`;
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.log('error', response.message);
+    }
+  } catch (error) {
+    console.log('error fetching ingredients');
+  }
+};
 
-  const requestData = {
-    name: name,
-    ingredients: ingredients,
-    type: type,
-    price: price,
-  };
+const addIngredient = async (ingredientData) => {
+  const url = `http://10.120.32.57/app/api/v1/ingredients`;
 
   try {
     const response = await fetch(url, {
@@ -40,11 +47,69 @@ const addProduct = async (name, ingredients, type, price) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestData),
+      body: JSON.stringify(ingredientData),
     });
 
     const responseData = await response.json();
     if (response.ok) {
+      console.log('New ingredient created successfully:', responseData);
+      return responseData;
+    } else {
+      console.log(`Failed to create new ingredient: ${responseData.message}`);
+    }
+  } catch (error) {
+    console.error('Error creating new ingredient:', error.message);
+    throw error;
+  }
+};
+
+const updateIngredient = async (ingredient) => {
+  const url = `http://10.120.32.57/app/api/v1/ingredients/${ingredient.id}`;
+
+  const ingredientInfo = {
+    name: ingredient.name,
+    cal: ingredient.cal,
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ingredientInfo),
+    });
+
+    const responseData = await response.json();
+    if (response.ok) {
+      console.log('update', responseData);
+      return responseData;
+    } else {
+      console.log('failed to update ingredient', responseData.message);
+    }
+  } catch (error) {
+    console.log('Error updating ingredient', error.message);
+  }
+};
+
+const addProduct = async (productData) => {
+  const url = `http://10.120.32.57/app/api/v1/products`;
+
+  const formData = new FormData();
+  formData.append('name', productData.name);
+  formData.append('price', productData.price);
+  formData.append('ingredients', productData.ingredients);
+  formData.append('file', productData.image);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const responseData = await response.json();
+    if (response.ok) {
+      console.log('product added', responseData);
       return responseData;
     } else {
       console.log('failed to add product', responseData.message);
@@ -55,7 +120,12 @@ const addProduct = async (name, ingredients, type, price) => {
 };
 
 const updateProduct = async (product) => {
-  const url = `http://10.120.32.57/app/api/v1/products/${id}`;
+  const url = `http://10.120.32.57/app/api/v1/products/${product.id}`;
+
+  const productInfo = {
+    name: product.name,
+    price: product.price,
+  };
 
   try {
     const response = await fetch(url, {
@@ -63,11 +133,12 @@ const updateProduct = async (product) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(productInfo),
     });
 
     const responseData = await response.json();
     if (response.ok) {
+      console.log('update', responseData);
       return responseData;
     } else {
       console.log('failed to update product', responseData.message);
@@ -154,7 +225,6 @@ const getUserById = async (id) => {
 
 const createUser = async (userData) => {
   const url = `http://10.120.32.57/app/api/v1/users`;
-
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -177,14 +247,15 @@ const createUser = async (userData) => {
   }
 };
 
-const updateUser = async (userData) => {
-  const url = 'http://10.120.32.57/app/api/v1/users';
+const updateUser = async (userData, accessToken) => {
+  const url = `http://10.120.32.57/app/api/v1/users/${userData.id}`;
 
   try {
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(userData),
     });
@@ -201,7 +272,7 @@ const updateUser = async (userData) => {
 };
 
 const deleteUser = async (id) => {
-  const url = 'http://10.120.32.57/app/api/v1/users';
+  const url = `http://10.120.32.57/app/api/v1/users/${id}`;
 
   try {
     const response = await fetch(url, {
@@ -249,4 +320,7 @@ export {
   updateUser,
   deleteUser,
   getAvatar,
+  getIngredients,
+  updateIngredient,
+  addIngredient,
 };
