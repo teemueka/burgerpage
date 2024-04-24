@@ -1,11 +1,5 @@
-const validateUsername = (username) => {
-  const regex = /^.{5,}$/;
-  return regex.test(username);
-};
-
 const validateEmail = (email) => {
-  const regex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return regex.test(email);
 };
 
@@ -14,4 +8,4 @@ const validatePassword = (password) => {
   return regex.test(password);
 };
 
-export {validateUsername, validateEmail, validatePassword};
+export {validateEmail, validatePassword};

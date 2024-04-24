@@ -1,8 +1,4 @@
-import {
-  validateUsername,
-  validateEmail,
-  validatePassword,
-} from './userValidator.js';
+import {validateEmail, validatePassword} from './userValidator.js';
 
 const productErrors = (productData) => {
   const {name, price, image} = productData;
@@ -51,13 +47,9 @@ const ingredientErrors = (ingredientData) => {
 };
 
 const userErrors = (userData) => {
-  const {username, password, email, role} = userData;
+  const {password, email} = userData;
 
   let hasErrors = false;
-
-  if (!validateUsername(username)) {
-    hasErrors = true;
-  }
 
   if (!validatePassword(password)) {
     hasErrors = true;
@@ -65,9 +57,7 @@ const userErrors = (userData) => {
   if (!validateEmail(email)) {
     hasErrors = true;
   }
-  if (role !== 'user' && role !== 'admin') {
-    hasErrors = true;
-  }
+
   if (hasErrors) {
     console.log('user information invalid');
     return true;
