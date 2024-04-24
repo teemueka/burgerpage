@@ -1,6 +1,6 @@
 import {generateHeader} from '../default.js';
 
-import {validatePassword, validateEmail} from '../validators/validator.js';
+import {validatePassword, validateEmail} from '../validators/userValidator.js';
 import {createUser, updateUser, userLogin} from '../api.js';
 const currentUser = JSON.parse(localStorage.getItem('user'));
 const token = localStorage.getItem('token');
