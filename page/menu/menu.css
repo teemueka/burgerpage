@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 .menuHeader {
   align-items: center;
   display: flex;

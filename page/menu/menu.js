@@ -8,28 +8,46 @@ const desserts = document.getElementById('desserts');
 
 (async () => {
   const response = await (
-    await fetch('http://10.120.32.57/app/api/v1/products')
+    await fetch('http://localhost:3000/api/v1/products')
   ).json();
-
   for (const product of response) {
-    const category = document.getElementById(product.category);
-    const div = document.createElement('div');
-    div.classList.add('menu-item');
+    if (!product.categories) {
+      continue;
+    }
+    console.log(product.categories);
+    product.categories.forEach((categoryl) => {
+      if (
+        categoryl.name === 'burger' ||
+        categoryl.name === 'side' ||
+        categoryl.name === 'dessert'
+      ) {
+        console.log(`'${categoryl.name}'`);
+        const category = document.getElementById(categoryl.name);
+        if (!category) {
+          console.log(`No element found with ID '${categoryl.name}'`);
+          return;
+        }
 
-    const img = document.createElement('img');
-    img.src = `http://10.120.32.57/app/api/v1/uploads/${product.image}`;
+        console.log(product);
+        const div = document.createElement('div');
+        div.classList.add('menu-item');
 
-    const h5 = document.createElement('h5');
-    h5.textContent = `${product.name}`;
-    const price = document.createElement('p');
-    price.textContent = `${product.price}€`;
-    const p = document.createElement('p');
-    p.textContent = `${product.ingredients}`;
+        const img = document.createElement('img');
+        img.src = `http://10.120.32.57/app/uploads/${product.image}`;
 
-    div.appendChild(img);
-    div.appendChild(h5);
-    div.appendChild(price);
-    div.appendChild(p);
-    category.appendChild(div);
+        const h5 = document.createElement('h5');
+        h5.textContent = `${product.name}`;
+        const price = document.createElement('p');
+        price.textContent = `${product.price}€`;
+        const p = document.createElement('p');
+        p.textContent = `${product.ingredients ? product.ingredients.map((ingredient) => ingredient.name).join(', ') : ''}`;
+
+        div.appendChild(img);
+        div.appendChild(h5);
+        div.appendChild(price);
+        div.appendChild(p);
+        category.appendChild(div);
+      }
+    });
   }
 })();
