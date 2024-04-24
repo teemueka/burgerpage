@@ -127,7 +127,7 @@ const registration = () => {
     <h1>Registration</h1>
     <div class="input-control">
       <label for="reg-email">Email</label>
-      <input id="reg-email" name="email" type="text" required />
+      <input id="reg-email" name="email" type="email" required />
       <div class="error" id="email-error"></div>
     </div>
     <div class="input-control">
