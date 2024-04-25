@@ -170,7 +170,30 @@ const deleteProduct = async (id) => {
   }
 };
 
+const checkEmailAvailability = async (email) => {
+  const url = `http://10.120.32.57/app/api/v1/auth/email/${email}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseData = await response.json();
+    if (response.ok) {
+      return responseData.state;
+    } else {
+      console.log('Error checking email availability', responseData.message);
+    }
+  } catch (error) {
+    console.log('Error checking email availability', error.message);
+  }
+};
+
 const userLogin = async (userData) => {
+  console.log(userData);
   const url = 'http://10.120.32.57/app/api/v1/auth/login';
 
   try {
@@ -320,4 +343,5 @@ export {
   getIngredients,
   updateIngredient,
   addIngredient,
+  checkEmailAvailability,
 };

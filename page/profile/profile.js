@@ -1,7 +1,12 @@
 import {generateHeader} from '../default.js';
 
 import {validatePassword, validateEmail} from '../validators/userValidator.js';
-import {createUser, updateUser, userLogin} from '../api.js';
+import {
+  checkEmailAvailability,
+  createUser,
+  updateUser,
+  userLogin,
+} from '../api.js';
 const currentUser = JSON.parse(localStorage.getItem('user'));
 const token = localStorage.getItem('token');
 console.log('current user', currentUser);
@@ -27,10 +32,22 @@ form.addEventListener('submit', async (event) => {
 
     if (!validateEmail(email)) {
       document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
-      console.log('emailerror');
       hasErrors = true;
     } else {
-      document.getElementById('email-error').innerHTML = '';
+      try {
+        const emailAvailable = await checkEmailAvailability(email);
+        document.getElementById('email-error').innerHTML = '';
+
+        if (!emailAvailable) {
+          document.getElementById('email-error').innerHTML =
+            '<p>Email already in use</p>';
+          hasErrors = true;
+        }
+      } catch (e) {
+        document.getElementById('email-error').innerHTML =
+          '<p>Error validating email</p>';
+        hasErrors = true;
+      }
     }
 
     if (!validatePassword(password)) {
@@ -113,8 +130,7 @@ form.addEventListener('submit', async (event) => {
 const handleRegistration = async (userData) => {
   try {
     await createUser(userData);
-    const {email, password} = userData;
-    await userLogin(email, password);
+    await userLogin(userData);
     window.location.href = '../../page/main/main.html';
   } catch (error) {
     console.error('Error registering user: ', error.message);
@@ -199,7 +215,7 @@ const profile = () => {
 };
 
 if (currentUser !== null) {
-  profile();
+  registration();
 } else {
   registration();
 }
