@@ -4,14 +4,20 @@ import {validatePassword, validateEmail} from '../validators/userValidator.js';
 import {
   checkEmailAvailability,
   createUser,
+  getAvatar,
   updateUser,
+  uploadAvatar,
   userLogin,
+  getCurrentUser,
 } from '../api.js';
 
 const currentUser = JSON.parse(localStorage.getItem('user'));
 const token = localStorage.getItem('token');
 console.log('current user', currentUser);
 console.log('token', token);
+
+const currentUserFromAPI = await getCurrentUser();
+console.log(currentUserFromAPI);
 
 const regEmailInput = document.getElementById('reg-email');
 const regPasswordInput = document.getElementById('reg-password');
@@ -212,7 +218,7 @@ const login = () => {
     .addEventListener('click', registration);
 };
 
-const profile = () => {
+const profile = async () => {
   form.innerHTML = `<div id="mainContainer">
   <form id="updateUserForm" method="POST">
     <h2 id="profileHeader">Update profile</h2>
@@ -251,6 +257,9 @@ const profile = () => {
   </dialog>
 </div>`;
   document.getElementById('profileEmail').value = currentUser.email;
+  document.getElementById('profilePicture').src = await getAvatar(
+    currentUser.id
+  );
   const profilePhotoInput = document.getElementById('photo');
   const profilePicture = document.getElementById('profilePicture');
 
@@ -261,7 +270,7 @@ const profile = () => {
     };
 
     try {
-      await updateUser(avatar, token);
+      await uploadAvatar(avatar, token);
       const reader = new FileReader();
       reader.onload = () => {
         profilePicture.src = reader.result;
