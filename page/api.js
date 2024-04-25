@@ -267,6 +267,56 @@ const createUser = async (userData) => {
   }
 };
 
+const uploadAvatar = async (avatarData, token) => {
+  const url = `http://10.120.32.57/app/api/v1/users/avatar/${avatarData.id}`;
+
+  const formData = new FormData();
+  formData.append('file', avatarData.file);
+
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log('Avatar uploaded successfully', data);
+      localStorage.setItem('AVATAR_KEY', data.avatar);
+      return data;
+    }
+  } catch (error) {
+    console.log('Failed to upload avatar:', error.message);
+    throw error;
+  }
+};
+
+const getAvatar = async (id) => {
+  const url = `http://10.120.32.57/app/api/v1/users/avatar/${id}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const avatar = await response.json();
+      return 'http://10.120.32.57/app/uploads/' + avatar.avatar;
+    } else {
+      throw new Error('Failed to fetch avatar image');
+    }
+  } catch (error) {
+    console.error('Error fetching avatar:', error);
+    throw error;
+  }
+};
+
 const updateUser = async (userData, accessToken) => {
   const url = `http://10.120.32.57/app/api/v1/users/${userData.id}`;
 
@@ -287,6 +337,29 @@ const updateUser = async (userData, accessToken) => {
     }
   } catch (error) {
     console.error('Error updating user information:', error.message);
+    throw error;
+  }
+};
+
+const getCurrentUser = async (token) => {
+  const url = `http://10.120.32.57/app/api/v1/auth/me`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const responseData = await response.json();
+    if (response.ok) {
+      console.log(responseData);
+      return responseData;
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error.message);
     throw error;
   }
 };
@@ -313,20 +386,6 @@ const deleteUser = async (id) => {
   }
 };
 
-const getAvatar = async (id) => {
-  const url = `http://10.120.32.57/app/api/v1/users/avatar/${id}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.log('Error fetching restaurant data', error);
-  }
-};
-
 export {
   getProducts,
   updateProduct,
@@ -344,4 +403,6 @@ export {
   updateIngredient,
   addIngredient,
   checkEmailAvailability,
+  uploadAvatar,
+  getCurrentUser,
 };
