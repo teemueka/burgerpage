@@ -341,7 +341,7 @@ const updateUser = async (userData, accessToken) => {
   }
 };
 
-const getCurrentUser = async (token) => {
+const getCurrentUser = async () => {
   const url = `http://10.120.32.57/app/api/v1/auth/me`;
 
   try {
@@ -349,13 +349,13 @@ const getCurrentUser = async (token) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
 
     const responseData = await response.json();
     if (response.ok) {
-      console.log(responseData);
+      localStorage.setItem('user', JSON.stringify(responseData.user));
       return responseData;
     }
   } catch (error) {
