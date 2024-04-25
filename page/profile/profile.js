@@ -7,22 +7,28 @@ import {
   updateUser,
   userLogin,
 } from '../api.js';
+
 const currentUser = JSON.parse(localStorage.getItem('user'));
 const token = localStorage.getItem('token');
 console.log('current user', currentUser);
 console.log('token', token);
+
+const regEmailInput = document.getElementById('reg-email');
+const regPasswordInput = document.getElementById('reg-password');
+
+const loginEmailInput = document.getElementById('login-email');
+const loginPasswordInput = document.getElementById('login-password');
+
+const profileEmailInput = document.getElementById('profileEmail');
+const profilePasswordInput = document.getElementById('profilePassword');
+const profileNewPasswordInput = document.getElementById('profileNewPassword');
+const profileNewDuplicatePasswordInput = document.getElementById(
+  'profileNewDuplicatePassword'
+);
+
 const form = document.getElementById('form');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
-
-  const regEmailInput = document.getElementById('reg-email');
-  const regPasswordInput = document.getElementById('reg-password');
-
-  const loginEmailInput = document.getElementById('login-email');
-  const loginPasswordInput = document.getElementById('login-password');
-
-  const profileEmailInput = document.getElementById('profileEmail');
-  const profilePasswordInput = document.getElementById('profilePassword');
 
   if (regEmailInput && regPasswordInput) {
     const email = regEmailInput.value.trim();
@@ -91,22 +97,38 @@ form.addEventListener('submit', async (event) => {
   } else {
     const email = profileEmailInput.value.trim();
     const password = profilePasswordInput.value.trim();
+    const newPassword = profileNewPasswordInput.value.trim();
+    const newPasswordAgain = profileNewDuplicatePasswordInput.value.trim();
 
     let hasErrors = false;
 
-    if (!validateEmail(email)) {
-      document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
-      hasErrors = true;
-    } else {
-      document.getElementById('email-error').innerHTML = '';
+    const oldUser = {
+      email: email,
+      password: password,
+    };
+
+    const validUser = await userLogin(oldUser);
+    document.getElementById('password-error').innerHTML = '';
+    if (validUser === undefined) {
+      document.getElementById('password-error').innerHTML =
+        '<p>current password incorrect</p>';
+      return;
     }
 
-    if (!validatePassword(password)) {
-      document.getElementById('password-error').innerHTML =
+    if (!validatePassword(newPassword)) {
+      document.getElementById('newPassword-error').innerHTML =
         '<p>Password must contain 8 characters and a number</p>';
       hasErrors = true;
     } else {
-      document.getElementById('password-error').innerHTML = '';
+      document.getElementById('newPassword-error').innerHTML = '';
+    }
+
+    if (newPassword !== newPasswordAgain) {
+      document.getElementById('duplicatePassword-error').innerHTML =
+        '<p>Passwords must match</p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('duplicatePassword-error').innerHTML = '';
     }
 
     if (hasErrors) {
@@ -114,8 +136,9 @@ form.addEventListener('submit', async (event) => {
     }
 
     const userData = {
+      id: currentUser.id,
       email: email,
-      password: password,
+      password: newPassword,
     };
 
     try {
@@ -192,16 +215,31 @@ const login = () => {
 const profile = () => {
   form.innerHTML = `<div id="mainContainer">
   <form id="updateUserForm" method="POST">
-    <h2>Update profile</h2>
+    <h2 id="profileHeader">Update profile</h2>
+    <div class="pfp">
+      <img src="https://placehold.co/400" alt="image loading failed" id="profilePicture" class="avatar">
+      <label for="photo" class="custom-file-upload">Update picture</label>
+    <input type="file" name="photo" id="photo" style="display: none;">
+    </div>
     <div class="profile-inputs">
       <label for="profileEmail">Email</label>
-      <input id="profileEmail" name="profileEmail" type="text">
+      <input id="profileEmail" name="profileEmail" type="text" readonly>
       <div class="error" id="email-error"></div>
     </div>
     <div class="profile-inputs">
       <label for="profilePassword">Password</label>
       <input id="profilePassword" name="profilePassword" type="password">
       <div class="error" id="password-error"></div>
+    </div>
+    <div class="profile-inputs">
+      <label for="profileNewPassword">New password</label>
+      <input id="profileNewPassword" name="profileNewPassword" type="password">
+      <div class="error" id="newPassword-error"></div>
+    </div>
+    <div class="profile-inputs">
+      <label for="profileNewDuplicatePassword">Confirm new password</label>
+      <input id="profileNewDuplicatePassword" name="profileNewDuplicatePassword" type="password">
+      <div class="error" id="duplicatePassword-error"></div>
     </div>
     <button type="submit">Update</button>
     <button type="button" id="delete" class="delete">Delete account</button>
@@ -212,10 +250,31 @@ const profile = () => {
     <button id="deleteUser" class="delete">yes</button>
   </dialog>
 </div>`;
+  document.getElementById('profileEmail').value = currentUser.email;
+  const profilePhotoInput = document.getElementById('photo');
+  const profilePicture = document.getElementById('profilePicture');
+
+  profilePhotoInput.addEventListener('change', async (evt) => {
+    const avatar = {
+      id: currentUser.id,
+      file: evt.target.files[0],
+    };
+
+    try {
+      await updateUser(avatar, token);
+      const reader = new FileReader();
+      reader.onload = () => {
+        profilePicture.src = reader.result;
+      };
+      reader.readAsDataURL(evt.target.files[0]);
+    } catch (error) {
+      console.log('Error uploading avatar', error);
+    }
+  });
 };
 
 if (currentUser !== null) {
-  registration();
+  profile();
 } else {
-  registration();
+  login();
 }
