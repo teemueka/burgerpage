@@ -11,30 +11,34 @@ import {
   getCurrentUser,
 } from '../api.js';
 
+try {
+  await getCurrentUser();
+} catch (e) {
+  console.log('aaaaaaaaaaaaaaaa', e.message);
+}
+
 const currentUser = JSON.parse(localStorage.getItem('user'));
+console.log(currentUser);
 const token = localStorage.getItem('token');
-console.log('current user', currentUser);
 console.log('token', token);
-
-const currentUserFromAPI = await getCurrentUser();
-console.log(currentUserFromAPI);
-
-const regEmailInput = document.getElementById('reg-email');
-const regPasswordInput = document.getElementById('reg-password');
-
-const loginEmailInput = document.getElementById('login-email');
-const loginPasswordInput = document.getElementById('login-password');
-
-const profileEmailInput = document.getElementById('profileEmail');
-const profilePasswordInput = document.getElementById('profilePassword');
-const profileNewPasswordInput = document.getElementById('profileNewPassword');
-const profileNewDuplicatePasswordInput = document.getElementById(
-  'profileNewDuplicatePassword'
-);
 
 const form = document.getElementById('form');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
+
+  const regEmailInput = document.getElementById('reg-email');
+  const regPasswordInput = document.getElementById('reg-password');
+
+  const loginEmailInput = document.getElementById('login-email');
+  const loginPasswordInput = document.getElementById('login-password');
+
+  const profileEmailInput = document.getElementById('profileEmail');
+  const profilePasswordInput = document.getElementById('profilePassword');
+  const profileNewPasswordInput = document.getElementById('profileNewPassword');
+  const profileNewDuplicatePasswordInput = document.getElementById(
+    'profileNewDuplicatePassword'
+  );
+
 
   if (regEmailInput && regPasswordInput) {
     const email = regEmailInput.value.trim();
