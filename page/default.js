@@ -32,7 +32,12 @@ const createHeader = () => {
 
   const loginButton = document.createElement('a');
   loginButton.href = '../profile/profile.html';
+
   loginButton.textContent = 'Login';
+
+  if (localStorage.getItem('user')) {
+    loginButton.textContent = 'Profile';
+  }
   navRight.appendChild(loginButton);
 
   const cartButton = document.createElement('a');
@@ -43,7 +48,7 @@ const createHeader = () => {
   const languageDropdown = document.createElement('div');
   languageDropdown.className = 'dropdown';
   const languageButton = document.createElement('a');
-  languageButton.textContent = 'Language';
+  languageButton.textContent = 'Lang';
   languageDropdown.appendChild(languageButton);
 
   navRight.appendChild(languageDropdown);
