@@ -2,12 +2,13 @@ body {
   font-family: sans-serif;
   background-color: var(--primary);
   height: 100vh;
+  overflow-x: hidden;
 }
 
 #form {
   background-color: rgba(128, 126, 123, 0.28);
-  width: 300px;
-  margin: 20vh auto 0 auto;
+  width: 30vw;
+  margin: 5vh auto 0 auto;
   padding: 20px;
   border-radius: 4px;
   font-size: 12px;
@@ -18,7 +19,7 @@ body {
   text-align: center;
 }
 
-#form button {
+.defaultBtn {
   background-color: var(--highlight);
   padding: 10px;
   margin-top: 10px;
@@ -28,8 +29,22 @@ body {
   cursor: pointer;
 }
 
-#form button:hover {
+.defaultBtn:hover {
   background-color: #4588a8;
+}
+
+.delete {
+  background-color: #ef7070;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete:hover {
+  background-color: #9b3c3c;
 }
 
 .custom-file-upload {
@@ -41,6 +56,7 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .custom-file-upload:hover {
   background-color: #4588a8;
 }
@@ -119,4 +135,14 @@ input {
 
 .input-control label {
   padding-bottom: 2px;
+}
+
+.modal {
+  background-color: whitesmoke;
+  top: 50vh;
+}
+
+.modal button {
+  width: 100%;
+  margin-top: 0.2rem;
 }

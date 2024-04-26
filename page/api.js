@@ -364,14 +364,15 @@ const getCurrentUser = async () => {
   }
 };
 
-const deleteUser = async (id) => {
-  const url = `http://10.120.32.57/app/api/v1/users/${id}`;
+const deleteUser = async (user, token) => {
+  const url = `http://10.120.32.57/app/api/v1/users/${user.id}`;
 
   try {
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     });
 

@@ -9,6 +9,7 @@ import {
   uploadAvatar,
   userLogin,
   getCurrentUser,
+  deleteUser,
 } from '../api.js';
 
 try {
@@ -38,7 +39,6 @@ form.addEventListener('submit', async (event) => {
   const profileNewDuplicatePasswordInput = document.getElementById(
     'profileNewDuplicatePassword'
   );
-
 
   if (regEmailInput && regPasswordInput) {
     const email = regEmailInput.value.trim();
@@ -193,7 +193,7 @@ const registration = () => {
       <p>Already have an account?</p>
       <a href="#" id="switchToLogin">Sign in</a>
     </div>
-    <button type="submit" >Register</button>`;
+    <button type="submit" class="defaultBtn" >Register</button>`;
 
   document.getElementById('switchToLogin').addEventListener('click', login);
 };
@@ -215,7 +215,7 @@ const login = () => {
       <p>Make an account</p>
       <a href="#" id="switchToRegistration">Sign up</a>
     </div>
-    <button type="submit">Log in</button>`;
+    <button type="submit" class="defaultBtn">Log in</button>`;
 
   document
     .getElementById('switchToRegistration')
@@ -251,12 +251,12 @@ const profile = async () => {
       <input id="profileNewDuplicatePassword" name="profileNewDuplicatePassword" type="password">
       <div class="error" id="duplicatePassword-error"></div>
     </div>
-    <button type="submit">Update</button>
+    <button type="submit" class="defaultBtn">Update</button>
     <button type="button" id="delete" class="delete">Delete account</button>
   </form>
   <dialog class="modal">
     <h2>Are you sure?</h2>
-    <button id="dontDelete">no</button>
+    <button id="dontDelete" class="defaultBtn">no</button>
     <button id="deleteUser" class="delete">yes</button>
   </dialog>
 </div>`;
@@ -282,6 +282,23 @@ const profile = async () => {
       reader.readAsDataURL(evt.target.files[0]);
     } catch (error) {
       console.log('Error uploading avatar', error);
+    }
+  });
+
+  const modal = document.querySelector('.modal');
+
+  document.getElementById('delete').addEventListener('click', async () => {
+    modal.show();
+  });
+  document.getElementById('dontDelete').addEventListener('click', (evt) => {
+    modal.close();
+    evt.preventDefault();
+  });
+  document.getElementById('deleteUser').addEventListener('click', async () => {
+    try {
+      await deleteUser(currentUser, token);
+    } catch (e) {
+      console.log('error deleting user', e.message);
     }
   });
 };
