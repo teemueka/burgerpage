@@ -32,7 +32,12 @@ const createHeader = () => {
 
   const loginButton = document.createElement('a');
   loginButton.href = '../profile/profile.html';
+
   loginButton.textContent = 'Login';
+
+  if (localStorage.getItem('user')) {
+    loginButton.textContent = 'Profile';
+  }
   navRight.appendChild(loginButton);
 
   const cartButton = document.createElement('a');
