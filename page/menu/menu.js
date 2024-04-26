@@ -8,7 +8,7 @@ const desserts = document.getElementById('desserts');
 
 (async () => {
   const response = await (
-    await fetch('http://localhost:3000/api/v1/products')
+    await fetch('http://10.120.32.57/app/api/v1/products')
   ).json();
   for (const product of response) {
     if (!product.categories) {
