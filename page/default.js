@@ -48,7 +48,7 @@ const createHeader = () => {
   const languageDropdown = document.createElement('div');
   languageDropdown.className = 'dropdown';
   const languageButton = document.createElement('a');
-  languageButton.textContent = 'Language';
+  languageButton.textContent = 'Lang';
   languageDropdown.appendChild(languageButton);
 
   navRight.appendChild(languageDropdown);
