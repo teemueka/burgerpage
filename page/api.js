@@ -378,7 +378,8 @@ const deleteUser = async (user, token) => {
 
     const responseData = await response.json();
     if (response.ok) {
-      console.log(responseData);
+      localStorage.clear();
+      location.reload();
       return responseData;
     }
   } catch (error) {

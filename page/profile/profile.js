@@ -294,16 +294,19 @@ const profile = async () => {
     modal.close();
     evt.preventDefault();
   });
-  document.getElementById('deleteUser').addEventListener('click', async () => {
-    try {
-      await deleteUser(currentUser, token);
-    } catch (e) {
-      console.log('error deleting user', e.message);
-    }
-  });
+  document
+    .getElementById('deleteUser')
+    .addEventListener('click', async (evt) => {
+      evt.preventDefault();
+      try {
+        await deleteUser(currentUser, token);
+      } catch (e) {
+        console.log('error deleting user', e.message);
+      }
+    });
 };
 
-if (currentUser !== null) {
+if (currentUser) {
   profile();
 } else {
   login();
