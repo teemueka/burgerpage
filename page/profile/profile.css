@@ -140,8 +140,6 @@ input {
 .modal {
   background-color: whitesmoke;
   top: 50vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .modal button {
