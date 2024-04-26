@@ -34,7 +34,7 @@ body {
 }
 
 .delete {
-  background-color: #ef7070;
+  background-color: var(--highlight);
   padding: 10px;
   margin-top: 10px;
   width: 100%;
@@ -44,7 +44,7 @@ body {
 }
 
 .delete:hover {
-  background-color: #9b3c3c;
+  background-color: #4588a8;
 }
 
 .custom-file-upload {
@@ -140,9 +140,15 @@ input {
 .modal {
   background-color: whitesmoke;
   top: 50vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal button {
   width: 100%;
-  margin-top: 0.2rem;
+}
+
+.modal h2 {
+  display: flex;
+  justify-content: center;
 }
