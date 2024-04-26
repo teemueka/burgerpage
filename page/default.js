@@ -37,6 +37,13 @@ const createHeader = () => {
 
   if (localStorage.getItem('user')) {
     loginButton.textContent = 'Profile';
+    console.log(JSON.parse(localStorage.getItem('user')).role);
+    if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
+      const adminButton = document.createElement('a');
+      adminButton.href = '../admin/admin.html';
+      adminButton.textContent = 'Admin';
+      navRight.appendChild(adminButton);
+    }
   }
   navRight.appendChild(loginButton);
 
