@@ -1,3 +1,5 @@
+import {generateHeader} from '../default.js';
+
 import {
   getProducts,
   updateProduct,
@@ -22,24 +24,20 @@ import {
 } from '../validators/adminValidator.js';
 
 const adminContent = document.getElementById('adminInputs');
-const usersButton = document.getElementById('usersBtn');
-const productsButton = document.getElementById('productsBtn');
-const ingredientsButton = document.getElementById('ingredientsBtn');
-const ordersButton = document.getElementById('ordersBtn');
-
-usersButton.addEventListener('click', async () => {
+document.getElementById('usersBtn').addEventListener('click', async () => {
   await adminUsers();
 });
-
-productsButton.addEventListener('click', async () => {
+document.getElementById('productsBtn').addEventListener('click', async () => {
   await adminProducts();
 });
 
-ingredientsButton.addEventListener('click', async () => {
-  await adminIngredients();
-});
+document
+  .getElementById('ingredientsBtn')
+  .addEventListener('click', async () => {
+    await adminIngredients();
+  });
 
-ordersButton.addEventListener('click', async () => {
+document.getElementById('ordersBtn').addEventListener('click', async () => {
   await adminOrders();
 });
 
@@ -47,7 +45,6 @@ const adminUsersContent = async () => {
   const addUsersContainer = document.getElementById('addUser-container');
   addUsersContainer.innerHTML = '';
   addUsersContainer.innerHTML = `<h5>Add new user</h5>
-<label for="addUserName">Username</label><input id="addUserName" type="text" required>
 <label for="addUserPass">Password</label><input id="addUserPass" type="text" required>
 <label for="addUserEmail">Email</label><input id="addUserEmail" type="text" required>
 <label for="addUserAddress">Address</label><input id="addUserAddress" type="text">
@@ -61,7 +58,6 @@ const adminUsersContent = async () => {
   addUserBtn.innerText = 'Add new user';
   addUserBtn.addEventListener('click', async () => {
     const newUser = {
-      username: document.getElementById('addUserName').value,
       password: document.getElementById('addUserPass').value,
       email: document.getElementById('addUserEmail').value,
       address: document.getElementById('addUserAddress').value,
@@ -86,29 +82,39 @@ const adminUsersContent = async () => {
     userContainer.className = 'adminContainer';
     userContainer.id = 'singleUser';
     userContainer.innerHTML = `
-    <h5 contenteditable="true" id="username-${user.id}">${user.username}</h5>
-    <p>Email: <span contenteditable="true" id="email-${user.id}">${user.email}</span></p>
+    <h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>
     <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
-    <img src="http://10.120.32.57/app/uploads${user.avatar}" alt="User Avatar" class="adminProductImglol">
-    <input type="file" id="avatar-${user.id}" accept="image/*">  <!-- Added file input -->
+    <img src="" alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
+    <input type="file" id="avatar-${user.id}" accept="image/*">
     <p>Role: <span contenteditable="true" id="role-${user.id}">${user.role}</span></p>`;
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
+    updateBtn.id = 'updateButton';
     updateBtn.innerText = 'Update';
 
     const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'deleteButton';
     deleteBtn.className = 'containerBtn';
     deleteBtn.innerText = 'Delete';
 
     userContainer.append(updateBtn, deleteBtn);
     mainContainer.appendChild(userContainer);
 
+    const avatarImg = document.getElementById(`avatar-${user.id}`);
+    getAvatar(user.id)
+      .then((avatarSrc) => {
+        avatarImg.src = avatarSrc;
+      })
+      .catch((error) => {
+        console.log('Error loading avatar:', error);
+        avatarImg.alt = 'Error loading image';
+      });
+
     updateBtn.addEventListener('click', async () => {
       const avatarElement = document.getElementById(`avatar-${user.id}`);
       const updatedUser = {
         id: user.id,
-        username: document.getElementById(`username-${user.id}`).innerText,
         email: document.getElementById(`email-${user.id}`).innerText,
         address: document.getElementById(`address-${user.id}`).innerText,
         avatar: avatarElement.files.length > 0 ? avatarElement.files[0] : null,
@@ -123,7 +129,6 @@ const adminUsersContent = async () => {
       userContainer.remove();
     });
   });
-
 };
 
 const adminProductsContent = async () => {
