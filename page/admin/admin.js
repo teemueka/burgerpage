@@ -17,12 +17,24 @@ import {
   updateIngredient,
   addIngredient,
   getCategories,
+  getCurrentUser,
 } from '../api.js';
 import {
   ingredientErrors,
   productErrors,
   userErrors,
 } from '../validators/adminValidator.js';
+
+try {
+  await getCurrentUser();
+} catch (e) {
+  console.log('aaaaaaaaaaaaaaaa', e.message);
+}
+
+const currentUser = JSON.parse(localStorage.getItem('user'));
+console.log(currentUser);
+const token = localStorage.getItem('token');
+console.log('token', token);
 
 const adminContent = document.getElementById('adminInputs');
 document.getElementById('usersBtn').addEventListener('click', async () => {
@@ -85,7 +97,11 @@ const adminUsersContent = async () => {
     <h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>
     <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
     <img alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
-    <p>Role: <span contenteditable="true" id="role-${user.id}">${user.role}</span></p>`;
+    <label for="userRole-${user.id}">role</label>
+      <select name="userRole" id="userRole-${user.id}">
+      <option value="user">user</option>
+      <option value="admin">admin</option>
+      </select>`;
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
@@ -111,16 +127,14 @@ const adminUsersContent = async () => {
       });
 
     updateBtn.addEventListener('click', async () => {
-      const avatarElement = document.getElementById(`avatar-${user.id}`);
       const updatedUser = {
         id: user.id,
         email: document.getElementById(`email-${user.id}`).innerText,
         address: document.getElementById(`address-${user.id}`).innerText,
-        avatar: avatarElement.files.length > 0 ? avatarElement.files[0] : null,
-        role: document.getElementById(`role-${user.id}`).innerText,
+        role: document.getElementById(`userRole-${user.id}`).value,
       };
       console.log('Updated User:', updatedUser);
-      await updateUser(updatedUser);
+      await updateUser(updatedUser, token);
     });
 
     deleteBtn.addEventListener('click', async () => {
