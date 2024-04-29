@@ -59,9 +59,9 @@ const adminUsersContent = async () => {
   addUsersContainer.innerHTML = '';
   addUsersContainer.innerHTML = `<h5>Add new user</h5>
 <label for="addUserPass">Password</label><input id="addUserPass" type="text" required>
-<label for="addUserEmail">Email</label><input id="addUserEmail" type="text" required>
+<label for="addUserEmail">Email</label><input id="addUserEmail" type="email" required>
 <label for="addUserAddress">Address</label><input id="addUserAddress" type="text">
-<label for="addUserAvatar">Avatar</label><input id="addUserAvatar" type="text">
+<label for="addUserAvatar">Avatar</label><input type="file" name="photo" id="addUserAvatar">
 <div class="error"></div>
 `;
 
@@ -74,7 +74,7 @@ const adminUsersContent = async () => {
       password: document.getElementById('addUserPass').value,
       email: document.getElementById('addUserEmail').value,
       address: document.getElementById('addUserAddress').value,
-      file: document.getElementById('addUserAvatar').value,
+      file: document.getElementById('addUserAvatar').files[0],
     };
     if (!userErrors(newUser)) {
       errors.innerHTML = '';

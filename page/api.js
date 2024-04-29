@@ -258,13 +258,17 @@ const getUserById = async (id) => {
 
 const createUser = async (userData) => {
   const url = `http://10.120.32.57/app/api/v1/users`;
+
+  const formData = new FormData();
+  formData.append('email', userData.email);
+  formData.append('password', userData.password);
+  formData.append('address', userData.address);
+  formData.append('file', userData.file);
+
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
+      body: formData,
     });
 
     const responseData = await response.json();
