@@ -241,6 +241,19 @@ const adminProductsContent = async () => {
       <img src="http://10.120.32.57/app/uploads/${product.image}" alt="Product image" id="image-${product.id}">
       <p>price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>`;
 
+    if (product.allergies && product.allergies.length > 0) {
+      singleProduct.innerHTML += `<p>allergies: ${product.allergies}</p>`;
+    }
+
+    if (product.categories) {
+      let categories = '';
+      product.categories.forEach((category) => {
+        console.log(category.name);
+        categories += category.name;
+      });
+      singleProduct.innerHTML += `<p>categories: ${categories}</p>`;
+    }
+
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
     updateBtn.id = 'updateButton';
