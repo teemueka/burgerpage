@@ -18,6 +18,7 @@ import {
   addIngredient,
   getCategories,
   getCurrentUser,
+  getOrders,
 } from '../api.js';
 import {
   ingredientErrors,
@@ -378,6 +379,39 @@ const adminIngredientsContent = async () => {
   addIngredientContainer.appendChild(addIngredientBtn);
 };
 
+const adminOrdersContent = async () => {
+  const orderContainer = document.getElementById('order-container');
+  orderContainer.innerHTML = '';
+  const orders = await getOrders();
+  console.log(orders);
+
+  orders.forEach((order) => {
+    const singleOrder = document.createElement('div');
+    singleOrder.className = 'adminContainer';
+    singleOrder.id = 'singleOrder';
+    singleOrder.innerHTML = '';
+    singleOrder.innerHTML = `<p>Address: ${order.address}</p>
+       <p>Date: ${order.date}</p>
+       <p>Type: ${order.order_type}</p>
+       <p>State: ${order.state}</p>`;
+
+    const updateBtn = document.createElement('button');
+    updateBtn.className = 'containerBtn';
+    updateBtn.id = 'updateButton';
+    updateBtn.innerText = 'update';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'containerBtn';
+    deleteBtn.id = 'deleteButton';
+    deleteBtn.innerText = 'delete';
+
+    singleOrder.appendChild(updateBtn);
+    singleOrder.appendChild(deleteBtn);
+
+    orderContainer.appendChild(singleOrder);
+  });
+};
+
 const adminUsers = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `
@@ -414,30 +448,14 @@ const adminIngredients = async () => {
   await adminIngredientsContent();
 };
 
-const adminOrders = () => {
+const adminOrders = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `<div id="adminOrders">
-    <h3>Orders</h3>
-    <div>
-      <label for="orderUser">User order</label>
-      <input id="orderUser" name="orderUser" type="text">
-    </div>
-    <div>
-      <label for="orderProduct">Ordered product</label>
-      <input id="orderProduct" name="orderProduct" type="text">
-    </div>
-    <div>
-      <label for="orderType">Order type</label>
-      <input id="orderType" name="orderType" type="text">
-    </div>
-    <div>
-      <label for="orderDate">Order date</label>
-      <input id="orderDate" name="orderDate" type="text">
-    </div><div>
-    <label for="orderState">Order state</label>
-    <input id="orderState" name="orderState" type="text">
+  <div id="orderContent">
+  <div id="order-container" class="adminContentControl"></div>
   </div>
   </div>`;
+  await adminOrdersContent();
 };
 
-await adminUsers();
+await adminOrders();

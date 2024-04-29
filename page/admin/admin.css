@@ -82,6 +82,12 @@
   align-items: center;
 }
 
+#orderContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #userBox {
   gap: 3em;
 }

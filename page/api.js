@@ -419,6 +419,26 @@ const deleteUser = async (user, token) => {
   }
 };
 
+const getOrders = async () => {
+  const url = `http://10.120.32.57/app/api/v1/orders`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.log('Error fetching products', error);
+  }
+};
+
 export {
   getProducts,
   updateProduct,
@@ -439,4 +459,5 @@ export {
   uploadAvatar,
   getCurrentUser,
   getCategories,
+  getOrders,
 };
