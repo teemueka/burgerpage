@@ -92,12 +92,25 @@ const updateIngredient = async (ingredient) => {
   }
 };
 
+const getCategories = async () => {
+  try {
+    const response = await fetch(`http://10.120.32.57/app/api/v1/categories`);
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.log('Error fetching products', error);
+  }
+};
+
 const addProduct = async (productData) => {
   const url = `http://10.120.32.57/app/api/v1/products`;
 
   const formData = new FormData();
   formData.append('name', productData.name);
   formData.append('price', productData.price);
+  formData.append('category', productData.category);
   formData.append('ingredients', productData.ingredients);
   formData.append('file', productData.image);
 
@@ -219,9 +232,18 @@ const userLogin = async (userData) => {
   }
 };
 
-const getUsers = async () => {
+const getUsers = async (token) => {
+  const url = `http://10.120.32.57/app/api/v1/users`;
+
   try {
-    const response = await fetch(`http://10.120.32.57/app/api/v1/users`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
     }
@@ -245,13 +267,17 @@ const getUserById = async (id) => {
 
 const createUser = async (userData) => {
   const url = `http://10.120.32.57/app/api/v1/users`;
+
+  const formData = new FormData();
+  formData.append('email', userData.email);
+  formData.append('password', userData.password);
+  formData.append('address', userData.address);
+  formData.append('file', userData.file);
+
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
+      body: formData,
     });
 
     const responseData = await response.json();
@@ -365,7 +391,9 @@ const getCurrentUser = async () => {
 };
 
 const deleteUser = async (user, token) => {
-  const url = `http://10.120.32.57/app/api/v1/users/${user.id}`;
+  const url = `http://10.120.32.57/app/api/v1/users/${user}`;
+
+  const userDeleting = await getCurrentUser(token);
 
   try {
     const response = await fetch(url, {
@@ -377,14 +405,37 @@ const deleteUser = async (user, token) => {
     });
 
     const responseData = await response.json();
+    console.log(responseData);
     if (response.ok) {
-      localStorage.clear();
-      location.reload();
+      if (userDeleting.user.role !== 'admin') {
+        localStorage.clear();
+        location.reload();
+      }
       return responseData;
     }
   } catch (error) {
     console.error('Error deleting user:', error.message);
     throw error;
+  }
+};
+
+const getOrders = async () => {
+  const url = `http://10.120.32.57/app/api/v1/orders`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.log('Error fetching products', error);
   }
 };
 
@@ -407,4 +458,6 @@ export {
   checkEmailAvailability,
   uploadAvatar,
   getCurrentUser,
+  getCategories,
+  getOrders,
 };

@@ -1,3 +1,5 @@
+import {generateHeader} from '../default.js';
+
 import {
   getProducts,
   updateProduct,
@@ -14,6 +16,9 @@ import {
   getIngredients,
   updateIngredient,
   addIngredient,
+  getCategories,
+  getCurrentUser,
+  getOrders,
 } from '../api.js';
 import {
   ingredientErrors,
@@ -21,25 +26,32 @@ import {
   userErrors,
 } from '../validators/adminValidator.js';
 
-const adminContent = document.getElementById('adminInputs');
-const usersButton = document.getElementById('usersBtn');
-const productsButton = document.getElementById('productsBtn');
-const ingredientsButton = document.getElementById('ingredientsBtn');
-const ordersButton = document.getElementById('ordersBtn');
+try {
+  await getCurrentUser();
+} catch (e) {
+  console.log('aaaaaaaaaaaaaaaa', e.message);
+}
 
-usersButton.addEventListener('click', async () => {
+const currentUser = JSON.parse(localStorage.getItem('user'));
+console.log(currentUser);
+const token = localStorage.getItem('token');
+console.log('token', token);
+
+const adminContent = document.getElementById('adminInputs');
+document.getElementById('usersBtn').addEventListener('click', async () => {
   await adminUsers();
 });
-
-productsButton.addEventListener('click', async () => {
+document.getElementById('productsBtn').addEventListener('click', async () => {
   await adminProducts();
 });
 
-ingredientsButton.addEventListener('click', async () => {
-  await adminIngredients();
-});
+document
+  .getElementById('ingredientsBtn')
+  .addEventListener('click', async () => {
+    await adminIngredients();
+  });
 
-ordersButton.addEventListener('click', async () => {
+document.getElementById('ordersBtn').addEventListener('click', async () => {
   await adminOrders();
 });
 
@@ -47,11 +59,10 @@ const adminUsersContent = async () => {
   const addUsersContainer = document.getElementById('addUser-container');
   addUsersContainer.innerHTML = '';
   addUsersContainer.innerHTML = `<h5>Add new user</h5>
-<label for="addUserName">Username</label><input id="addUserName" type="text" required>
 <label for="addUserPass">Password</label><input id="addUserPass" type="text" required>
-<label for="addUserEmail">Email</label><input id="addUserEmail" type="text" required>
+<label for="addUserEmail">Email</label><input id="addUserEmail" type="email" required>
 <label for="addUserAddress">Address</label><input id="addUserAddress" type="text">
-<label for="addUserAvatar">Avatar</label><input id="addUserAvatar" type="text">
+<label for="addUserAvatar">Avatar</label><input type="file" name="photo" id="addUserAvatar">
 <div class="error"></div>
 `;
 
@@ -61,11 +72,10 @@ const adminUsersContent = async () => {
   addUserBtn.innerText = 'Add new user';
   addUserBtn.addEventListener('click', async () => {
     const newUser = {
-      username: document.getElementById('addUserName').value,
       password: document.getElementById('addUserPass').value,
       email: document.getElementById('addUserEmail').value,
       address: document.getElementById('addUserAddress').value,
-      file: document.getElementById('addUserAvatar').value,
+      file: document.getElementById('addUserAvatar').files[0],
     };
     if (!userErrors(newUser)) {
       errors.innerHTML = '';
@@ -78,52 +88,66 @@ const adminUsersContent = async () => {
 
   const mainContainer = document.getElementById('users-container');
   mainContainer.innerHTML = '';
-  const users = await getUsers();
-  // http://10.120.32.57/app/${user.avatar}
+  const users = await getUsers(token);
 
   users.forEach((user) => {
     const userContainer = document.createElement('div');
     userContainer.className = 'adminContainer';
     userContainer.id = 'singleUser';
     userContainer.innerHTML = `
-    <h5 contenteditable="true" id="username-${user.id}">${user.username}</h5>
-    <p>Email: <span contenteditable="true" id="email-${user.id}">${user.email}</span></p>
+    <h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>
     <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
-    <img src="http://10.120.32.57/app/uploads${user.avatar}" alt="User Avatar" class="adminProductImglol">
-    <input type="file" id="avatar-${user.id}" accept="image/*">  <!-- Added file input -->
-    <p>Role: <span contenteditable="true" id="role-${user.id}">${user.role}</span></p>`;
+    <img alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
+    <label for="userRole-${user.id}">role</label>
+      <select name="userRole" id="userRole-${user.id}">
+      ${
+        user.role === 'admin'
+          ? `<option value="admin">admin</option>
+         <option value="user">user</option>`
+          : `<option value="user">user</option>
+         <option value="admin">admin</option>`
+      }
+      </select>`;
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
+    updateBtn.id = 'updateButton';
     updateBtn.innerText = 'Update';
 
     const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'deleteButton';
     deleteBtn.className = 'containerBtn';
     deleteBtn.innerText = 'Delete';
 
     userContainer.append(updateBtn, deleteBtn);
     mainContainer.appendChild(userContainer);
 
+    const avatarImg = document.getElementById(`avatar-${user.id}`);
+    getAvatar(user.id)
+      .then((avatarSrc) => {
+        avatarImg.src = avatarSrc;
+      })
+      .catch((error) => {
+        console.log('Error loading avatar:', error);
+        avatarImg.alt = 'Error loading image';
+      });
+
     updateBtn.addEventListener('click', async () => {
-      const avatarElement = document.getElementById(`avatar-${user.id}`);
       const updatedUser = {
         id: user.id,
-        username: document.getElementById(`username-${user.id}`).innerText,
         email: document.getElementById(`email-${user.id}`).innerText,
         address: document.getElementById(`address-${user.id}`).innerText,
-        avatar: avatarElement.files.length > 0 ? avatarElement.files[0] : null,
-        role: document.getElementById(`role-${user.id}`).innerText,
+        role: document.getElementById(`userRole-${user.id}`).value,
       };
       console.log('Updated User:', updatedUser);
-      await updateUser(updatedUser);
+      await updateUser(updatedUser, token);
     });
 
     deleteBtn.addEventListener('click', async () => {
-      await deleteUser(user.id); // Function name adjusted to match the intended action
+      await deleteUser(user.id, token);
       userContainer.remove();
     });
   });
-
 };
 
 const adminProductsContent = async () => {
@@ -188,9 +212,17 @@ const adminProductsContent = async () => {
       <input id="addProductName" type="text">
       <label for="productPrice">Price</label>
       <input id="productPrice" type="text">
+      <label for="productCategory">Category</label>
+      <select name="productCategory" id="productCategory"></select>
       <label for="productImage">Image</label>
       <input id="productImage" type="file">
            <div class="error"></div>`;
+
+  const categories = await getCategories();
+  const dropDown = document.getElementById('productCategory');
+  categories.forEach((category) => {
+    dropDown.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+  });
 
   addProductContainer.appendChild(ingredientsContainer);
   const errors = document.querySelector('.error');
@@ -201,6 +233,7 @@ const adminProductsContent = async () => {
     const productData = {
       name: document.getElementById('addProductName').value,
       price: document.getElementById('productPrice').value,
+      category: document.getElementById('productCategory').value,
       ingredients: JSON.stringify(ingredientArray.toString()),
       image: document.getElementById('productImage').files[0],
     };
@@ -225,27 +258,41 @@ const adminProductsContent = async () => {
     singleProduct.innerHTML = '';
     singleProduct.innerHTML = `
       <h5 contenteditable="true" id="productName-${product.id}">${product.name}</h5>
-      <p>price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>
-      <img src="http://10.120.32.57/app/uploads/${product.image}">
-      <p>image: <span contenteditable="true" id="image-${product.id}">$product.image}</span></p>`;
+      <img src="http://10.120.32.57/app/uploads/${product.image}" alt="Product image" id="image-${product.id}">
+      <p>price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>`;
+
+    if (product.allergies && product.allergies.length > 0) {
+      singleProduct.innerHTML += `<p>allergies: ${product.allergies}</p>`;
+    }
+
+    if (product.categories) {
+      let categories = '';
+      product.categories.forEach((category) => {
+        console.log(category.name);
+        categories += category.name;
+      });
+      singleProduct.innerHTML += `<p>categories: ${categories}</p>`;
+    }
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'containerBtn';
     deleteBtn.id = 'deleteButton';
     deleteBtn.innerText = 'delete';
+
     singleProduct.appendChild(updateBtn);
     singleProduct.appendChild(deleteBtn);
     productContainer.appendChild(singleProduct);
+
     updateBtn.addEventListener('click', async () => {
       const updatedProduct = {
         id: product.id,
         name: document.getElementById(`productName-${product.id}`).innerText,
         price: document.getElementById(`price-${product.id}`).innerText,
-        image: document.getElementById(`image-${product.id}`).innerText,
       };
       await updateProduct(updatedProduct);
     });
@@ -270,16 +317,21 @@ const adminIngredientsContent = async () => {
       <h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}</h5>
       <p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
 
+    if (ingredient.allergies) {
+      let allergies = '';
+      ingredient.allergies.forEach((allergy) => {
+        allergies += allergy + ', ';
+      });
+      allergies = allergies.slice(0, -2);
+      singleIngredient.innerHTML += `<p>allergies: ${allergies}</p>`;
+    }
+
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtnSingle';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
-    // const deleteBtn = document.createElement('button');
-    // deleteBtn.className = 'containerBtn';
-    // deleteBtn.id = 'deleteButton';
-    // deleteBtn.innerText = 'delete';
+
     singleIngredient.appendChild(updateBtn);
-    // singleIngredient.appendChild(deleteBtn);
     ingredientContainer.appendChild(singleIngredient);
     updateBtn.addEventListener('click', async () => {
       const updatedIngredient = {
@@ -288,12 +340,9 @@ const adminIngredientsContent = async () => {
           .innerText,
         price: document.getElementById(`cal-${ingredient.id}`).innerText,
       };
+      console.log(updatedIngredient);
       await updateIngredient(updatedIngredient);
     });
-    // deleteBtn.addEventListener('click', async () => {
-    // await deleteIngredient(ingredient.id);
-    // singleIngredient.remove();
-    // });
   });
 
   const addIngredientContainer = document.getElementById(
@@ -306,6 +355,8 @@ const adminIngredientsContent = async () => {
       <input id="ingredientName" type="text">
       <label for="ingredientCal">Calories</label>
       <input id="ingredientCal" type="text">
+      <label for="ingredientAllergies">Allergies</label>
+      <input id="ingredientAllergies" type="text">
            <div class="error"></div>`;
 
   const errors = document.querySelector('.error');
@@ -316,6 +367,7 @@ const adminIngredientsContent = async () => {
     const ingredientData = {
       name: document.getElementById('ingredientName').value,
       cal: document.getElementById('ingredientCal').value,
+      allergies: document.getElementById('ingredientAllergies').value,
     };
     if (!ingredientErrors(ingredientData)) {
       errors.innerHTML = '';
@@ -325,6 +377,39 @@ const adminIngredientsContent = async () => {
     }
   });
   addIngredientContainer.appendChild(addIngredientBtn);
+};
+
+const adminOrdersContent = async () => {
+  const orderContainer = document.getElementById('order-container');
+  orderContainer.innerHTML = '';
+  const orders = await getOrders();
+  console.log(orders);
+
+  orders.forEach((order) => {
+    const singleOrder = document.createElement('div');
+    singleOrder.className = 'adminContainer';
+    singleOrder.id = 'singleOrder';
+    singleOrder.innerHTML = '';
+    singleOrder.innerHTML = `<p>Address: ${order.address}</p>
+       <p>Date: ${order.date}</p>
+       <p>Type: ${order.order_type}</p>
+       <p>State: ${order.state}</p>`;
+
+    const updateBtn = document.createElement('button');
+    updateBtn.className = 'containerBtn';
+    updateBtn.id = 'updateButton';
+    updateBtn.innerText = 'update';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'containerBtn';
+    deleteBtn.id = 'deleteButton';
+    deleteBtn.innerText = 'delete';
+
+    singleOrder.appendChild(updateBtn);
+    singleOrder.appendChild(deleteBtn);
+
+    orderContainer.appendChild(singleOrder);
+  });
 };
 
 const adminUsers = async () => {
@@ -363,30 +448,14 @@ const adminIngredients = async () => {
   await adminIngredientsContent();
 };
 
-const adminOrders = () => {
+const adminOrders = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `<div id="adminOrders">
-    <h3>Orders</h3>
-    <div>
-      <label for="orderUser">User order</label>
-      <input id="orderUser" name="orderUser" type="text">
-    </div>
-    <div>
-      <label for="orderProduct">Ordered product</label>
-      <input id="orderProduct" name="orderProduct" type="text">
-    </div>
-    <div>
-      <label for="orderType">Order type</label>
-      <input id="orderType" name="orderType" type="text">
-    </div>
-    <div>
-      <label for="orderDate">Order date</label>
-      <input id="orderDate" name="orderDate" type="text">
-    </div><div>
-    <label for="orderState">Order state</label>
-    <input id="orderState" name="orderState" type="text">
+  <div id="orderContent">
+  <div id="order-container" class="adminContentControl"></div>
   </div>
   </div>`;
+  await adminOrdersContent();
 };
 
-await adminUsers();
+await adminOrders();

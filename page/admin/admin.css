@@ -82,6 +82,12 @@
   align-items: center;
 }
 
+#orderContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #userBox {
   gap: 3em;
 }
@@ -91,6 +97,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.addProduct-container label {
+  margin-top: 0.5rem;
 }
 
 .addUser-container {
@@ -163,14 +173,14 @@
   background-color: #98af98;
 }
 
-
-.adminProductImg {
-  width: 50px;
-  height: 50px;
-}
-
 #singleProduct img {
   width: 50px;
   height: 50px;
   cursor: pointer;
+}
+
+#singleUser img {
+  border-radius: 4px;
+  width: 50px;
+  height: 50px;
 }
