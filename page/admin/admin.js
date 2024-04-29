@@ -99,8 +99,13 @@ const adminUsersContent = async () => {
     <img alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
     <label for="userRole-${user.id}">role</label>
       <select name="userRole" id="userRole-${user.id}">
-      <option value="user">user</option>
-      <option value="admin">admin</option>
+      ${
+        user.role === 'admin'
+          ? `<option value="admin">admin</option>
+         <option value="user">user</option>`
+          : `<option value="user">user</option>
+         <option value="admin">admin</option>`
+      }
       </select>`;
 
     const updateBtn = document.createElement('button');
