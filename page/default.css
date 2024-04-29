@@ -26,6 +26,13 @@ body{
   --secondary: #484538ff;
 
   --primary: #f2f4f3ff;
+
+  --bg: #effaf4;
+
+  --text: #171717;
+
+  background: var(--bg);
+  color: var(--text);
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -96,7 +103,7 @@ body{
   align-items: center;
   height: 30px;
   width: auto;
-  color: white;
+  color: var(--primary);
 
   cursor: pointer;
 }
