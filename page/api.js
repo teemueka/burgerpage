@@ -232,9 +232,18 @@ const userLogin = async (userData) => {
   }
 };
 
-const getUsers = async () => {
+const getUsers = async (token) => {
+  const url = `http://10.120.32.57/app/api/v1/users`;
+
   try {
-    const response = await fetch(`http://10.120.32.57/app/api/v1/users`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
     }

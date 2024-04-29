@@ -87,7 +87,7 @@ const adminUsersContent = async () => {
 
   const mainContainer = document.getElementById('users-container');
   mainContainer.innerHTML = '';
-  const users = await getUsers();
+  const users = await getUsers(token);
 
   users.forEach((user) => {
     const userContainer = document.createElement('div');
@@ -339,6 +339,7 @@ const adminIngredientsContent = async () => {
           .innerText,
         price: document.getElementById(`cal-${ingredient.id}`).innerText,
       };
+      console.log(updatedIngredient);
       await updateIngredient(updatedIngredient);
     });
   });
@@ -353,6 +354,8 @@ const adminIngredientsContent = async () => {
       <input id="ingredientName" type="text">
       <label for="ingredientCal">Calories</label>
       <input id="ingredientCal" type="text">
+      <label for="ingredientAllergies">Allergies</label>
+      <input id="ingredientAllergies" type="text">
            <div class="error"></div>`;
 
   const errors = document.querySelector('.error');
@@ -363,6 +366,7 @@ const adminIngredientsContent = async () => {
     const ingredientData = {
       name: document.getElementById('ingredientName').value,
       cal: document.getElementById('ingredientCal').value,
+      allergies: document.getElementById('ingredientAllergies').value,
     };
     if (!ingredientErrors(ingredientData)) {
       errors.innerHTML = '';
