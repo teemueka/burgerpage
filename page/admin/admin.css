@@ -93,6 +93,10 @@
   align-items: center;
 }
 
+.addProduct-container label {
+  margin-top: 0.5rem;
+}
+
 .addUser-container {
   display: flex;
   flex-direction: column;

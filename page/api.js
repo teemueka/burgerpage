@@ -92,12 +92,25 @@ const updateIngredient = async (ingredient) => {
   }
 };
 
+const getCategories = async () => {
+  try {
+    const response = await fetch(`http://10.120.32.57/app/api/v1/categories`);
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.log('Error fetching products', error);
+  }
+};
+
 const addProduct = async (productData) => {
   const url = `http://10.120.32.57/app/api/v1/products`;
 
   const formData = new FormData();
   formData.append('name', productData.name);
   formData.append('price', productData.price);
+  formData.append('category', productData.category);
   formData.append('ingredients', productData.ingredients);
   formData.append('file', productData.image);
 
@@ -407,4 +420,5 @@ export {
   checkEmailAvailability,
   uploadAvatar,
   getCurrentUser,
+  getCategories,
 };

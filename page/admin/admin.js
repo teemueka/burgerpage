@@ -16,6 +16,7 @@ import {
   getIngredients,
   updateIngredient,
   addIngredient,
+  getCategories,
 } from '../api.js';
 import {
   ingredientErrors,
@@ -75,7 +76,6 @@ const adminUsersContent = async () => {
   const mainContainer = document.getElementById('users-container');
   mainContainer.innerHTML = '';
   const users = await getUsers();
-  // http://10.120.32.57/app/${user.avatar}
 
   users.forEach((user) => {
     const userContainer = document.createElement('div');
@@ -84,8 +84,7 @@ const adminUsersContent = async () => {
     userContainer.innerHTML = `
     <h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>
     <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
-    <img src="" alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
-    <input type="file" id="avatar-${user.id}" accept="image/*">
+    <img alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
     <p>Role: <span contenteditable="true" id="role-${user.id}">${user.role}</span></p>`;
 
     const updateBtn = document.createElement('button');
@@ -125,7 +124,7 @@ const adminUsersContent = async () => {
     });
 
     deleteBtn.addEventListener('click', async () => {
-      await deleteUser(user.id); // Function name adjusted to match the intended action
+      await deleteUser(user.id);
       userContainer.remove();
     });
   });
@@ -193,9 +192,17 @@ const adminProductsContent = async () => {
       <input id="addProductName" type="text">
       <label for="productPrice">Price</label>
       <input id="productPrice" type="text">
+      <label for="productCategory">Category</label>
+      <select name="productCategory" id="productCategory"></select>
       <label for="productImage">Image</label>
       <input id="productImage" type="file">
            <div class="error"></div>`;
+
+  const categories = await getCategories();
+  const dropDown = document.getElementById('productCategory');
+  categories.forEach((category) => {
+    dropDown.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+  });
 
   addProductContainer.appendChild(ingredientsContainer);
   const errors = document.querySelector('.error');
@@ -206,6 +213,7 @@ const adminProductsContent = async () => {
     const productData = {
       name: document.getElementById('addProductName').value,
       price: document.getElementById('productPrice').value,
+      category: document.getElementById('productCategory').value,
       ingredients: JSON.stringify(ingredientArray.toString()),
       image: document.getElementById('productImage').files[0],
     };
@@ -230,27 +238,28 @@ const adminProductsContent = async () => {
     singleProduct.innerHTML = '';
     singleProduct.innerHTML = `
       <h5 contenteditable="true" id="productName-${product.id}">${product.name}</h5>
-      <p>price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>
-      <img src="http://10.120.32.57/app/uploads/${product.image}">
-      <p>image: <span contenteditable="true" id="image-${product.id}">$product.image}</span></p>`;
+      <img src="http://10.120.32.57/app/uploads/${product.image}" alt="Product image" id="image-${product.id}">
+      <p>price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>`;
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'containerBtn';
     deleteBtn.id = 'deleteButton';
     deleteBtn.innerText = 'delete';
+
     singleProduct.appendChild(updateBtn);
     singleProduct.appendChild(deleteBtn);
     productContainer.appendChild(singleProduct);
+
     updateBtn.addEventListener('click', async () => {
       const updatedProduct = {
         id: product.id,
         name: document.getElementById(`productName-${product.id}`).innerText,
         price: document.getElementById(`price-${product.id}`).innerText,
-        image: document.getElementById(`image-${product.id}`).innerText,
       };
       await updateProduct(updatedProduct);
     });
