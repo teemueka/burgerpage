@@ -316,16 +316,21 @@ const adminIngredientsContent = async () => {
       <h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}</h5>
       <p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
 
+    if (ingredient.allergies) {
+      let allergies = '';
+      ingredient.allergies.forEach((allergy) => {
+        allergies += allergy + ', ';
+      });
+      allergies = allergies.slice(0, -2);
+      singleIngredient.innerHTML += `<p>allergies: ${allergies}</p>`;
+    }
+
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtnSingle';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
-    // const deleteBtn = document.createElement('button');
-    // deleteBtn.className = 'containerBtn';
-    // deleteBtn.id = 'deleteButton';
-    // deleteBtn.innerText = 'delete';
+
     singleIngredient.appendChild(updateBtn);
-    // singleIngredient.appendChild(deleteBtn);
     ingredientContainer.appendChild(singleIngredient);
     updateBtn.addEventListener('click', async () => {
       const updatedIngredient = {
@@ -336,10 +341,6 @@ const adminIngredientsContent = async () => {
       };
       await updateIngredient(updatedIngredient);
     });
-    // deleteBtn.addEventListener('click', async () => {
-    // await deleteIngredient(ingredient.id);
-    // singleIngredient.remove();
-    // });
   });
 
   const addIngredientContainer = document.getElementById(
