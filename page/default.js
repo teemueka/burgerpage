@@ -37,6 +37,13 @@ const createHeader = () => {
 
   if (localStorage.getItem('user')) {
     loginButton.textContent = 'Profile';
+    console.log(JSON.parse(localStorage.getItem('user')).role);
+    if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
+      const adminButton = document.createElement('a');
+      adminButton.href = '../admin/admin.html';
+      adminButton.textContent = 'Admin';
+      navRight.appendChild(adminButton);
+    }
   }
   navRight.appendChild(loginButton);
 
@@ -53,6 +60,31 @@ const createHeader = () => {
 
   navRight.appendChild(languageDropdown);
 
+  const themeButton = document.createElement('a');
+  themeButton.textContent = 'Theme';
+
+  themeButton.addEventListener('click', () => {
+    if (localStorage.getItem('theme') === 'dark') {
+      localStorage.setItem('theme', 'light');
+      const body = document.querySelector('body');
+      body.style.setProperty('--primary', '#f2f4f3ff');
+      body.style.setProperty('--secondary', '#484538ff');
+      body.style.setProperty('--highlight', '#65AFD1ff');
+      body.style.setProperty('--bg', '#effaf4');
+      body.style.setProperty('--text', '#171717');
+      return;
+    }
+
+    localStorage.setItem('theme', 'dark');
+    const body = document.querySelector('body');
+    body.style.setProperty('--primary', '#171717');
+    body.style.setProperty('--secondary', 'white');
+    body.style.setProperty('--highlight', '#65AFD1ff');
+    body.style.setProperty('--bg', 'black');
+    body.style.setProperty('--text', 'white');
+  });
+  navRight.appendChild(themeButton);
+
   nav.appendChild(navRight);
 
   header.appendChild(nav);
@@ -60,6 +92,25 @@ const createHeader = () => {
 
 async function generateHeader() {
   await createHeader();
+}
+
+if (!localStorage.getItem('theme')) {
+  localStorage.setItem('theme', 'light');
+} else {
+  const body = document.querySelector('body');
+  if (localStorage.getItem('theme') === 'dark') {
+    body.style.setProperty('--primary', '#171717');
+    body.style.setProperty('--secondary', 'white');
+    body.style.setProperty('--highlight', '#65AFD1ff');
+    body.style.setProperty('--bg', 'black');
+    body.style.setProperty('--text', 'white');
+  } else {
+    body.style.setProperty('--primary', '#f2f4f3ff');
+    body.style.setProperty('--secondary', '#484538ff');
+    body.style.setProperty('--highlight', '#65AFD1ff');
+    body.style.setProperty('--bg', '#effaf4');
+    body.style.setProperty('--text', '#171717');
+  }
 }
 
 generateHeader();
