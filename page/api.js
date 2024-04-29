@@ -378,7 +378,9 @@ const getCurrentUser = async () => {
 };
 
 const deleteUser = async (user, token) => {
-  const url = `http://10.120.32.57/app/api/v1/users/${user.id}`;
+  const url = `http://10.120.32.57/app/api/v1/users/${user}`;
+
+  const userDeleting = await getCurrentUser(token);
 
   try {
     const response = await fetch(url, {
@@ -390,9 +392,12 @@ const deleteUser = async (user, token) => {
     });
 
     const responseData = await response.json();
+    console.log(responseData);
     if (response.ok) {
-      localStorage.clear();
-      location.reload();
+      if (userDeleting.user.role !== 'admin') {
+        localStorage.clear();
+        location.reload();
+      }
       return responseData;
     }
   } catch (error) {

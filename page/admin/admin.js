@@ -138,7 +138,7 @@ const adminUsersContent = async () => {
     });
 
     deleteBtn.addEventListener('click', async () => {
-      await deleteUser(user.id);
+      await deleteUser(user.id, token);
       userContainer.remove();
     });
   });
