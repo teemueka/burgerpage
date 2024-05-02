@@ -123,6 +123,10 @@
   overflow-x: hidden;
 }
 
+#order-container > :first-child p {
+  margin-top: 0;
+}
+
 .adminContentControl > :first-child h5 {
   margin-top: 0;
 }

@@ -63,35 +63,6 @@ const addIngredient = async (ingredientData) => {
   }
 };
 
-const updateIngredient = async (ingredient) => {
-  const url = `http://10.120.32.57/app/api/v1/ingredients/${ingredient.id}`;
-
-  const ingredientInfo = {
-    name: ingredient.name,
-    cal: ingredient.cal,
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(ingredientInfo),
-    });
-
-    const responseData = await response.json();
-    if (response.ok) {
-      console.log('update', responseData);
-      return responseData;
-    } else {
-      console.log('failed to update ingredient', responseData.message);
-    }
-  } catch (error) {
-    console.log('Error updating ingredient', error.message);
-  }
-};
-
 const getCategories = async () => {
   try {
     const response = await fetch(`http://10.120.32.57/app/api/v1/categories`);
@@ -495,7 +466,6 @@ export {
   deleteUser,
   getAvatar,
   getIngredients,
-  updateIngredient,
   addIngredient,
   checkEmailAvailability,
   uploadAvatar,

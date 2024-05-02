@@ -14,7 +14,6 @@ import {
   deleteUser,
   getAvatar,
   getIngredients,
-  updateIngredient,
   addIngredient,
   getCategories,
   getCurrentUser,
@@ -326,24 +325,7 @@ const adminIngredientsContent = async () => {
       allergies = allergies.slice(0, -2);
       singleIngredient.innerHTML += `<p>allergies: ${allergies}</p>`;
     }
-
-    const updateBtn = document.createElement('button');
-    updateBtn.className = 'containerBtnSingle';
-    updateBtn.id = 'updateButton';
-    updateBtn.innerText = 'update';
-
-    singleIngredient.appendChild(updateBtn);
     ingredientContainer.appendChild(singleIngredient);
-    updateBtn.addEventListener('click', async () => {
-      const updatedIngredient = {
-        id: ingredient.id,
-        name: document.getElementById(`ingredientName-${ingredient.id}`)
-          .innerText,
-        price: document.getElementById(`cal-${ingredient.id}`).innerText,
-      };
-      console.log(updatedIngredient);
-      await updateIngredient(updatedIngredient);
-    });
   });
 
   const addIngredientContainer = document.getElementById(
