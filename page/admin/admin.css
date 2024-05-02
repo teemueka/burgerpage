@@ -1,4 +1,5 @@
 #adminContainer h1 {
+  margin-top: 0;
   padding-top: 0.5rem;
   display: flex;
   justify-content: center;
@@ -26,7 +27,7 @@
 
 #adminContainer {
   background-color: rgba(128, 126, 123, 0.28);
-  background-size: 100vh;
+  background-size: 100%;
 }
 
 .error p {
@@ -85,6 +86,7 @@
 #addIngredientBtn {
   margin-top: 0.5rem;
 }
+
 #addUserBtn {
   margin-top: 0.5rem;
 }
@@ -116,6 +118,9 @@
 }
 
 .adminContentControl {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   max-width: 80vw;
   max-height: 40vh;
   background-color: whitesmoke;
@@ -123,24 +128,24 @@
   overflow-x: hidden;
 }
 
-#order-container > :first-child p {
+#order-container p {
   margin-top: 0;
 }
 
-.adminContentControl > :first-child h5 {
+.adminContentControl h5 {
   margin-top: 0;
 }
 
-#adminIngredientsSubAdd > :first-child p {
+#adminIngredientsSubAdd p {
   margin-top: 0;
 }
 
-.adminContentControl > :last-child {
+.adminContentControl {
   margin-bottom: 0;
 }
 
 .adminContainer {
-  background-color: #87b4b4;
+  background-color: #bcc5ce;
 }
 
 .singleIngredientControl {
