@@ -19,6 +19,8 @@ import {
   getCategories,
   getCurrentUser,
   getOrders,
+  updateOrder,
+  deleteOrder,
 } from '../api.js';
 import {
   ingredientErrors,
@@ -98,8 +100,7 @@ const adminUsersContent = async () => {
     <h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>
     <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
     <img alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
-    <label for="userRole-${user.id}">role</label>
-      <select name="userRole" id="userRole-${user.id}">
+    <p>Role: <select name="userRole" id="userRole-${user.id}">
       ${
         user.role === 'admin'
           ? `<option value="admin">admin</option>
@@ -107,7 +108,7 @@ const adminUsersContent = async () => {
           : `<option value="user">user</option>
          <option value="admin">admin</option>`
       }
-      </select>`;
+      </select></p>`;
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
@@ -390,20 +391,64 @@ const adminOrdersContent = async () => {
     singleOrder.className = 'adminContainer';
     singleOrder.id = 'singleOrder';
     singleOrder.innerHTML = '';
-    singleOrder.innerHTML = `<p>Address: ${order.address}</p>
-       <p>Date: ${order.date}</p>
-       <p>Type: ${order.order_type}</p>
-       <p>State: ${order.state}</p>`;
+
+    const readableDate = new Date(parseInt(order.date));
+    const dateTimeString = readableDate.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    singleOrder.innerHTML = `<p>Adress: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>
+       <p>Date: <span id="orderDate-${order.id}">${dateTimeString}</span></p>
+       <p>Type: <select id="orderType-${order.id}">
+       ${
+         order.order_type === 'pickup'
+           ? `<option value="pickup">pickup</option>
+              <option value="delivery">delivery</option>`
+           : `<option value="delivery">delivery</option>
+              <option value="pickup">pickup</option>`
+       }
+        </select></p>
+
+       <p>State: <select id="orderState-${order.id}">
+       ${
+         order.state === 'completed'
+           ? `<option value="completed">completed</option>
+        <option value="ongoing">ongoing</option>`
+           : `<option value="ongoing">ongoing</option>
+    <option value="completed">completed</option>`
+       }
+      </select></p>`;
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
     updateBtn.id = 'updateButton';
     updateBtn.innerText = 'update';
 
+    updateBtn.addEventListener('click', async () => {
+      const updatedOrder = {
+        order_id: order.id,
+        address: document.getElementById(`orderAddress-${order.id}`).innerText,
+        order_type: document.getElementById(`orderType-${order.id}`).value,
+        state: document.getElementById(`orderState-${order.id}`).value,
+      };
+      console.log(updatedOrder);
+      await updateOrder(updatedOrder);
+    });
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'containerBtn';
     deleteBtn.id = 'deleteButton';
     deleteBtn.innerText = 'delete';
+
+    deleteBtn.addEventListener('click', async () => {
+      await deleteOrder(order.id);
+      singleOrder.remove();
+    });
 
     singleOrder.appendChild(updateBtn);
     singleOrder.appendChild(deleteBtn);

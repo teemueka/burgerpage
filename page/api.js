@@ -439,6 +439,48 @@ const getOrders = async () => {
   }
 };
 
+const updateOrder = async (orderData) => {
+  const url = `http://10.120.32.57/app/api/v1/orders`;
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.log('Error updating order', error);
+  }
+};
+
+const deleteOrder = async (id) => {
+  const url = `http://10.120.32.57/app/api/v1/orders/${id}`;
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    console.log(response);
+    return await response.json();
+  } catch (error) {
+    console.log('Error deleting order', error);
+  }
+};
+
 export {
   getProducts,
   updateProduct,
@@ -460,4 +502,6 @@ export {
   getCurrentUser,
   getCategories,
   getOrders,
+  updateOrder,
+  deleteOrder,
 };

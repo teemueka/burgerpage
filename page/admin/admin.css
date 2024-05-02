@@ -82,6 +82,13 @@
   align-items: center;
 }
 
+#addIngredientBtn {
+  margin-top: 0.5rem;
+}
+#addUserBtn {
+  margin-top: 0.5rem;
+}
+
 #orderContent {
   display: flex;
   align-items: center;
