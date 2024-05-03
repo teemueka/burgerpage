@@ -69,37 +69,45 @@ main{
   padding: 2vh;
   height: 10vh;
 }
+
+.nav a:hover{
+  background-color: var(--secondary);
+  color: var(--highlight);
+}
 .nav a{
   color: var(--secondary);
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  border-radius: 2rem;
-  margin: 3rem;
-  scale: 1.6;
+  padding: 0.5rem 1rem 0.5rem 1rem ;
+  border-radius: 2vw;
+  margin: 1vw;
+  font-size: 25px;
+
   font-family: "Josefin Sans", sans-serif;
 }
-.nav a:hover{
-  background-color: var(--secondary);
-  color: var(--highlight);
-}
+
 .nav-right{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+
 }
 .nav-right a{
   color: var(--secondary);
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  border-radius: 20px;
-  margin: 0.1rem;
+  padding: 0.5vw 1vw 0.5vw 1vw;
+  border-radius: 10vw;
+  margin: 0.1vw;
   scale: 1;
+  font-size: 15px;
   font-family: "Josefin Sans", sans-serif;
 }
+
+
 
 .logo-container a{
   all:initial;
