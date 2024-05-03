@@ -39,7 +39,7 @@ body{
 }
 
 main{
-  margin-top:8vh;
+  margin-top:14vh;
 }
 
 .logo:hover{
@@ -66,9 +66,8 @@ main{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  margin-inline-end: 1rem;
-  height: 8vh;
+  padding: 2vh;
+  height: 10vh;
 }
 .nav a{
   color: var(--secondary);
