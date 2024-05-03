@@ -112,6 +112,38 @@ body{
 
 }
 
+.good{
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+.good:hover{
+  color: var(--primary);
+  background-color: var(--highlight);
+}
+
+.bad{
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+.bad:hover{
+  color: var(--primary);
+  background-color: #f35555;
+}
+
+
+.verybad{
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.verybad:hover{
+  color: var(--primary);
+  background-color: red;
+}
+
 
 
 
