@@ -11,6 +11,7 @@
 </head>
 <header class="header" id="header"></header>
 <body>
+<main>
   <div id="cart-order">
     <h2>Cart</h2>
     <div id="cart-items"></div>
@@ -18,32 +19,33 @@
   <div id="info-order">
     <form id="orderForm" method="POST">
       <div class="input-control">
-    <label for="userAddress">address</label>
-    <input id="userAddress" type="text">
+        <label for="userAddress">address</label>
+        <input id="userAddress" type="text">
         <div class="error" id="address-error"></div>
       </div>
       <div class="input-control">
-    <label for="userName">name</label>
-    <input id="userName" type="text">
+        <label for="userName">name</label>
+        <input id="userName" type="text">
         <div class="error" id="username-error"></div>
       </div>
       <div class="input-control">
-    <label for="orderType">order type</label>
-    <select id="orderType">
-      <option value="pickup">pickup</option>
-      <option value="delivery">delivery</option>
-      <option value="dine-in">dine-in</option>
-    </select>
+        <label for="orderType">order type</label>
+        <select id="orderType">
+          <option value="pickup">pickup</option>
+          <option value="delivery">delivery</option>
+          <option value="dine-in">dine-in</option>
+        </select>
         <div class="error" id="type-error"></div>
       </div>
       <div class="input-control">
-    <label for="fromRestaurant">select restaurant</label>
-    <select id="fromRestaurant"></select>
+        <label for="fromRestaurant">select restaurant</label>
+        <select id="fromRestaurant"></select>
         <div class="error" id="fromRes-error"></div>
       </div>
-    <button type="submit" id="orderBtn">Order</button>
+      <button id="orderBtn" type="submit">Order</button>
     </form>
   </div>
+</main>
 </body>
 <footer class="footer" id="footer"></footer>
 </html>
