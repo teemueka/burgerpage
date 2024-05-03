@@ -1,119 +1,58 @@
 // eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
 import {generateHeader} from '../default.js';
-import {getProducts, getProductsById} from '../api.js';
+import {getRestaurants, createOrder} from '../api.js';
 
-const allProducts = await getProducts();
+const currentUser = JSON.parse(localStorage.getItem('user'));
+const orderForm = document.getElementById('orderForm');
+const restaurants = await getRestaurants();
+const fromResDropdown = document.getElementById('fromRestaurant');
+restaurants.forEach((restaurant) => {
+  fromResDropdown.innerHTML += `<option value="${restaurant.id}">${restaurant.address}</option>`;
+});
+orderForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-const cartElement = document.getElementById('cart-items');
-const totalCostElement = document.createElement('p');
-totalCostElement.id = 'total-cost';
-let totalPrice = 0;
+  const userID = currentUser.id;
+  const userAddress = document.getElementById('userAddress').value;
+  const userName = document.getElementById('userName').value;
+  const orderType = document.getElementById('orderType').value;
+  const fromRest = document.getElementById('fromRestaurant').value;
+  const products = localStorage.getItem('cart');
 
-const generateCart = async () => {
-  const cart = JSON.parse(localStorage.getItem('cart'));
-  if (!cart) {
+  let hasErrors = false;
+
+  if (!userAddress.trim()) {
+    hasErrors = true;
+    document.getElementById('address-error').innerHTML =
+      '<p>order must contain address</p>';
+  } else {
+    document.getElementById('address-error').innerHTML = '';
+  }
+
+  if (!userName.trim()) {
+    hasErrors = true;
+    document.getElementById('username-error').innerHTML =
+      '<p>order must contain name</p>';
+  } else {
+    document.getElementById('username-error').innerHTML = '';
+  }
+
+  if (!products) {
+    hasErrors = true;
+  }
+
+  if (hasErrors) {
     return;
   }
-  const productQuantities = {};
-  for (const productId of cart) {
-    if (productQuantities[productId]) {
-      productQuantities[productId]++;
-    } else {
-      productQuantities[productId] = 1;
-    }
-  }
-  cartElement.innerHTML = '';
-  for (const item in productQuantities) {
-    const product = await getProductsById(item);
-    console.log(product);
-    totalPrice += product.price * productQuantities[item];
-    const productElement = document.createElement('div');
-    productElement.classList.add('cart-item');
 
-    const productImage = document.createElement('img');
-    productImage.src = 'http://10.120.32.57/app/uploads/' + product.image;
-    productImage.alt = product.name;
+  const orderData = {
+    user_id: userID,
+    res_id: fromRest,
+    order_type: orderType,
+    address: userAddress,
+    products: products,
+  };
 
-    const productName = document.createElement('h3');
-    productName.innerText = product.name;
-
-    const productPrice = document.createElement('p');
-    productPrice.innerText = product.price;
-    productPrice.classList.add('price');
-
-    const productQuantity = document.createElement('p');
-    productQuantity.innerText = productQuantities[item];
-    productQuantity.classList.add('quantity');
-
-    const getCount = (p_id) => {
-      const count = JSON.parse(localStorage.getItem('cart')) || [];
-      const index = count.indexOf(product.id);
-      return index > -1 ? count.filter((id) => id === p_id).length : 0;
-    };
-    const updateAmount = async () => {
-      productQuantity.innerText = `${getCount(product.id)}`;
-      totalCostElement.innerText = `Total Cost: ${totalPrice}`;
-    };
-
-    await updateAmount();
-
-    const button = document.createElement('button');
-    button.textContent = '+';
-    button.classList.add('good');
-    button.addEventListener('click', async () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(product.id);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      totalPrice += product.price;
-      productQuantities[item]++;
-      await updateAmount();
-    });
-
-    const buttonRemove = document.createElement('button');
-    buttonRemove.textContent = '-';
-    buttonRemove.classList.add('bad');
-    buttonRemove.addEventListener('click', async () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const index = cart.indexOf(product.id);
-      if (index > -1) {
-        cart.splice(index, 1);
-        totalPrice -= product.price;
-        productQuantities[item]--;
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      await updateAmount();
-    });
-
-    const removeProduct = document.createElement('button');
-    removeProduct.textContent = 'Remove';
-    removeProduct.classList.add('verybad');
-    removeProduct.addEventListener('click', async () => {
-      productElement.remove();
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const index = cart.indexOf(product.id);
-      for (let i = 0; i < productQuantities[item]; i++) {
-        cart.splice(index, 1);
-        totalPrice -= product.price;
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      await updateAmount();
-    });
-
-    productElement.appendChild(productImage);
-    productElement.appendChild(productName);
-    productElement.appendChild(productPrice);
-    productElement.appendChild(productQuantity);
-    productElement.appendChild(buttonRemove);
-    productElement.appendChild(button);
-    productElement.appendChild(removeProduct);
-
-    cartElement.appendChild(productElement);
-  }
-  totalCostElement.innerText = `Total Cost: ${totalPrice}`;
-  cartElement.appendChild(totalCostElement);
-};
-
-(async () => {
-  await generateCart();
-})();
+  await createOrder(orderData);
+});
