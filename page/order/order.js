@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
-import {generateHeader} from '../default.js';
+import {generateHeader, updateCart} from '../default.js';
 import {getProducts, getProductsById} from '../api.js';
 
 const allProducts = await getProducts();
@@ -54,6 +54,7 @@ const generateCart = async () => {
     const updateAmount = async () => {
       productQuantity.innerText = `${getCount(product.id)}`;
       totalCostElement.innerText = `Total Cost: ${totalPrice}`;
+      updateCart();
     };
 
     await updateAmount();

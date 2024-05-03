@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
-import {generateHeader} from '../default.js';
+import {generateHeader, updateCart} from '../default.js';
 
 (async () => {
   const response = await (
-    await fetch('http://localhost:3000/api/v1/products')
+    await fetch('http://10.120.32.57/app/api/v1/products')
   ).json();
   for (const product of response) {
     if (!product.categories) {
@@ -60,6 +60,7 @@ import {generateHeader} from '../default.js';
           const cart = JSON.parse(localStorage.getItem('cart')) || [];
           cart.push(product.id);
           localStorage.setItem('cart', JSON.stringify(cart));
+          updateCart();
           updateAmount();
         });
 
@@ -72,6 +73,7 @@ import {generateHeader} from '../default.js';
             cart.splice(index, 1);
           }
           localStorage.setItem('cart', JSON.stringify(cart));
+          updateCart();
           updateAmount();
         });
 

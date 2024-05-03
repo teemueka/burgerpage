@@ -144,6 +144,14 @@ body{
   background-color: red;
 }
 
-
+#cart-amount {
+  position: absolute;
+  background-color: #4588a8;
+  color: var(--primary);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
 
 
