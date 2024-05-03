@@ -47,10 +47,15 @@ const createHeader = () => {
   }
   navRight.appendChild(loginButton);
 
+  const cartDiv = document.createElement('div');
   const cartButton = document.createElement('a');
   cartButton.href = '../order/order.html';
   cartButton.textContent = 'Cart';
-  navRight.appendChild(cartButton);
+  const cartAmout = document.createElement('span');
+  cartAmout.id = 'cart-amount';
+  cartDiv.appendChild(cartAmout);
+  cartDiv.appendChild(cartButton);
+  navRight.appendChild(cartDiv);
 
   const languageDropdown = document.createElement('div');
   languageDropdown.className = 'dropdown';
@@ -115,4 +120,21 @@ if (!localStorage.getItem('theme')) {
 
 generateHeader();
 
-export {generateHeader};
+const cartAmountIndicator = document.getElementById('cart-amount');
+
+function updateCart() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartAmount = cart.length;
+
+  if (cartAmount > 0) {
+    cartAmountIndicator.style.display = 'inline';
+    cartAmountIndicator.innerText = cartAmount;
+  } else {
+    cartAmountIndicator.style.display = 'none';
+  }
+  console.log(cartAmount);
+}
+
+updateCart();
+
+export {generateHeader, updateCart};
