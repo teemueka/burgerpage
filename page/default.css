@@ -99,13 +99,45 @@ main{
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5vw 1vw 0.5vw 1vw;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 10vw;
   margin: 0.1vw;
   scale: 1;
   font-size: 15px;
   font-family: "Josefin Sans", sans-serif;
+
 }
+
+#cartNav{
+  font-size: 0;
+  position: relative;
+  display: flex;
+}
+
+#cartNav span{
+  z-index: 1;
+  top: 0.1rem;
+
+}
+#cart-button{
+  top: -8px;
+}
+
+.cart-image{
+  display: flow;
+  position: relative;
+
+  width: 1rem;
+  height: 1rem;
+  color: currentColor;
+
+  scale: 1.8;
+}
+
+.cart-image:hover{
+  color: var(--highlight);
+}
+
 
 
 
