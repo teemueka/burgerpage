@@ -386,7 +386,7 @@ const adminOrdersContent = async () => {
       second: '2-digit',
     });
 
-    singleOrder.innerHTML = `<p>Adress: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>
+    singleOrder.innerHTML = `<p>Address: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>
        <p>Date: <span id="orderDate-${order.id}">${dateTimeString}</span></p>
        <p>Type: <select id="orderType-${order.id}">
        ${

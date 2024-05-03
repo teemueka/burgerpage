@@ -56,6 +56,7 @@ import {generateHeader, updateCart} from '../default.js';
 
         const button = document.createElement('button');
         button.textContent = '+';
+        button.classList.add('good');
         button.addEventListener('click', async () => {
           const cart = JSON.parse(localStorage.getItem('cart')) || [];
           cart.push(product.id);
@@ -66,6 +67,7 @@ import {generateHeader, updateCart} from '../default.js';
 
         const buttonRemove = document.createElement('button');
         buttonRemove.textContent = '-';
+        buttonRemove.classList.add('bad');
         buttonRemove.addEventListener('click', async () => {
           const cart = JSON.parse(localStorage.getItem('cart')) || [];
           const index = cart.indexOf(product.id);
