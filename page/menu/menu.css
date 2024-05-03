@@ -34,3 +34,10 @@
 .menu-item span {
   font-weight: bold;
 }
+
+.menu-item div  {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
