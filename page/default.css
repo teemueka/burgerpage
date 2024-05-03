@@ -39,7 +39,7 @@ body{
 }
 
 main{
-  margin-top:3vh;
+  margin-top:8vh;
 }
 
 .logo:hover{
@@ -68,7 +68,7 @@ main{
   align-items: center;
   padding: 1rem;
   margin-inline-end: 1rem;
-  height: 3vh;
+  height: 8vh;
 }
 .nav a{
   color: var(--secondary);
