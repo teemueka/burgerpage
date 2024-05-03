@@ -5,6 +5,54 @@
   margin-bottom: 20px;
 }
 
+#header {
+  max-width: 100vw;
+}
+
+.nav {
+  max-width: 100vw;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+
+.input-control {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+}
+
+.input-control input {
+  display: block;
+  font-size: 12px;
+  padding: 5px;
+  width: 100%;
+}
+
+.input-control select {
+  display: block;
+  font-size: 12px;
+  padding: 5px;
+  width: 100%;
+}
+
+#orderBtn {
+  display: block;
+  font-size: 12px;
+  padding: 5px;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.error p {
+  margin: 0;
+  color: red;
+  font-size: 0.9rem;
+}
 
 #cart-order {
   display: flex;
