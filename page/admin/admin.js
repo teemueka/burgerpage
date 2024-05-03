@@ -151,10 +151,13 @@ const adminUsersContent = async () => {
 };
 
 const adminProductsContent = async () => {
-  const addProductContainer = document.getElementById('addProduct-container');
-  addProductContainer.innerHTML = '';
-  const ingredientsContainer = document.createElement('div');
-  ingredientsContainer.id = 'adminIngredientsSubAdd';
+  const productDetailsContainer = document.getElementById(
+    'productDetails-container'
+  );
+  productDetailsContainer.innerHTML = '';
+  const ingredientsContainer = document.getElementById(
+    'adminIngredientsSubAdd'
+  );
   ingredientsContainer.innerHTML = '';
   const ingredients = await getIngredients();
   const ingredientArray = [];
@@ -206,7 +209,7 @@ const adminProductsContent = async () => {
     ingredientsContainer.appendChild(singleIngredient);
   });
 
-  addProductContainer.innerHTML = `
+  productDetailsContainer.innerHTML = `
               <h5>Add product</h5>
       <label for="addProductName">Product name</label>
       <input id="addProductName" type="text">
@@ -224,7 +227,6 @@ const adminProductsContent = async () => {
     dropDown.innerHTML += `<option value="${category.name}">${category.name}</option>`;
   });
 
-  addProductContainer.appendChild(ingredientsContainer);
   const errors = document.querySelector('.error');
   const addProductBtn = document.createElement('button');
   addProductBtn.id = 'addProdBtn';
@@ -245,7 +247,7 @@ const adminProductsContent = async () => {
     }
   });
 
-  addProductContainer.appendChild(addProductBtn);
+  productDetailsContainer.appendChild(addProductBtn);
 
   const productContainer = document.getElementById('products-container');
   productContainer.innerHTML = '';
@@ -458,7 +460,10 @@ const adminProducts = async () => {
   adminContent.innerHTML = `<div id="adminProducts">
     <div id="adminProductContent">
     <div id="products-container" class="adminContentControl"></div>
-    <div id="addProduct-container" class="addProduct-container"></div>
+    <div class="adminProductAdd-container">
+      <div id="productDetails-container" class="addProduct-container"></div>
+      <div id="adminIngredientsSubAdd"></div>
+    </div>
     </div>
     </div>`;
   await adminProductsContent();
@@ -485,4 +490,4 @@ const adminOrders = async () => {
   await adminOrdersContent();
 };
 
-await adminOrders();
+await adminProducts();

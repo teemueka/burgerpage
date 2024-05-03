@@ -1,3 +1,20 @@
+body {
+  background-color: rgba(128, 126, 123, 0.28);
+}
+
+.adminProductAdd-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  background-color: rgba(105, 104, 102, 0.28);
+  border: 2px solid var(--secondary);
+}
+
+#productDetails-container {
+  margin-left: 1rem;
+}
+
 #adminContainer h1 {
   margin-top: 0;
   padding-top: 0.5rem;
@@ -24,18 +41,12 @@
 #adminNav button:hover {
   background-color: var(--highlight);
 }
-
-#adminContainer {
-  background-color: rgba(128, 126, 123, 0.28);
-  background-size: 100%;
-}
-
 .error p {
   color: red;
 }
 
 #adminInputs{
-  height: 100vh;
+  height: auto;
 }
 
 #adminSearch {
@@ -164,9 +175,9 @@
 
 #adminIngredientsSubAdd {
   background-color: rgba(84, 83, 81, 0.28);
-  margin-top: 1rem;
   max-height: 40vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #addProdBtn {
