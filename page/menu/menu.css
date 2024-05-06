@@ -75,14 +75,25 @@ p{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50vw;
-  max-height: 60vh;
+  margin: 0;
+  width: 40vw;
+  max-height: 70vh;
   overflow-y: auto;
-  z-index: 1000;
-  background: white;
-  padding: 20px;
+  z-index: 199;
+  background: var(--primary);
+  color: var(--text);
+  border-color: var(--secondary);
+  padding: 0;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   border-radius: 10px;
+
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .modal h3 {
@@ -91,17 +102,79 @@ p{
 }
 
 .modal img {
-  max-width: 250px;
-  max-height: 250px;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 1rem;
+
+  object-fit: cover;
 }
 
 .modalControl {
   display: flex;
-  gap: 2rem;
+
+  justify-content: space-between;
+
+}
+
+
+#modalMain {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 1rem;
 }
 
 #modalMain p {
   display: flex;
   justify-content: center;
 }
+
+
+
+#exit{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 30px;
+  cursor: pointer;
+  position: absolute;
+  color: var(--text);
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+#exit:hover{
+  color: red;
+}
+
+
+
+
+#ingredientSubAdd{
+  overflow-y: auto;
+  max-height: 60vh;
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+#ingredientSubAdd p {
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.singleIngredientControl{
+  margin-bottom: 1rem;
+}
+
+#orderBtn {
+  width: 100%;
+  margin-top: 1rem;
+  font-weight: 400;
+}
+
 
