@@ -67,24 +67,58 @@ const totalCostElement = document.createElement('p');
 totalCostElement.id = 'total-cost';
 let totalPrice = 0;
 
+const generateProductKey = (product) => {
+  let key = `id:${product.id}`;
+
+  if (product.added && product.added.length > 0) {
+    const additions = product.added.sort().join(',');
+    key += `|added:${additions}`;
+  }
+
+  if (product.removed && product.removed.length > 0) {
+    const removals = product.removed.sort().join(',');
+    key += `|removed:${removals}`;
+  }
+  return key;
+};
 const generateCart = async () => {
   const cart = JSON.parse(localStorage.getItem('cart'));
   if (!cart) {
     return;
   }
-  const productQuantities = {};
-  for (const productId of cart) {
-    if (productQuantities[productId]) {
-      productQuantities[productId]++;
+
+  const productMap = {};
+
+  const updateLocalCart = () => {
+    const newCart = [];
+    Object.entries(productMap).forEach(([key, {amount, details}]) => {
+      for (let i = 0; i < amount; i++) {
+        newCart.push(details);
+      }
+    });
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  };
+
+  cart.forEach((item) => {
+    const key = generateProductKey(item);
+    if (productMap[key]) {
+      productMap[key].amount++;
     } else {
-      productQuantities[productId] = 1;
+      productMap[key] = {
+        amount: 1,
+        details: item,
+      };
     }
-  }
+  });
+
   cartElement.innerHTML = '';
-  for (const item in productQuantities) {
-    const product = await getProductsById(item);
+  for (const key in productMap) {
+    const entry = productMap[key];
+    const product = await getProductsById(entry.details.id);
+    const amount = entry.amount;
     console.log(product);
-    totalPrice += product.price * productQuantities[item];
+
+    totalPrice += product.price * amount;
     const productElement = document.createElement('div');
     productElement.classList.add('cart-item');
 
@@ -100,47 +134,37 @@ const generateCart = async () => {
     productPrice.classList.add('price');
 
     const productQuantity = document.createElement('p');
-    productQuantity.innerText = productQuantities[item];
+    productQuantity.innerText = amount;
     productQuantity.classList.add('quantity');
 
-    const getCount = (p_id) => {
-      const count = JSON.parse(localStorage.getItem('cart')) || [];
-      const index = count.indexOf(product.id);
-      return index > -1 ? count.filter((id) => id === p_id).length : 0;
-    };
-    const updateAmount = async () => {
-      productQuantity.innerText = `${getCount(product.id)}`;
+    const updateUI = () => {
+      productQuantity.innerText = productMap[key].amount;
       totalCostElement.innerText = `Total Cost: ${totalPrice}`;
-      updateCart();
     };
-
-    await updateAmount();
 
     const button = document.createElement('button');
     button.textContent = '+';
     button.classList.add('good');
     button.addEventListener('click', async () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(product.id);
-      localStorage.setItem('cart', JSON.stringify(cart));
       totalPrice += product.price;
-      productQuantities[item]++;
-      await updateAmount();
+      productMap[key].amount++;
+      updateLocalCart();
+      updateCart();
+      updateUI();
     });
 
     const buttonRemove = document.createElement('button');
     buttonRemove.textContent = '-';
     buttonRemove.classList.add('bad');
     buttonRemove.addEventListener('click', async () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const index = cart.indexOf(product.id);
-      if (index > -1) {
-        cart.splice(index, 1);
-        totalPrice -= product.price;
-        productQuantities[item]--;
+      totalPrice -= product.price;
+      productMap[key].amount--;
+      if (productMap[key].amount === 0) {
+        productElement.remove();
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      await updateAmount();
+      updateLocalCart();
+      updateCart();
+      updateUI();
     });
 
     const removeProduct = document.createElement('button');
@@ -148,14 +172,14 @@ const generateCart = async () => {
     removeProduct.classList.add('verybad');
     removeProduct.addEventListener('click', async () => {
       productElement.remove();
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const index = cart.indexOf(product.id);
-      for (let i = 0; i < productQuantities[item]; i++) {
-        cart.splice(index, 1);
+      const amount = productMap[key].amount;
+      for (let i = 0; i < amount; i++) {
+        productMap[key].amount--;
         totalPrice -= product.price;
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      await updateAmount();
+      updateLocalCart();
+      updateCart();
+      updateUI();
     });
 
     productElement.appendChild(productImage);
