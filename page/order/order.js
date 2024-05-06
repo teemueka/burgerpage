@@ -23,7 +23,7 @@ orderForm.addEventListener('submit', async (e) => {
   const userName = document.getElementById('userName').value;
   const orderType = document.getElementById('orderType').value;
   const fromRest = document.getElementById('fromRestaurant').value;
-  const products = localStorage.getItem('cart');
+  const products = JSON.parse(localStorage.getItem('cart'));
 
   let hasErrors = false;
 
