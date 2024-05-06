@@ -65,10 +65,12 @@ const customProduct = async (productID) => {
     const ingredients = await getIngredients();
     ingredients.forEach((ingredient) => {
       counts[ingredient.id] = {
+        id: ingredient.id,
         name: ingredient.name,
         amount: 0,
       };
       defaultCounts[ingredient.id] = {
+        id: ingredient.id,
         name: ingredient.name,
         amount: 0,
       };
@@ -220,13 +222,13 @@ const compareIngredients = (modified, original) => {
             let count = ingredient.amount;
             count -= modIngredient.amount;
             for (let i = 0; i < count; i++) {
-              removed.push(ingredient.name);
+              removed.push(ingredient.id);
             }
           } else if (ingredient.amount < modIngredient.amount) {
             let count = modIngredient.amount;
             count -= ingredient.amount;
             for (let i = 0; i < count; i++) {
-              added.push(ingredient.name);
+              added.push(ingredient.id);
             }
           }
         }
