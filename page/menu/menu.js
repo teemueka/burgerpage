@@ -1,7 +1,7 @@
-// noinspection ES6UnusedImports
 // eslint-disable-next-line no-unused-vars
-import {generateHeader, updateCart} from '../default.js';
-import {getIngredients, getProductsById} from '../api.js';
+// noinspection ES6UnusedImports
+import { generateHeader, updateCart } from "../default.js";
+import { getIngredients, getProductsById } from "../api.js";
 
 const modal = document.querySelector('.modal');
 
@@ -73,8 +73,6 @@ const customProduct = async (productID) => {
         amount: 0,
       };
     });
-    console.log(counts);
-    console.log(defaultCounts);
 
     const product = await getProductsById(productID);
     product.ingredients.forEach((ingredient) => {
@@ -143,18 +141,15 @@ const customProduct = async (productID) => {
     modalControl.appendChild(ingredientsContainer);
     modal.appendChild(modalControl);
 
-    // SUB ADD ORDER AMOUNT
     const updateCustomOrder = () => {
       const compare = compareIngredients(counts, defaultCounts);
 
-      const customOrder = {
+      return {
         id: productID,
         added: compare.added,
         removed: compare.removed,
         price: product.price,
       };
-      console.log(customOrder);
-      return customOrder;
     };
 
     const subAdd = document.createElement('div');
@@ -175,12 +170,9 @@ const customProduct = async (productID) => {
       amount += 1;
       orderAmount.innerText = amount.toString();
       const customOrder = updateCustomOrder();
-      console.log('modified', counts);
-      console.log('default', defaultCounts);
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(customOrder);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCart();
+      const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
+      tempCart.push(customOrder);
+      localStorage.setItem('tempCart', JSON.stringify(tempCart));
     });
     subAdd.appendChild(increaseOrderAmount);
 
@@ -188,15 +180,14 @@ const customProduct = async (productID) => {
     decreaseOrdedAmount.id = `dec-${productID}`;
     decreaseOrdedAmount.innerText = '-';
     decreaseOrdedAmount.addEventListener('click', () => {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
       let amount = parseInt(orderAmount.innerText);
       if (amount > 0) {
         amount -= 1;
         orderAmount.innerText = amount.toString();
-        cart.pop();
-        updateCart();
+        tempCart.pop();
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('tempCart', JSON.stringify(tempCart));
     });
     subAdd.appendChild(decreaseOrdedAmount);
 
@@ -205,12 +196,11 @@ const customProduct = async (productID) => {
     orderBtn.innerText = 'order';
     orderBtn.addEventListener('click', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const amount = parseInt(orderAmount.innerText);
-      const customOrder = updateCustomOrder();
-      for (let i = 0; i < amount; i++) {
-        cart.push(customOrder);
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
+      const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
+      const updatedCart = cart.concat(tempCart);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      localStorage.setItem('tempCart', JSON.stringify([]));
+      updateCart();
       modal.close();
     });
     subAdd.appendChild(orderBtn);
@@ -243,7 +233,5 @@ const compareIngredients = (modified, original) => {
       }
     });
   });
-  console.log('added', added);
-  console.log('removed', removed);
   return {added, removed};
 };
