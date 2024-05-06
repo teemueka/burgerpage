@@ -1,6 +1,4 @@
-body {
-  background-color: rgba(128, 126, 123, 0.28);
-}
+
 
 .adminProductAdd-container {
   display: flex;
@@ -134,7 +132,7 @@ body {
   gap: 1rem;
   max-width: 80vw;
   max-height: 40vh;
-  background-color: whitesmoke;
+  background-color: var(--bg);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -156,7 +154,7 @@ body {
 }
 
 .adminContainer {
-  background-color: #bcc5ce;
+  background-color: rgba(105, 104, 102, 0.28);
 }
 
 .singleIngredientControl {
