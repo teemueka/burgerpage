@@ -25,7 +25,9 @@ body{
 
   --secondary: #484538ff;
 
-  --primary: #f2f4f3ff;
+  --primary: #c0d2c8;
+
+  --bright: #faf3db;
 
   --bg: #effaf4;
 
@@ -198,6 +200,7 @@ main{
 }
 
 #cart-amount {
+
   position: absolute;
   background-color: #4588a8;
   color: var(--primary);
@@ -208,3 +211,27 @@ main{
 }
 
 
+
+#theme-nav{
+  font-size: 0;
+  position: relative;
+  display: flex;
+}
+
+#theme-nav {
+  z-index: 1;
+  top: 0.7rem;
+}
+
+#theme-icon svg{
+  height: 2rem;
+  width: 2rem;
+  fill: var(--secondary);
+  color: var(--highlight);
+  transition: 0.5s;
+}
+
+#theme-icon svg:hover{
+  scale: 1.2;
+
+}

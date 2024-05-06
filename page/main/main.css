@@ -33,7 +33,7 @@
 }
 
 .welcome-other-info{
-  color: var(--primary);
+  color: var(--bright);
   font-family: "Josefin Sans", sans-serif;
   font-size: 30px;
   font-weight: 200;
@@ -43,7 +43,7 @@
 }
 
 .welcome-other-info a{
-  color: var(--primary);
+  color: var(--bright);
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
@@ -53,8 +53,8 @@
   }
 
 .welcome-other-info a:hover{
-  color: var(--highlight);
-  background-color: var(--primary);
+  color: var(--secondary);
+  background-color: var(--highlight);
 }
 .welcome-content{
   position: absolute;
@@ -71,7 +71,7 @@
 }
 
 .welcome-content h1{
-  color: var(--primary);
+  color: var(--bright);
   text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
   font-family: "Josefin Sans", sans-serif;
   font-size: 10vw;
