@@ -1,6 +1,9 @@
-// eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
+// eslint-disable-next-line no-unused-vars
 import {generateHeader, updateCart} from '../default.js';
+import {getIngredients, getProductsById} from '../api.js';
+
+const modal = document.querySelector('.modal');
 
 (async () => {
   const response = await (
@@ -10,23 +13,28 @@ import {generateHeader, updateCart} from '../default.js';
     if (!product.categories) {
       continue;
     }
-    console.log(product.categories);
+    // console.log(product.categories);
     product.categories.forEach((categoryl) => {
       if (
         categoryl.name === 'burger' ||
         categoryl.name === 'side' ||
         categoryl.name === 'dessert'
       ) {
-        console.log(`'${categoryl.name}'`);
+        // console.log(`'${categoryl.name}'`);
         const category = document.getElementById(categoryl.name);
         if (!category) {
           console.log(`No element found with ID '${categoryl.name}'`);
           return;
         }
 
-        console.log(product);
+        // console.log(product);
         const div = document.createElement('div');
         div.classList.add('menu-item');
+
+        div.addEventListener('click', async () => {
+          await customProduct(product.id);
+          modal.show();
+        });
 
         const img = document.createElement('img');
         img.src = `http://10.120.32.57/app/uploads/${product.image}`;
@@ -38,56 +46,204 @@ import {generateHeader, updateCart} from '../default.js';
         const p = document.createElement('p');
         p.textContent = `${product.ingredients ? product.ingredients.map((ingredient) => ingredient.name).join(', ') : ''}`;
 
-        const addToCartBox = document.createElement('div');
-
-        const amount = document.createElement('p');
-        amount.id = 'amount';
-
-        const getCount = (p_id) => {
-          const count = JSON.parse(localStorage.getItem('cart')) || [];
-          const index = count.indexOf(product.id);
-          return index > -1 ? count.filter((id) => id === p_id).length : 0;
-        };
-        const updateAmount = () => {
-          amount.innerText = `${getCount(product.id)}`;
-        };
-
-        updateAmount();
-
-        const button = document.createElement('button');
-        button.textContent = '+';
-        button.addEventListener('click', async () => {
-          const cart = JSON.parse(localStorage.getItem('cart')) || [];
-          cart.push(product.id);
-          localStorage.setItem('cart', JSON.stringify(cart));
-          updateCart();
-          updateAmount();
-        });
-
-        const buttonRemove = document.createElement('button');
-        buttonRemove.textContent = '-';
-        buttonRemove.addEventListener('click', async () => {
-          const cart = JSON.parse(localStorage.getItem('cart')) || [];
-          const index = cart.indexOf(product.id);
-          if (index > -1) {
-            cart.splice(index, 1);
-          }
-          localStorage.setItem('cart', JSON.stringify(cart));
-          updateCart();
-          updateAmount();
-        });
-
-        addToCartBox.appendChild(buttonRemove);
-        addToCartBox.appendChild(amount);
-        addToCartBox.appendChild(button);
-
         div.appendChild(img);
         div.appendChild(h5);
         div.appendChild(price);
         div.appendChild(p);
-        div.appendChild(addToCartBox);
         category.appendChild(div);
       }
     });
   }
 })();
+
+const customProduct = async (productID) => {
+  const counts = {};
+  const defaultCounts = {};
+
+  if (modal) {
+    modal.innerHTML = '';
+    const ingredients = await getIngredients();
+    ingredients.forEach((ingredient) => {
+      counts[ingredient.id] = {
+        name: ingredient.name,
+        amount: 0,
+      };
+      defaultCounts[ingredient.id] = {
+        name: ingredient.name,
+        amount: 0,
+      };
+    });
+    console.log(counts);
+    console.log(defaultCounts);
+
+    const product = await getProductsById(productID);
+    product.ingredients.forEach((ingredient) => {
+      if (ingredient.id in counts) {
+        counts[ingredient.id].amount++;
+        defaultCounts[ingredient.id].amount++;
+      }
+    });
+
+    const modalControl = document.createElement('div');
+    modalControl.className = 'modalControl';
+    modalControl.innerHTML = '';
+    modal.appendChild(modalControl);
+    const modalMain = document.createElement('div');
+    modalMain.id = 'modalMain';
+    modalMain.innerHTML = `
+    <h3>${product.name}</h3>
+    <img src="http://10.120.32.57/app/uploads/${product.image}" alt="product image">
+    <p>${product.price}</p>`;
+    modalControl.appendChild(modalMain);
+
+    const ingredientsContainer = document.createElement('div');
+    ingredientsContainer.id = 'ingredientSubAdd';
+    ingredients.forEach((ingredient) => {
+      const singleIngredient = document.createElement('div');
+      singleIngredient.className = 'singleIngredientControl';
+      singleIngredient.innerHTML = '';
+
+      const ingredientName = document.createElement('p');
+      ingredientName.innerText = `${ingredient.name}`;
+      singleIngredient.appendChild(ingredientName);
+
+      const ingredientAmount = document.createElement('span');
+      ingredientAmount.id = `amount-${ingredient.id}`;
+      ingredientAmount.innerText = counts[ingredient.id].amount;
+      singleIngredient.appendChild(ingredientAmount);
+
+      const increaseIngredient = document.createElement('button');
+      increaseIngredient.id = `add-${ingredient.id}`;
+      increaseIngredient.innerText = '+';
+      singleIngredient.appendChild(increaseIngredient);
+      increaseIngredient.addEventListener('click', () => {
+        let amount = parseInt(ingredientAmount.innerText);
+        if (amount < 10) {
+          amount += 1;
+          ingredientAmount.innerText = amount.toString();
+          counts[ingredient.id].amount++;
+        }
+      });
+
+      const decreaseIngredient = document.createElement('button');
+      decreaseIngredient.id = `dec-${ingredient.id}`;
+      decreaseIngredient.innerText = '-';
+      decreaseIngredient.addEventListener('click', () => {
+        let amount = parseInt(ingredientAmount.innerText);
+        if (amount > 0) {
+          amount -= 1;
+          counts[ingredient.id].amount--;
+          ingredientAmount.innerText = amount.toString();
+        }
+      });
+      singleIngredient.appendChild(decreaseIngredient);
+
+      ingredientsContainer.appendChild(singleIngredient);
+    });
+    modalControl.appendChild(ingredientsContainer);
+    modal.appendChild(modalControl);
+
+    // SUB ADD ORDER AMOUNT
+    const updateCustomOrder = () => {
+      const compare = compareIngredients(counts, defaultCounts);
+
+      const customOrder = {
+        id: productID,
+        added: compare.added,
+        removed: compare.removed,
+        price: product.price,
+      };
+      console.log(customOrder);
+      return customOrder;
+    };
+
+    const subAdd = document.createElement('div');
+    subAdd.className = 'orderAmount';
+    subAdd.innerHTML = '';
+
+    const orderAmount = document.createElement('span');
+    orderAmount.id = `amount-${productID}`;
+    orderAmount.innerText = '0';
+    subAdd.appendChild(orderAmount);
+
+    const increaseOrderAmount = document.createElement('button');
+    increaseOrderAmount.id = `add-${productID}`;
+    increaseOrderAmount.innerText = '+';
+    subAdd.appendChild(increaseOrderAmount);
+    increaseOrderAmount.addEventListener('click', () => {
+      let amount = parseInt(orderAmount.innerText);
+      amount += 1;
+      orderAmount.innerText = amount.toString();
+      const customOrder = updateCustomOrder();
+      console.log('modified', counts);
+      console.log('default', defaultCounts);
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(customOrder);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart();
+    });
+    subAdd.appendChild(increaseOrderAmount);
+
+    const decreaseOrdedAmount = document.createElement('button');
+    decreaseOrdedAmount.id = `dec-${productID}`;
+    decreaseOrdedAmount.innerText = '-';
+    decreaseOrdedAmount.addEventListener('click', () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let amount = parseInt(orderAmount.innerText);
+      if (amount > 0) {
+        amount -= 1;
+        orderAmount.innerText = amount.toString();
+        cart.pop();
+        updateCart();
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+    });
+    subAdd.appendChild(decreaseOrdedAmount);
+
+    const orderBtn = document.createElement('button');
+    orderBtn.id = 'orderBtn';
+    orderBtn.innerText = 'order';
+    orderBtn.addEventListener('click', () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const amount = parseInt(orderAmount.innerText);
+      const customOrder = updateCustomOrder();
+      for (let i = 0; i < amount; i++) {
+        cart.push(customOrder);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      modal.close();
+    });
+    subAdd.appendChild(orderBtn);
+    modal.appendChild(subAdd);
+  }
+};
+
+const compareIngredients = (modified, original) => {
+  const added = [];
+  const removed = [];
+
+  Object.entries(original).forEach(([key, ingredient]) => {
+    Object.entries(modified).forEach(([modKey, modIngredient]) => {
+      if (key === modKey) {
+        if (ingredient.amount !== modIngredient.amount) {
+          if (ingredient.amount > modIngredient.amount) {
+            let count = ingredient.amount;
+            count -= modIngredient.amount;
+            for (let i = 0; i < count; i++) {
+              removed.push(ingredient.name);
+            }
+          } else if (ingredient.amount < modIngredient.amount) {
+            let count = modIngredient.amount;
+            count -= ingredient.amount;
+            for (let i = 0; i < count; i++) {
+              added.push(ingredient.name);
+            }
+          }
+        }
+      }
+    });
+  });
+  console.log('added', added);
+  console.log('removed', removed);
+  return {added, removed};
+};
