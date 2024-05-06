@@ -82,7 +82,7 @@ main{
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5rem 1rem 0.5rem 1rem ;
+  padding: 0.5rem 1rem 0.2rem 1rem ;
   border-radius: 2vw;
   margin: 1vw;
   font-size: 25px;
@@ -102,7 +102,7 @@ main{
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0.5rem 1rem 0.2rem 1rem;
   border-radius: 10vw;
   margin: 0.1vw;
   scale: 1;
@@ -115,15 +115,16 @@ main{
   font-size: 0;
   position: relative;
   display: flex;
+
 }
 
 #cartNav span{
   z-index: 1;
-  top: 0.1rem;
+
 
 }
 #cart-button{
-  top: -8px;
+
 }
 
 .cart-image{
@@ -131,7 +132,6 @@ main{
   position: relative;
 
   width: 1rem;
-  height: 1rem;
   color: currentColor;
 
   scale: 1.8;
@@ -220,7 +220,7 @@ main{
 
 #theme-nav {
   z-index: 1;
-  top: 0.7rem;
+  top: 0.5rem;
 }
 
 #theme-icon svg{
