@@ -1,3 +1,5 @@
+import {getCurrentUser} from './api.js';
+
 const createHeader = () => {
   const header = document.getElementById('header');
 
@@ -207,7 +209,7 @@ if (!localStorage.getItem('theme')) {
     body.style.setProperty('--text', '#171717');
   }
 }
-
+getCurrentUser().then();
 generateHeader();
 
 function updateCart() {
