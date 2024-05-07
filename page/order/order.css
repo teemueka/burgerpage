@@ -45,22 +45,34 @@ input {
   color: red;
   font-size: 0.9rem;
 }
-main{
+
+main {
   display: flex;
+}
+
+html {
+  overflow-y: hidden;
+}
+
+.orderBtn-control {
+  display: flex;
+}
+
+.orderBtn-control button {
+  height: 100%;
 }
 
 #cart-order {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   width: 80%;
   margin: 0 auto;
   box-shadow: inset 0 -7px 20px rgba(0,0,0,0.5);
-
+  height: 86vh;
+  overflow-y: auto;
 }
 
 #info-order h2{
@@ -69,18 +81,6 @@ main{
   font-size: 40px;
   font-weight: bold;
   margin-bottom: 20px;
-}
-
-#info-order{
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  padding: 20px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  background-color: var(--primary);
-  width: 30%;
-
 }
 
 #total-cost{
@@ -99,10 +99,12 @@ main{
 }
 
 .cart-item{
+  padding: 0.5rem;
+  background-color: rgba(228, 229, 231, 0.55);
+  border: solid 2px var(--secondary);
+  border-radius: 6px;
   display: flex;
-  justify-content: space-evenly;
-  font-family: "Josefin Sans", sans-serif;
-  font-size: 40px;
+  justify-content: space-between;
   font-weight: bold;
   margin-bottom: 20px;
   height: 5rem;
@@ -123,15 +125,16 @@ main{
   font-weight: normal;
 }
 
-.price{
+.price {
   font-size: 20px;
-  margin-left: 20px;
+  margin-left: 4px;
   width: 5rem;
   font-weight:lighter;
 }
+
 .quantity{
   font-size: 30px;
-  margin-left: 2px;
+  margin-left: 2rem;
   width: 10rem;
   font-weight: lighter;
 }
@@ -148,11 +151,46 @@ main{
 #info-order{
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   padding: 20px;
   border: 1px solid #e5e5e5;
   border-radius: 5px;
   background-color: var(--primary);
   width: 20%;
+}
 
+.toolTip {
+  position: relative;
+  display: inline-block; /* Makes the container as wide as its content */
+  vertical-align: middle;
+}
+
+.toolTip .toolTipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 100%; /* Adjust this to control vertical offset */
+  left: 50%;
+  transform: translateX(-50%); /* Centrally aligns the tooltip */
+}
+
+.toolTip .toolTipText::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+.toolTip:hover .toolTipText {
+  visibility: visible;
 }

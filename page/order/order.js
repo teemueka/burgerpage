@@ -6,12 +6,14 @@ import {
   createOrder,
   getProducts,
   getProductsById,
+  getIngredients,
 } from '../api.js';
 
 const currentUser = JSON.parse(localStorage.getItem('user'));
 const orderForm = document.getElementById('orderForm');
 const restaurants = await getRestaurants();
 const fromResDropdown = document.getElementById('fromRestaurant');
+
 restaurants.forEach((restaurant) => {
   fromResDropdown.innerHTML += `<option value="${restaurant.id}">${restaurant.address}</option>`;
 });
@@ -81,6 +83,22 @@ const generateProductKey = (product) => {
   }
   return key;
 };
+
+const compareIdToIngredient = async (idList, type) => {
+  let compared = '';
+  const ingredients = await getIngredients();
+
+  idList.forEach((id) => {
+    const ingredient = ingredients.find((ingredient) => ingredient.id === id);
+    if (ingredient) {
+      type === 'added' ? (compared += `+ ${ingredient.name}\n`) : '';
+      type === 'removed' ? (compared += `- ${ingredient.name}\n`) : '';
+    }
+  });
+
+  return compared.trim();
+};
+
 const generateCart = async () => {
   const cart = JSON.parse(localStorage.getItem('cart'));
   if (!cart) {
@@ -116,7 +134,6 @@ const generateCart = async () => {
     const entry = productMap[key];
     const product = await getProductsById(entry.details.id);
     const amount = entry.amount;
-    console.log(product);
 
     totalPrice += product.price * amount;
     const productElement = document.createElement('div');
@@ -126,12 +143,40 @@ const generateCart = async () => {
     productImage.src = 'http://10.120.32.57/app/uploads/' + product.image;
     productImage.alt = product.name;
 
+    const productInfo = document.createElement('div');
+    productInfo.id = 'productInfo-control';
+
     const productName = document.createElement('h3');
     productName.innerText = product.name;
 
     const productPrice = document.createElement('p');
     productPrice.innerText = product.price;
     productPrice.classList.add('price');
+
+    const infoDiv = document.createElement('div');
+    infoDiv.id = 'infoDiv';
+
+    const toolTip = document.createElement('div');
+    toolTip.className = 'toolTip';
+    toolTip.innerText = 'modifications';
+
+    const added = document.createElement('p');
+    added.className = 'toolTipText';
+    added.innerText = await compareIdToIngredient(
+      entry.details.added,
+      'added'
+    );
+
+    const removed = document.createElement('p');
+    removed.className = 'toolTipText';
+    removed.innerText = await compareIdToIngredient(
+      entry.details.removed,
+      'removed'
+    );
+
+    toolTip.appendChild(added);
+    toolTip.appendChild(removed);
+    infoDiv.appendChild(toolTip);
 
     const productQuantity = document.createElement('p');
     productQuantity.innerText = amount;
@@ -141,6 +186,9 @@ const generateCart = async () => {
       productQuantity.innerText = productMap[key].amount;
       totalCostElement.innerText = `Total Cost: ${totalPrice}`;
     };
+
+    const orderBtnControl = document.createElement('div');
+    orderBtnControl.className = 'orderBtn-control';
 
     const button = document.createElement('button');
     button.textContent = '+';
@@ -182,13 +230,16 @@ const generateCart = async () => {
       updateUI();
     });
 
+    orderBtnControl.appendChild(button);
+    orderBtnControl.appendChild(buttonRemove);
+    orderBtnControl.appendChild(removeProduct);
+    productInfo.appendChild(productName);
+    productInfo.appendChild(productPrice);
     productElement.appendChild(productImage);
-    productElement.appendChild(productName);
-    productElement.appendChild(productPrice);
+    productElement.appendChild(productInfo);
+    productElement.appendChild(infoDiv);
     productElement.appendChild(productQuantity);
-    productElement.appendChild(buttonRemove);
-    productElement.appendChild(button);
-    productElement.appendChild(removeProduct);
+    productElement.appendChild(orderBtnControl);
 
     cartElement.appendChild(productElement);
   }
