@@ -95,11 +95,24 @@ const adminUsersContent = async () => {
     const userContainer = document.createElement('div');
     userContainer.className = 'adminContainer';
     userContainer.id = 'singleUser';
-    userContainer.innerHTML = `
-    <h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>
-    <p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>
-    <img alt="User Avatar" class="adminProductImglol" id="avatar-${user.id}">
-    <p>Role: <select name="userRole" id="userRole-${user.id}">
+
+    const emailDiv = document.createElement('div');
+    emailDiv.className = 'userEmail';
+    emailDiv.innerHTML = `<h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>`;
+
+    const adressDiv = document.createElement('div');
+    adressDiv.className = 'userAddress';
+    adressDiv.innerHTML = `<p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>`;
+
+    const userAvatar = document.createElement('img');
+    userAvatar.className = 'userAvatar';
+    userAvatar.src = '';
+    userAvatar.alt = 'User avatar';
+    userAvatar.id = `avatar-${user.id}`;
+
+    const userRoleDiv = document.createElement('div');
+    userRoleDiv.className = 'userRole';
+    userRoleDiv.innerHTML = `<p>Role: <select name="userRole" id="userRole-${user.id}">
       ${
         user.role === 'admin'
           ? `<option value="admin">admin</option>
@@ -109,17 +122,23 @@ const adminUsersContent = async () => {
       }
       </select></p>`;
 
+    userContainer.append(emailDiv, userAvatar, adressDiv, userRoleDiv);
+
+    const userButtonDiv = document.createElement('div');
+    userButtonDiv.className = 'adminProdBtn-control';
+
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
     updateBtn.id = 'updateButton';
-    updateBtn.innerText = 'Update';
+    updateBtn.innerText = 'update';
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.id = 'deleteButton';
     deleteBtn.className = 'containerBtn';
-    deleteBtn.innerText = 'Delete';
+    deleteBtn.id = 'deleteButton';
+    deleteBtn.innerText = 'delete';
 
-    userContainer.append(updateBtn, deleteBtn);
+    userButtonDiv.append(updateBtn, deleteBtn);
+    userContainer.appendChild(userButtonDiv);
     mainContainer.appendChild(userContainer);
 
     const avatarImg = document.getElementById(`avatar-${user.id}`);
@@ -266,23 +285,47 @@ const adminProductsContent = async () => {
     singleProduct.id = 'singleProduct';
     singleProduct.className = 'adminContainer';
     singleProduct.innerHTML = '';
-    singleProduct.innerHTML = `
-      <h5 contenteditable="true" id="productName-${product.id}">${product.name}</h5>
-      <img src="http://10.120.32.57/app/uploads/${product.image}" alt="Product image" id="image-${product.id}">
-      <p>price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>`;
 
-    if (product.allergies && product.allergies.length > 0) {
-      singleProduct.innerHTML += `<p>allergies: ${product.allergies}</p>`;
+    const productTitle = document.createElement('div');
+    productTitle.className = 'prodTitle';
+    productTitle.innerHTML = `<h5 class="prodHead" contenteditable="true" id="productName-${product.id}">${product.name}</h5>`;
+
+    const productImage = document.createElement('img');
+    productImage.className = 'prodImg';
+    productImage.src = `http://10.120.32.57/app/uploads/${product.image}`; // Set source path
+    productImage.alt = 'Product image';
+    productImage.id = `image-${product.id}`;
+
+    const productPriceDiv = document.createElement('div');
+    productPriceDiv.className = 'prodPriceDiv';
+    productPriceDiv.innerHTML = `<p class="prodPrice">price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>`;
+
+    singleProduct.appendChild(productTitle);
+    singleProduct.appendChild(productImage);
+    singleProduct.appendChild(productPriceDiv);
+
+    if (product.allergies) {
+      const allergyDiv = document.createElement('div');
+      allergyDiv.className = 'prodAllergy';
+      if (product.allergies.length) {
+        console.log(product.allergies);
+        allergyDiv.innerHTML += `<p>allergies: ${product.allergies.join(', ')}</p>`;
+      } else {
+        allergyDiv.innerHTML += `<p>No known allergies.</p>`;
+      }
+      singleProduct.appendChild(allergyDiv);
     }
 
     if (product.categories) {
       let categories = '';
       product.categories.forEach((category) => {
-        console.log(category.name);
         categories += category.name;
       });
       singleProduct.innerHTML += `<p>categories: ${categories}</p>`;
     }
+
+    const buttonDiv = document.createElement('div');
+    buttonDiv.className = 'adminProdBtn-control';
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
@@ -294,8 +337,9 @@ const adminProductsContent = async () => {
     deleteBtn.id = 'deleteButton';
     deleteBtn.innerText = 'delete';
 
-    singleProduct.appendChild(updateBtn);
-    singleProduct.appendChild(deleteBtn);
+    buttonDiv.appendChild(updateBtn);
+    buttonDiv.appendChild(deleteBtn);
+    singleProduct.appendChild(buttonDiv);
     productContainer.appendChild(singleProduct);
 
     updateBtn.addEventListener('click', async () => {
@@ -317,15 +361,22 @@ const adminIngredientsContent = async () => {
   const ingredientContainer = document.getElementById('ingredients-container');
   ingredientContainer.innerHTML = '';
   const ingredients = await getIngredients();
-  console.log(ingredients);
   ingredients.forEach((ingredient) => {
     const singleIngredient = document.createElement('div');
     singleIngredient.className = 'adminContainer';
     singleIngredient.id = 'singleIngredient';
     singleIngredient.innerHTML = '';
-    singleIngredient.innerHTML = `
-      <h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}</h5>
-      <p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
+
+    const ingNameDiv = document.createElement('div');
+    ingNameDiv.className = 'ingNameDiv';
+    ingNameDiv.innerHTML = `<h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}</h5>`;
+
+    const ingCalDiv = document.createElement('div');
+    ingCalDiv.className = 'ingCalDiv';
+    ingCalDiv.innerHTML = `<p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
+
+    const ingAllergyDiv = document.createElement('div');
+    ingAllergyDiv.className = 'ingAllergyDiv';
 
     if (ingredient.allergies) {
       let allergies = '';
@@ -333,8 +384,11 @@ const adminIngredientsContent = async () => {
         allergies += allergy + ', ';
       });
       allergies = allergies.slice(0, -2);
-      singleIngredient.innerHTML += `<p>allergies: ${allergies}</p>`;
+      ingAllergyDiv.innerHTML += `<p>allergies: ${allergies}</p>`;
+    } else {
+      ingAllergyDiv.innerHTML += '<p>no known allergies</p>';
     }
+    singleIngredient.append(ingNameDiv, ingCalDiv, ingAllergyDiv);
     ingredientContainer.appendChild(singleIngredient);
   });
 
@@ -394,9 +448,17 @@ const adminOrdersContent = async () => {
       second: '2-digit',
     });
 
-    singleOrder.innerHTML = `<p>Address: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>
-       <p>Date: <span id="orderDate-${order.id}">${dateTimeString}</span></p>
-       <p>Type: <select id="orderType-${order.id}">
+    const orderAdressDiv = document.createElement('div');
+    orderAdressDiv.className = 'orderAddressDiv';
+    orderAdressDiv.innerHTML = `<p>Address: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>`;
+
+    const orderDateDiv = document.createElement('div');
+    orderDateDiv.className = 'orderDateDiv';
+    orderDateDiv.innerHTML = `<p>Date: <span id="orderDate-${order.id}">${dateTimeString}</span></p>`;
+
+    const orderTypeDiv = document.createElement('div');
+    orderTypeDiv.className = 'orderTypeDiv';
+    orderTypeDiv.innerHTML = `<p>Type: <select id="orderType-${order.id}">
        ${
          order.order_type === 'pickup'
            ? `<option value="pickup">pickup</option>
@@ -404,9 +466,11 @@ const adminOrdersContent = async () => {
            : `<option value="delivery">delivery</option>
               <option value="pickup">pickup</option>`
        }
-        </select></p>
+        </select></p>`;
 
-       <p>State: <select id="orderState-${order.id}">
+    const orderStateDiv = document.createElement('div');
+    orderStateDiv.className = 'orderStateDiv';
+    orderStateDiv.innerHTML = `<p>State: <select id="orderState-${order.id}">
        ${
          order.state === 'completed'
            ? `<option value="completed">completed</option>
@@ -415,6 +479,9 @@ const adminOrdersContent = async () => {
     <option value="completed">completed</option>`
        }
       </select></p>`;
+
+    const orderButtonDiv = document.createElement('div');
+    orderButtonDiv.className = 'adminProdBtn-control';
 
     const updateBtn = document.createElement('button');
     updateBtn.className = 'containerBtn';
@@ -442,8 +509,15 @@ const adminOrdersContent = async () => {
       singleOrder.remove();
     });
 
-    singleOrder.appendChild(updateBtn);
-    singleOrder.appendChild(deleteBtn);
+    singleOrder.append(
+      orderAdressDiv,
+      orderDateDiv,
+      orderTypeDiv,
+      orderStateDiv
+    );
+
+    orderButtonDiv.append(updateBtn, deleteBtn);
+    singleOrder.appendChild(orderButtonDiv);
 
     orderContainer.appendChild(singleOrder);
   });
@@ -452,10 +526,6 @@ const adminOrdersContent = async () => {
 const adminUsers = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `
-<div id="adminSearch">
-<input id="adminSearchInput" type="text" placeholder="search for users">
-<button id="adminSearchButton">Search</button>
-</div>
 <div id="userBox">
 <div id="users-container" class="adminContentControl"></div>
 <div id="addUser-container" class="addUser-container"></div>
@@ -498,4 +568,4 @@ const adminOrders = async () => {
   await adminOrdersContent();
 };
 
-await adminProducts();
+await adminUsers();
