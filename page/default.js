@@ -30,13 +30,41 @@ const createHeader = () => {
   const navRight = document.createElement('div');
   navRight.className = 'nav-right';
 
-  const loginButton = document.createElement('a');
-  loginButton.href = '../profile/profile.html';
+  const profileDropdownDiv = document.createElement('div');
+  profileDropdownDiv.className = 'profileDropdownDiv';
 
+  const dropdown = document.createElement('div');
+  dropdown.className = 'dropdown';
+  const profileButton = document.createElement('a');
+  profileButton.href = '../profile/profile.html';
+  profileButton.textContent = 'Me';
+  const logoutButton = document.createElement('a');
+  logoutButton.textContent = 'Logout';
+  logoutButton.className = 'logout-button';
+  logoutButton.addEventListener('click', () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    location.reload();
+  });
+  dropdown.appendChild(profileButton);
+  dropdown.appendChild(logoutButton);
+
+  const loginButton = document.createElement('a');
   loginButton.textContent = 'Login';
+  loginButton.className = 'login-button';
+  dropdown.style.display = 'none';
+  loginButton.addEventListener('click', () => {
+    if (!localStorage.getItem('user')) {
+      window.location.href = '../profile/profile.html';
+    } else {
+      dropdown.style.display =
+        dropdown.style.display === 'none' ? 'flex' : 'none';
+    }
+  });
 
   if (localStorage.getItem('user')) {
     loginButton.textContent = 'Profile';
+    logoutButton.classList.add('logout-buttonVisible');
     console.log(JSON.parse(localStorage.getItem('user')).role);
     if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
       const adminButton = document.createElement('a');
@@ -45,7 +73,9 @@ const createHeader = () => {
       navRight.appendChild(adminButton);
     }
   }
-  navRight.appendChild(loginButton);
+  profileDropdownDiv.appendChild(loginButton);
+  profileDropdownDiv.appendChild(dropdown);
+  navRight.appendChild(profileDropdownDiv);
 
   const cartDiv = document.createElement('div');
   cartDiv.id = 'cartNav';

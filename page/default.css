@@ -111,6 +111,41 @@ main{
 
 }
 
+.profileDropdownDiv{
+  position: relative;
+  display: flex;
+
+}
+
+.login-button{
+  cursor: pointer;
+}
+
+.dropdown{
+  display: none;
+  position:absolute;
+  background-color: transparent;
+  width: 5rem;
+
+  border-radius: 1.1rem;
+  z-index: 1;
+  top: 100%;
+  flex-direction: column;
+
+}
+
+.logout-button{
+  display: none;
+}
+
+.logout-buttonVisible{
+  display: flex;
+  cursor: pointer;
+}
+
+
+
+
 #cartNav{
   font-size: 0;
   position: relative;
