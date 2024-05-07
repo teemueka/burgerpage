@@ -162,10 +162,7 @@ const generateCart = async () => {
 
     const added = document.createElement('p');
     added.className = 'toolTipText';
-    added.innerText = await compareIdToIngredient(
-      entry.details.added,
-      'added'
-    );
+    added.innerText = await compareIdToIngredient(entry.details.added, 'added');
 
     const removed = document.createElement('p');
     removed.className = 'toolTipText';
