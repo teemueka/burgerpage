@@ -150,7 +150,7 @@ const generateCart = async () => {
     productName.innerText = product.name;
 
     const productPrice = document.createElement('p');
-    productPrice.innerText = product.price;
+    productPrice.innerText = product.price + '€';
     productPrice.classList.add('price');
 
     const infoDiv = document.createElement('div');
@@ -160,28 +160,32 @@ const generateCart = async () => {
     toolTip.className = 'toolTip';
     toolTip.innerText = 'modifications';
 
+    const addedText = await compareIdToIngredient(entry.details.added, 'added');
+    const removedText = await compareIdToIngredient(entry.details.removed, 'removed')
+
+    if (!addedText && !removedText) {
+      infoDiv.classList.add('empty');
+    }
+
     const added = document.createElement('p');
     added.className = 'toolTipText';
-    added.innerText = await compareIdToIngredient(entry.details.added, 'added');
+    added.innerText = addedText;
 
     const removed = document.createElement('p');
     removed.className = 'toolTipText';
-    removed.innerText = await compareIdToIngredient(
-      entry.details.removed,
-      'removed'
-    );
+    removed.innerText = removedText;
 
     toolTip.appendChild(added);
     toolTip.appendChild(removed);
     infoDiv.appendChild(toolTip);
 
     const productQuantity = document.createElement('p');
-    productQuantity.innerText = amount;
+    productQuantity.innerText = 'x' + amount;
     productQuantity.classList.add('quantity');
 
     const updateUI = () => {
-      productQuantity.innerText = productMap[key].amount;
-      totalCostElement.innerText = `Total Cost: ${totalPrice}`;
+      productQuantity.innerText = 'x' + productMap[key].amount;
+      totalCostElement.innerText = `Total Cost: ${totalPrice}` + '€';
     };
 
     const orderBtnControl = document.createElement('div');
@@ -240,7 +244,7 @@ const generateCart = async () => {
 
     cartElement.appendChild(productElement);
   }
-  totalCostElement.innerText = `Total Cost: ${totalPrice}`;
+  totalCostElement.innerText = `Total Cost: ${totalPrice}` + '€';
   cartElement.appendChild(totalCostElement);
 };
 
