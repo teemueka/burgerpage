@@ -175,9 +175,13 @@ const adminProductsContent = async () => {
     ingredientAmount.innerText = '0';
     singleIngredient.appendChild(ingredientAmount);
 
+    const amountDiv = document.createElement('div');
+    amountDiv.className = 'amountRegulator';
+
     const increaseIngredient = document.createElement('button');
     increaseIngredient.id = `add-${ingredient.id}`;
     increaseIngredient.innerText = '+';
+    increaseIngredient.className = 'good';
     singleIngredient.appendChild(increaseIngredient);
     increaseIngredient.addEventListener('click', () => {
       let amount = parseInt(ingredientAmount.innerText);
@@ -191,6 +195,7 @@ const adminProductsContent = async () => {
     const decreaseIngredient = document.createElement('button');
     decreaseIngredient.id = `dec-${ingredient.id}`;
     decreaseIngredient.innerText = '-';
+    decreaseIngredient.className = 'bad';
     decreaseIngredient.addEventListener('click', () => {
       let amount = parseInt(ingredientAmount.innerText);
       if (amount > 0) {
@@ -202,7 +207,12 @@ const adminProductsContent = async () => {
         ingredientAmount.innerText = amount.toString();
       }
     });
-    singleIngredient.appendChild(decreaseIngredient);
+
+    amountDiv.appendChild(increaseIngredient);
+    amountDiv.appendChild(ingredientAmount);
+    amountDiv.appendChild(decreaseIngredient);
+
+    singleIngredient.appendChild(amountDiv);
 
     ingredientsContainer.appendChild(singleIngredient);
   });

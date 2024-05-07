@@ -29,7 +29,7 @@ body{
 
   --bright: #faf3db;
 
-  --bg: #effaf4;
+  --bg: #effafa;
 
   --text: #171717;
 
@@ -93,7 +93,7 @@ main{
 .nav-right{
   display: inline-flex;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
 
 }
@@ -166,6 +166,7 @@ main{
   font-size: 20px;
   border-radius: 5px;
   border-color: transparent;
+  transition: color 0.2s;
 }
 .good:hover{
   color: var(--primary);
@@ -178,6 +179,8 @@ main{
   font-size: 20px;
   border-radius: 5px;
   border-color: transparent;
+  transition: color 0.2s;
+
 
 }
 .bad:hover{
@@ -220,7 +223,7 @@ main{
 
 #theme-nav {
   z-index: 1;
-  top: 0.5rem;
+
 }
 
 #theme-icon svg{
@@ -233,5 +236,15 @@ main{
 
 #theme-icon svg:hover{
   scale: 1.2;
+
+}
+
+
+.amountRegulator{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 5rem;
+  margin: auto;
 
 }

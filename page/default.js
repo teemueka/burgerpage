@@ -132,7 +132,7 @@ const createHeader = () => {
       body.style.setProperty('--primary', '#f2f4f3ff');
       body.style.setProperty('--secondary', '#484538ff');
       body.style.setProperty('--highlight', '#65AFD1ff');
-      body.style.setProperty('--bg', '#effaf4');
+      body.style.setProperty('--bg', '#effafa');
       body.style.setProperty('--text', '#171717');
       return;
     }
@@ -173,7 +173,7 @@ if (!localStorage.getItem('theme')) {
     body.style.setProperty('--primary', '#f2f4f3ff');
     body.style.setProperty('--secondary', '#484538ff');
     body.style.setProperty('--highlight', '#65AFD1ff');
-    body.style.setProperty('--bg', '#effaf4');
+    body.style.setProperty('--bg', '#effafa');
     body.style.setProperty('--text', '#171717');
   }
 }

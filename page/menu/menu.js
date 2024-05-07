@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
-import { generateHeader, updateCart } from "../default.js";
-import { getIngredients, getProductsById } from "../api.js";
+import {generateHeader, updateCart} from '../default.js';
+import {getIngredients, getProductsById} from '../api.js';
 
 const modal = document.querySelector('.modal');
 
@@ -34,6 +34,7 @@ const modal = document.querySelector('.modal');
         div.addEventListener('click', async () => {
           await customProduct(product.id);
           modal.show();
+          modal.classList.add('visible');
         });
 
         const img = document.createElement('img');
@@ -88,12 +89,23 @@ const customProduct = async (productID) => {
     modalControl.className = 'modalControl';
     modalControl.innerHTML = '';
     modal.appendChild(modalControl);
+
     const modalMain = document.createElement('div');
     modalMain.id = 'modalMain';
     modalMain.innerHTML = `
     <h3>${product.name}</h3>
     <img src="http://10.120.32.57/app/uploads/${product.image}" alt="product image">
     <p>${product.price}</p>`;
+
+    const exit = document.createElement('span');
+    exit.id = 'exit';
+    exit.innerText = 'x';
+
+    exit.addEventListener('click', () => {
+      modal.classList.remove('visible');
+      modal.close();
+    });
+    modalMain.appendChild(exit);
     modalControl.appendChild(modalMain);
 
     const ingredientsContainer = document.createElement('div');
@@ -107,6 +119,9 @@ const customProduct = async (productID) => {
       ingredientName.innerText = `${ingredient.name}`;
       singleIngredient.appendChild(ingredientName);
 
+      const amountDiv = document.createElement('div');
+      amountDiv.className = 'amountRegulator';
+
       const ingredientAmount = document.createElement('span');
       ingredientAmount.id = `amount-${ingredient.id}`;
       ingredientAmount.innerText = counts[ingredient.id].amount;
@@ -115,7 +130,7 @@ const customProduct = async (productID) => {
       const increaseIngredient = document.createElement('button');
       increaseIngredient.id = `add-${ingredient.id}`;
       increaseIngredient.innerText = '+';
-      singleIngredient.appendChild(increaseIngredient);
+      increaseIngredient.className = 'good';
       increaseIngredient.addEventListener('click', () => {
         let amount = parseInt(ingredientAmount.innerText);
         if (amount < 10) {
@@ -128,6 +143,7 @@ const customProduct = async (productID) => {
       const decreaseIngredient = document.createElement('button');
       decreaseIngredient.id = `dec-${ingredient.id}`;
       decreaseIngredient.innerText = '-';
+      decreaseIngredient.className = 'bad';
       decreaseIngredient.addEventListener('click', () => {
         let amount = parseInt(ingredientAmount.innerText);
         if (amount > 0) {
@@ -136,7 +152,11 @@ const customProduct = async (productID) => {
           ingredientAmount.innerText = amount.toString();
         }
       });
-      singleIngredient.appendChild(decreaseIngredient);
+
+      amountDiv.appendChild(increaseIngredient);
+      amountDiv.appendChild(ingredientAmount);
+      amountDiv.appendChild(decreaseIngredient);
+      singleIngredient.appendChild(amountDiv);
 
       ingredientsContainer.appendChild(singleIngredient);
     });
@@ -158,14 +178,17 @@ const customProduct = async (productID) => {
     subAdd.className = 'orderAmount';
     subAdd.innerHTML = '';
 
+    const amountDivM = document.createElement('div');
+    amountDivM.className = 'amountRegulator';
+
     const orderAmount = document.createElement('span');
     orderAmount.id = `amount-${productID}`;
     orderAmount.innerText = '0';
-    subAdd.appendChild(orderAmount);
 
     const increaseOrderAmount = document.createElement('button');
     increaseOrderAmount.id = `add-${productID}`;
     increaseOrderAmount.innerText = '+';
+    increaseOrderAmount.className = 'good';
     subAdd.appendChild(increaseOrderAmount);
     increaseOrderAmount.addEventListener('click', () => {
       let amount = parseInt(orderAmount.innerText);
@@ -176,11 +199,11 @@ const customProduct = async (productID) => {
       tempCart.push(customOrder);
       localStorage.setItem('tempCart', JSON.stringify(tempCart));
     });
-    subAdd.appendChild(increaseOrderAmount);
 
     const decreaseOrdedAmount = document.createElement('button');
     decreaseOrdedAmount.id = `dec-${productID}`;
     decreaseOrdedAmount.innerText = '-';
+    decreaseOrdedAmount.className = 'bad';
     decreaseOrdedAmount.addEventListener('click', () => {
       const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
       let amount = parseInt(orderAmount.innerText);
@@ -191,11 +214,15 @@ const customProduct = async (productID) => {
       }
       localStorage.setItem('tempCart', JSON.stringify(tempCart));
     });
-    subAdd.appendChild(decreaseOrdedAmount);
+
+    amountDivM.appendChild(increaseOrderAmount);
+    amountDivM.appendChild(orderAmount);
+    amountDivM.appendChild(decreaseOrdedAmount);
 
     const orderBtn = document.createElement('button');
     orderBtn.id = 'orderBtn';
     orderBtn.innerText = 'order';
+    orderBtn.className = 'good';
     orderBtn.addEventListener('click', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
@@ -204,9 +231,11 @@ const customProduct = async (productID) => {
       localStorage.setItem('tempCart', JSON.stringify([]));
       updateCart();
       modal.close();
+      modal.classList.remove('visible');
     });
+    subAdd.appendChild(amountDivM);
     subAdd.appendChild(orderBtn);
-    modal.appendChild(subAdd);
+    modalMain.appendChild(subAdd);
   }
 };
 
