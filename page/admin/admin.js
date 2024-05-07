@@ -182,8 +182,7 @@ const adminProductsContent = async () => {
     increaseIngredient.addEventListener('click', () => {
       let amount = parseInt(ingredientAmount.innerText);
       if (amount < 10) {
-        ingredientArray.push(ingredient.name);
-        console.log(ingredientArray);
+        ingredientArray.push(ingredient.id);
         amount += 1;
         ingredientAmount.innerText = amount.toString();
       }
@@ -195,11 +194,10 @@ const adminProductsContent = async () => {
     decreaseIngredient.addEventListener('click', () => {
       let amount = parseInt(ingredientAmount.innerText);
       if (amount > 0) {
-        const index = ingredientArray.lastIndexOf(ingredient.name);
+        const index = ingredientArray.lastIndexOf(ingredient.id);
         if (index !== -1) {
           ingredientArray.splice(index, 1);
         }
-        console.log(ingredientArray);
         amount -= 1;
         ingredientAmount.innerText = amount.toString();
       }
@@ -236,7 +234,7 @@ const adminProductsContent = async () => {
       name: document.getElementById('addProductName').value,
       price: document.getElementById('productPrice').value,
       category: document.getElementById('productCategory').value,
-      ingredients: JSON.stringify(ingredientArray.toString()),
+      ingredients: JSON.stringify(ingredientArray),
       image: document.getElementById('productImage').files[0],
     };
     if (!productErrors(productData)) {
