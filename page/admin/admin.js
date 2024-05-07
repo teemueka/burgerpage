@@ -69,7 +69,7 @@ const adminUsersContent = async () => {
 
   const errors = document.querySelector('.error');
   const addUserBtn = document.createElement('button');
-  addUserBtn.id = 'addUserBtn';
+  addUserBtn.className = 'adminBtn';
   addUserBtn.innerText = 'Add new user';
   addUserBtn.addEventListener('click', async () => {
     const newUser = {
@@ -256,7 +256,7 @@ const adminProductsContent = async () => {
 
   const errors = document.querySelector('.error');
   const addProductBtn = document.createElement('button');
-  addProductBtn.id = 'addProdBtn';
+  addProductBtn.className = 'adminBtn';
   addProductBtn.innerText = 'Add product';
   addProductBtn.addEventListener('click', async () => {
     const productData = {
@@ -308,7 +308,6 @@ const adminProductsContent = async () => {
       const allergyDiv = document.createElement('div');
       allergyDiv.className = 'prodAllergy';
       if (product.allergies.length) {
-        console.log(product.allergies);
         allergyDiv.innerHTML += `<p>allergies: ${product.allergies.join(', ')}</p>`;
       } else {
         allergyDiv.innerHTML += `<p>No known allergies.</p>`;
@@ -408,7 +407,7 @@ const adminIngredientsContent = async () => {
 
   const errors = document.querySelector('.error');
   const addIngredientBtn = document.createElement('button');
-  addIngredientBtn.id = 'addIngredientBtn';
+  addIngredientBtn.className = 'adminBtn';
   addIngredientBtn.innerText = 'Add ingredient';
   addIngredientBtn.addEventListener('click', async () => {
     const ingredientData = {
@@ -426,16 +425,23 @@ const adminIngredientsContent = async () => {
   addIngredientContainer.appendChild(addIngredientBtn);
 };
 
+const updateOrderStyle = (orderId, newState) => {
+  const orderElement = document.querySelector(`#order-${orderId}`);
+  if (orderElement) {
+    orderElement.classList.remove('order-completed', 'order-ongoing');
+    orderElement.classList.add(`order-${newState}`);
+  }
+};
+
 const adminOrdersContent = async () => {
   const orderContainer = document.getElementById('order-container');
   orderContainer.innerHTML = '';
   const orders = await getOrders();
-  console.log(orders);
 
   orders.forEach((order) => {
     const singleOrder = document.createElement('div');
-    singleOrder.className = 'adminContainer';
-    singleOrder.id = 'singleOrder';
+    singleOrder.className = 'orderContainer';
+    singleOrder.id = `order-${order.id}`;
     singleOrder.innerHTML = '';
 
     const readableDate = new Date(parseInt(order.date));
@@ -448,9 +454,9 @@ const adminOrdersContent = async () => {
       second: '2-digit',
     });
 
-    const orderAdressDiv = document.createElement('div');
-    orderAdressDiv.className = 'orderAddressDiv';
-    orderAdressDiv.innerHTML = `<p>Address: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>`;
+    const orderAddressDiv = document.createElement('div');
+    orderAddressDiv.className = 'orderAddressDiv';
+    orderAddressDiv.innerHTML = `<p>Address: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>`;
 
     const orderDateDiv = document.createElement('div');
     orderDateDiv.className = 'orderDateDiv';
@@ -496,6 +502,7 @@ const adminOrdersContent = async () => {
         state: document.getElementById(`orderState-${order.id}`).value,
       };
       console.log(updatedOrder);
+      updateOrderStyle(order.id, updatedOrder.state);
       await updateOrder(updatedOrder);
     });
 
@@ -510,7 +517,7 @@ const adminOrdersContent = async () => {
     });
 
     singleOrder.append(
-      orderAdressDiv,
+      orderAddressDiv,
       orderDateDiv,
       orderTypeDiv,
       orderStateDiv
@@ -520,6 +527,7 @@ const adminOrdersContent = async () => {
     singleOrder.appendChild(orderButtonDiv);
 
     orderContainer.appendChild(singleOrder);
+    updateOrderStyle(order.id, order.state);
   });
 };
 
