@@ -12,8 +12,151 @@ import {
   deleteUser,
 } from '../api.js';
 
+/**
+ * This method populates the registration form
+ */
+const registration = () => {
+  form.innerHTML = `
+    <h1>Registration</h1>
+    <div class="input-control">
+      <label for="reg-email">Email</label>
+      <input id="reg-email" name="email" type="email" required />
+      <div class="error" id="email-error"></div>
+    </div>
+    <div class="input-control">
+      <label for="reg-password">Password</label>
+      <input id="reg-password" name="password" type="password" required />
+      <div class="error" id="password-error"></div>
+    </div>
+    <div class="alreadyUser">
+      <p>Already have an account?</p>
+      <a href="#" id="switchToLogin">Sign in</a>
+    </div>
+    <button type="submit" class="defaultBtn" >Register</button>`;
+
+  document.getElementById('switchToLogin').addEventListener('click', login);
+};
+
+/**
+ * This method populates the login form.
+ */
+const login = () => {
+  form.innerHTML = `
+    <h1>Login</h1>
+    <div class="input-control">
+      <label for="login-email">Email</label>
+      <input id="login-email" name="email" type="email" required />
+      <div class="error" id="email-error"></div>
+    </div>
+    <div class="input-control">
+      <label for="login-password">Password</label>
+      <input id="login-password" name="password" type="password" required />
+      <div class="error" id="password-error"></div>
+    </div>
+    <div class="alreadyUser">
+      <p>Make an account</p>
+      <a href="#" id="switchToRegistration">Sign up</a>
+    </div>
+    <button type="submit" class="defaultBtn">Log in</button>`;
+
+  document
+    .getElementById('switchToRegistration')
+    .addEventListener('click', registration);
+};
+
+/**
+ * This method populates the profile form and handles avatar change.
+ * @return {Promise<void>}
+ */
+const profile = async () => {
+  form.innerHTML = `<div id="mainContainer">
+  <form id="updateUserForm" method="POST">
+    <h2 id="profileHeader">Update profile</h2>
+    <div class="pfp">
+      <img src="https://placehold.co/400" alt="image loading failed" id="profilePicture" class="avatar">
+      <label for="photo" class="custom-file-upload">Update picture</label>
+    <input type="file" name="photo" id="photo" style="display: none;">
+    </div>
+    <div class="profile-inputs">
+      <label for="profileEmail">Email</label>
+      <input id="profileEmail" name="profileEmail" type="text" readonly>
+      <div class="error" id="email-error"></div>
+    </div>
+    <div class="profile-inputs">
+      <label for="profilePassword">Password</label>
+      <input id="profilePassword" name="profilePassword" type="password">
+      <div class="error" id="password-error"></div>
+    </div>
+    <div class="profile-inputs">
+      <label for="profileNewPassword">New password</label>
+      <input id="profileNewPassword" name="profileNewPassword" type="password">
+      <div class="error" id="newPassword-error"></div>
+    </div>
+    <div class="profile-inputs">
+      <label for="profileNewDuplicatePassword">Confirm new password</label>
+      <input id="profileNewDuplicatePassword" name="profileNewDuplicatePassword" type="password">
+      <div class="error" id="duplicatePassword-error"></div>
+    </div>
+    <button type="submit" class="defaultBtn">Update</button>
+    <button type="button" id="delete" class="delete">Delete account</button>
+  </form>
+  <dialog class="modal">
+    <h2>Are you sure?</h2>
+    <button id="dontDelete" class="defaultBtn">no</button>
+    <button id="deleteUser" class="delete">yes</button>
+  </dialog>
+</div>`;
+  document.getElementById('profileEmail').value = currentUser.email;
+  document.getElementById('profilePicture').src = await getAvatar(
+    currentUser.id
+  );
+  const profilePhotoInput = document.getElementById('photo');
+  const profilePicture = document.getElementById('profilePicture');
+
+  profilePhotoInput.addEventListener('change', async (evt) => {
+    const avatar = {
+      id: currentUser.id,
+      file: evt.target.files[0],
+    };
+
+    try {
+      await uploadAvatar(avatar, token);
+      const reader = new FileReader();
+      reader.onload = () => {
+        profilePicture.src = reader.result;
+      };
+      reader.readAsDataURL(evt.target.files[0]);
+    } catch (error) {
+      console.log('Error uploading avatar', error);
+    }
+  });
+
+  const modal = document.querySelector('.modal');
+
+  document.getElementById('delete').addEventListener('click', async () => {
+    modal.show();
+  });
+  document.getElementById('dontDelete').addEventListener('click', (evt) => {
+    modal.close();
+    evt.preventDefault();
+  });
+  document
+    .getElementById('deleteUser')
+    .addEventListener('click', async (evt) => {
+      evt.preventDefault();
+      try {
+        await deleteUser(currentUser, token);
+      } catch (e) {
+        console.log('error deleting user', e.message);
+      }
+    });
+};
+
 try {
-  await getCurrentUser();
+  const user = await getCurrentUser();
+  if (!user) {
+    login();
+  }
 } catch (e) {
   /* empty */
 }
@@ -178,146 +321,6 @@ const handleRegistration = async (userData) => {
     }
     throw new Error('Registration failed');
   }
-};
-
-/**
- * This method populates the registration form
- */
-const registration = () => {
-  form.innerHTML = `
-    <h1>Registration</h1>
-    <div class="input-control">
-      <label for="reg-email">Email</label>
-      <input id="reg-email" name="email" type="email" required />
-      <div class="error" id="email-error"></div>
-    </div>
-    <div class="input-control">
-      <label for="reg-password">Password</label>
-      <input id="reg-password" name="password" type="password" required />
-      <div class="error" id="password-error"></div>
-    </div>
-    <div class="alreadyUser">
-      <p>Already have an account?</p>
-      <a href="#" id="switchToLogin">Sign in</a>
-    </div>
-    <button type="submit" class="defaultBtn" >Register</button>`;
-
-  document.getElementById('switchToLogin').addEventListener('click', login);
-};
-
-/**
- * This method populates the login form.
- */
-const login = () => {
-  form.innerHTML = `
-    <h1>Login</h1>
-    <div class="input-control">
-      <label for="login-email">Email</label>
-      <input id="login-email" name="email" type="email" required />
-      <div class="error" id="email-error"></div>
-    </div>
-    <div class="input-control">
-      <label for="login-password">Password</label>
-      <input id="login-password" name="password" type="password" required />
-      <div class="error" id="password-error"></div>
-    </div>
-    <div class="alreadyUser">
-      <p>Make an account</p>
-      <a href="#" id="switchToRegistration">Sign up</a>
-    </div>
-    <button type="submit" class="defaultBtn">Log in</button>`;
-
-  document
-    .getElementById('switchToRegistration')
-    .addEventListener('click', registration);
-};
-
-/**
- * This method populates the profile form and handles avatar change.
- * @return {Promise<void>}
- */
-const profile = async () => {
-  form.innerHTML = `<div id="mainContainer">
-  <form id="updateUserForm" method="POST">
-    <h2 id="profileHeader">Update profile</h2>
-    <div class="pfp">
-      <img src="https://placehold.co/400" alt="image loading failed" id="profilePicture" class="avatar">
-      <label for="photo" class="custom-file-upload">Update picture</label>
-    <input type="file" name="photo" id="photo" style="display: none;">
-    </div>
-    <div class="profile-inputs">
-      <label for="profileEmail">Email</label>
-      <input id="profileEmail" name="profileEmail" type="text" readonly>
-      <div class="error" id="email-error"></div>
-    </div>
-    <div class="profile-inputs">
-      <label for="profilePassword">Password</label>
-      <input id="profilePassword" name="profilePassword" type="password">
-      <div class="error" id="password-error"></div>
-    </div>
-    <div class="profile-inputs">
-      <label for="profileNewPassword">New password</label>
-      <input id="profileNewPassword" name="profileNewPassword" type="password">
-      <div class="error" id="newPassword-error"></div>
-    </div>
-    <div class="profile-inputs">
-      <label for="profileNewDuplicatePassword">Confirm new password</label>
-      <input id="profileNewDuplicatePassword" name="profileNewDuplicatePassword" type="password">
-      <div class="error" id="duplicatePassword-error"></div>
-    </div>
-    <button type="submit" class="defaultBtn">Update</button>
-    <button type="button" id="delete" class="delete">Delete account</button>
-  </form>
-  <dialog class="modal">
-    <h2>Are you sure?</h2>
-    <button id="dontDelete" class="defaultBtn">no</button>
-    <button id="deleteUser" class="delete">yes</button>
-  </dialog>
-</div>`;
-  document.getElementById('profileEmail').value = currentUser.email;
-  document.getElementById('profilePicture').src = await getAvatar(
-    currentUser.id
-  );
-  const profilePhotoInput = document.getElementById('photo');
-  const profilePicture = document.getElementById('profilePicture');
-
-  profilePhotoInput.addEventListener('change', async (evt) => {
-    const avatar = {
-      id: currentUser.id,
-      file: evt.target.files[0],
-    };
-
-    try {
-      await uploadAvatar(avatar, token);
-      const reader = new FileReader();
-      reader.onload = () => {
-        profilePicture.src = reader.result;
-      };
-      reader.readAsDataURL(evt.target.files[0]);
-    } catch (error) {
-      console.log('Error uploading avatar', error);
-    }
-  });
-
-  const modal = document.querySelector('.modal');
-
-  document.getElementById('delete').addEventListener('click', async () => {
-    modal.show();
-  });
-  document.getElementById('dontDelete').addEventListener('click', (evt) => {
-    modal.close();
-    evt.preventDefault();
-  });
-  document
-    .getElementById('deleteUser')
-    .addEventListener('click', async (evt) => {
-      evt.preventDefault();
-      try {
-        await deleteUser(currentUser, token);
-      } catch (e) {
-        console.log('error deleting user', e.message);
-      }
-    });
 };
 
 if (currentUser) {
