@@ -12,7 +12,7 @@ import {
   deleteUser,
 } from '../api.js';
 
-let valid = false;
+let valid = true;
 
 /**
  * This method populates the registration form
@@ -71,6 +71,7 @@ const login = () => {
  * @return {Promise<void>}
  */
 const profile = async () => {
+  form.id = 'profileForm';
   form.innerHTML = `<div id="mainContainer">
   <form id="updateUserForm" method="POST">
     <h2 id="profileHeader">Update profile</h2>
@@ -240,10 +241,8 @@ form.addEventListener('submit', async (event) => {
       password: password,
     };
 
-    try {
-      await userLogin(userData);
-      window.location.href = '../../page/main/main.html';
-    } catch (error) {
+    const log = await userLogin(userData);
+    if (!log) {
       document.getElementById('password-error').innerHTML =
         '<p>Incorrect email or password</p>';
     }
@@ -313,7 +312,6 @@ const handleRegistration = async (userData) => {
   try {
     await createUser(userData);
     await userLogin(userData);
-    window.location.href = '../../page/main/main.html';
   } catch (error) {
     console.error('Error registering user: ', error.message);
     if (error.message.includes('email already exists')) {
