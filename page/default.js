@@ -1,5 +1,8 @@
 import {getCurrentUser} from './api.js';
 
+/**
+ * This method generates global header for the restaurant.
+ */
 const createHeader = () => {
   const header = document.getElementById('header');
 
@@ -212,6 +215,9 @@ if (!localStorage.getItem('theme')) {
 getCurrentUser().then();
 generateHeader();
 
+/**
+ * This method updates the UI and displays amount of products in the cart.
+ */
 function updateCart() {
   const cartAmountIndicator = document.getElementById('cart-amount');
   const cart = JSON.parse(localStorage.getItem('cart')) || [];

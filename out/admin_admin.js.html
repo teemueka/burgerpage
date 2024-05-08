@@ -1,4 +1,32 @@
-import {generateHeader} from '../default.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: admin/admin.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: admin/admin.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {generateHeader} from '../default.js';
 
 import {
   getProducts,
@@ -30,7 +58,7 @@ import {
 try {
   await getCurrentUser();
 } catch (e) {
-  console.log(e.message);
+  console.log('aaaaaaaaaaaaaaaa', e.message);
 }
 
 const token = localStorage.getItem('token');
@@ -58,12 +86,12 @@ document.getElementById('ordersBtn').addEventListener('click', async () => {
 const adminUsersContent = async () => {
   const addUsersContainer = document.getElementById('addUser-container');
   addUsersContainer.innerHTML = '';
-  addUsersContainer.innerHTML = `<h5>Add new user</h5>
-<label for="addUserPass">Password</label><input id="addUserPass" type="text" required>
-<label for="addUserEmail">Email</label><input id="addUserEmail" type="email" required>
-<label for="addUserAddress">Address</label><input id="addUserAddress" type="text">
-<label for="addUserAvatar">Avatar</label><input type="file" name="photo" id="addUserAvatar">
-<div class="error"></div>
+  addUsersContainer.innerHTML = `&lt;h5>Add new user&lt;/h5>
+&lt;label for="addUserPass">Password&lt;/label>&lt;input id="addUserPass" type="text" required>
+&lt;label for="addUserEmail">Email&lt;/label>&lt;input id="addUserEmail" type="email" required>
+&lt;label for="addUserAddress">Address&lt;/label>&lt;input id="addUserAddress" type="text">
+&lt;label for="addUserAvatar">Avatar&lt;/label>&lt;input type="file" name="photo" id="addUserAvatar">
+&lt;div class="error">&lt;/div>
 `;
 
   const errors = document.querySelector('.error');
@@ -81,7 +109,7 @@ const adminUsersContent = async () => {
       errors.innerHTML = '';
       await createUser(newUser);
     } else {
-      errors.innerHTML = `<p>Invalid inputs</p>`;
+      errors.innerHTML = `&lt;p>Invalid inputs&lt;/p>`;
     }
   });
   addUsersContainer.appendChild(addUserBtn);
@@ -97,11 +125,11 @@ const adminUsersContent = async () => {
 
     const emailDiv = document.createElement('div');
     emailDiv.className = 'userEmail';
-    emailDiv.innerHTML = `<h5 contenteditable="true" id="email-${user.id}">${user.email}</h5>`;
+    emailDiv.innerHTML = `&lt;h5 contenteditable="true" id="email-${user.id}">${user.email}&lt;/h5>`;
 
     const adressDiv = document.createElement('div');
     adressDiv.className = 'userAddress';
-    adressDiv.innerHTML = `<p>Address: <span contenteditable="true" id="address-${user.id}">${user.address}</span></p>`;
+    adressDiv.innerHTML = `&lt;p>Address: &lt;span contenteditable="true" id="address-${user.id}">${user.address}&lt;/span>&lt;/p>`;
 
     const userAvatar = document.createElement('img');
     userAvatar.className = 'userAvatar';
@@ -111,15 +139,15 @@ const adminUsersContent = async () => {
 
     const userRoleDiv = document.createElement('div');
     userRoleDiv.className = 'userRole';
-    userRoleDiv.innerHTML = `<p>Role: <select name="userRole" id="userRole-${user.id}">
+    userRoleDiv.innerHTML = `&lt;p>Role: &lt;select name="userRole" id="userRole-${user.id}">
       ${
         user.role === 'admin'
-          ? `<option value="admin">admin</option>
-         <option value="user">user</option>`
-          : `<option value="user">user</option>
-         <option value="admin">admin</option>`
+          ? `&lt;option value="admin">admin&lt;/option>
+         &lt;option value="user">user&lt;/option>`
+          : `&lt;option value="user">user&lt;/option>
+         &lt;option value="admin">admin&lt;/option>`
       }
-      </select></p>`;
+      &lt;/select>&lt;/p>`;
 
     userContainer.append(emailDiv, userAvatar, adressDiv, userRoleDiv);
 
@@ -206,7 +234,7 @@ const adminProductsContent = async () => {
     singleIngredient.appendChild(increaseIngredient);
     increaseIngredient.addEventListener('click', () => {
       let amount = parseInt(ingredientAmount.innerText);
-      if (amount < 10) {
+      if (amount &lt; 10) {
         ingredientArray.push(ingredient.id);
         amount += 1;
         ingredientAmount.innerText = amount.toString();
@@ -239,21 +267,21 @@ const adminProductsContent = async () => {
   });
 
   productDetailsContainer.innerHTML = `
-              <h5>Add product</h5>
-      <label for="addProductName">Product name</label>
-      <input id="addProductName" type="text">
-      <label for="productPrice">Price</label>
-      <input id="productPrice" type="text">
-      <label for="productCategory">Category</label>
-      <select name="productCategory" id="productCategory"></select>
-      <label for="productImage">Image</label>
-      <input id="productImage" type="file">
-           <div class="error"></div>`;
+              &lt;h5>Add product&lt;/h5>
+      &lt;label for="addProductName">Product name&lt;/label>
+      &lt;input id="addProductName" type="text">
+      &lt;label for="productPrice">Price&lt;/label>
+      &lt;input id="productPrice" type="text">
+      &lt;label for="productCategory">Category&lt;/label>
+      &lt;select name="productCategory" id="productCategory">&lt;/select>
+      &lt;label for="productImage">Image&lt;/label>
+      &lt;input id="productImage" type="file">
+           &lt;div class="error">&lt;/div>`;
 
   const categories = await getCategories();
   const dropDown = document.getElementById('productCategory');
   categories.forEach((category) => {
-    dropDown.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+    dropDown.innerHTML += `&lt;option value="${category.name}">${category.name}&lt;/option>`;
   });
 
   const errors = document.querySelector('.error');
@@ -272,7 +300,7 @@ const adminProductsContent = async () => {
       errors.innerHTML = '';
       await addProduct(productData);
     } else {
-      errors.innerHTML = `<p>Invalid inputs</p>`;
+      errors.innerHTML = `&lt;p>Invalid inputs&lt;/p>`;
     }
   });
 
@@ -290,7 +318,7 @@ const adminProductsContent = async () => {
 
     const productTitle = document.createElement('div');
     productTitle.className = 'prodTitle';
-    productTitle.innerHTML = `<h5 class="prodHead" contenteditable="true" id="productName-${product.id}">${product.name}</h5>`;
+    productTitle.innerHTML = `&lt;h5 class="prodHead" contenteditable="true" id="productName-${product.id}">${product.name}&lt;/h5>`;
 
     const productImage = document.createElement('img');
     productImage.className = 'prodImg';
@@ -300,7 +328,7 @@ const adminProductsContent = async () => {
 
     const productPriceDiv = document.createElement('div');
     productPriceDiv.className = 'prodPriceDiv';
-    productPriceDiv.innerHTML = `<p class="prodPrice">price: <span contenteditable="true" id="price-${product.id}">${product.price}</span></p>`;
+    productPriceDiv.innerHTML = `&lt;p class="prodPrice">price: &lt;span contenteditable="true" id="price-${product.id}">${product.price}&lt;/span>&lt;/p>`;
 
     singleProduct.appendChild(productTitle);
     singleProduct.appendChild(productImage);
@@ -310,9 +338,9 @@ const adminProductsContent = async () => {
       const allergyDiv = document.createElement('div');
       allergyDiv.className = 'prodAllergy';
       if (product.allergies.length) {
-        allergyDiv.innerHTML += `<p>allergies: ${product.allergies.join(', ')}</p>`;
+        allergyDiv.innerHTML += `&lt;p>allergies: ${product.allergies.join(', ')}&lt;/p>`;
       } else {
-        allergyDiv.innerHTML += `<p>No known allergies.</p>`;
+        allergyDiv.innerHTML += `&lt;p>No known allergies.&lt;/p>`;
       }
       singleProduct.appendChild(allergyDiv);
     }
@@ -322,7 +350,7 @@ const adminProductsContent = async () => {
       product.categories.forEach((category) => {
         categories += category.name;
       });
-      singleProduct.innerHTML += `<p>categories: ${categories}</p>`;
+      singleProduct.innerHTML += `&lt;p>categories: ${categories}&lt;/p>`;
     }
 
     const buttonDiv = document.createElement('div');
@@ -373,11 +401,11 @@ const adminIngredientsContent = async () => {
 
     const ingNameDiv = document.createElement('div');
     ingNameDiv.className = 'ingNameDiv';
-    ingNameDiv.innerHTML = `<h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}</h5>`;
+    ingNameDiv.innerHTML = `&lt;h5 contenteditable="true" id="ingredientName-${ingredient.id}">${ingredient.name}&lt;/h5>`;
 
     const ingCalDiv = document.createElement('div');
     ingCalDiv.className = 'ingCalDiv';
-    ingCalDiv.innerHTML = `<p>cal: <span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}</span></p>`;
+    ingCalDiv.innerHTML = `&lt;p>cal: &lt;span contenteditable="true" id="cal-${ingredient.id}">${ingredient.cal}&lt;/span>&lt;/p>`;
 
     const ingAllergyDiv = document.createElement('div');
     ingAllergyDiv.className = 'ingAllergyDiv';
@@ -388,9 +416,9 @@ const adminIngredientsContent = async () => {
         allergies += allergy + ', ';
       });
       allergies = allergies.slice(0, -2);
-      ingAllergyDiv.innerHTML += `<p>allergies: ${allergies}</p>`;
+      ingAllergyDiv.innerHTML += `&lt;p>allergies: ${allergies}&lt;/p>`;
     } else {
-      ingAllergyDiv.innerHTML += '<p>no known allergies</p>';
+      ingAllergyDiv.innerHTML += '&lt;p>no known allergies&lt;/p>';
     }
     singleIngredient.append(ingNameDiv, ingCalDiv, ingAllergyDiv);
     ingredientContainer.appendChild(singleIngredient);
@@ -401,14 +429,14 @@ const adminIngredientsContent = async () => {
   );
   addIngredientContainer.innerHTML = '';
   addIngredientContainer.innerHTML = `
-              <h5>Add ingredient</h5>
-      <label for="ingredientName">Ingredient name</label>
-      <input id="ingredientName" type="text">
-      <label for="ingredientCal">Calories</label>
-      <input id="ingredientCal" type="text">
-      <label for="ingredientAllergies">Allergies</label>
-      <input id="ingredientAllergies" type="text">
-           <div class="error"></div>`;
+              &lt;h5>Add ingredient&lt;/h5>
+      &lt;label for="ingredientName">Ingredient name&lt;/label>
+      &lt;input id="ingredientName" type="text">
+      &lt;label for="ingredientCal">Calories&lt;/label>
+      &lt;input id="ingredientCal" type="text">
+      &lt;label for="ingredientAllergies">Allergies&lt;/label>
+      &lt;input id="ingredientAllergies" type="text">
+           &lt;div class="error">&lt;/div>`;
 
   const errors = document.querySelector('.error');
   const addIngredientBtn = document.createElement('button');
@@ -424,7 +452,7 @@ const adminIngredientsContent = async () => {
       errors.innerHTML = '';
       await addIngredient(ingredientData);
     } else {
-      errors.innerHTML = `<p>Invalid inputs</p>`;
+      errors.innerHTML = `&lt;p>Invalid inputs&lt;/p>`;
     }
   });
   addIngredientContainer.appendChild(addIngredientBtn);
@@ -472,35 +500,35 @@ const adminOrdersContent = async () => {
 
     const orderAddressDiv = document.createElement('div');
     orderAddressDiv.className = 'orderAddressDiv';
-    orderAddressDiv.innerHTML = `<p>Address: <span contenteditable="true" id="orderAddress-${order.id}">${order.address}</span></p>`;
+    orderAddressDiv.innerHTML = `&lt;p>Address: &lt;span contenteditable="true" id="orderAddress-${order.id}">${order.address}&lt;/span>&lt;/p>`;
 
     const orderDateDiv = document.createElement('div');
     orderDateDiv.className = 'orderDateDiv';
-    orderDateDiv.innerHTML = `<p>Date: <span id="orderDate-${order.id}">${dateTimeString}</span></p>`;
+    orderDateDiv.innerHTML = `&lt;p>Date: &lt;span id="orderDate-${order.id}">${dateTimeString}&lt;/span>&lt;/p>`;
 
     const orderTypeDiv = document.createElement('div');
     orderTypeDiv.className = 'orderTypeDiv';
-    orderTypeDiv.innerHTML = `<p>Type: <select id="orderType-${order.id}">
+    orderTypeDiv.innerHTML = `&lt;p>Type: &lt;select id="orderType-${order.id}">
        ${
          order.order_type === 'pickup'
-           ? `<option value="pickup">pickup</option>
-              <option value="delivery">delivery</option>`
-           : `<option value="delivery">delivery</option>
-              <option value="pickup">pickup</option>`
+           ? `&lt;option value="pickup">pickup&lt;/option>
+              &lt;option value="delivery">delivery&lt;/option>`
+           : `&lt;option value="delivery">delivery&lt;/option>
+              &lt;option value="pickup">pickup&lt;/option>`
        }
-        </select></p>`;
+        &lt;/select>&lt;/p>`;
 
     const orderStateDiv = document.createElement('div');
     orderStateDiv.className = 'orderStateDiv';
-    orderStateDiv.innerHTML = `<p>State: <select id="orderState-${order.id}">
+    orderStateDiv.innerHTML = `&lt;p>State: &lt;select id="orderState-${order.id}">
        ${
          order.state === 'completed'
-           ? `<option value="completed">completed</option>
-        <option value="ongoing">ongoing</option>`
-           : `<option value="ongoing">ongoing</option>
-    <option value="completed">completed</option>`
+           ? `&lt;option value="completed">completed&lt;/option>
+        &lt;option value="ongoing">ongoing&lt;/option>`
+           : `&lt;option value="ongoing">ongoing&lt;/option>
+    &lt;option value="completed">completed&lt;/option>`
        }
-      </select></p>`;
+      &lt;/select>&lt;/p>`;
 
     const orderButtonDiv = document.createElement('div');
     orderButtonDiv.className = 'adminProdBtn-control';
@@ -554,10 +582,10 @@ const adminOrdersContent = async () => {
 const adminUsers = async () => {
   adminContent.innerHTML = '';
   adminContent.innerHTML = `
-<div id="userBox">
-<div id="users-container" class="adminContentControl"></div>
-<div id="addUser-container" class="addUser-container"></div>
-</div>`;
+&lt;div id="userBox">
+&lt;div id="users-container" class="adminContentControl">&lt;/div>
+&lt;div id="addUser-container" class="addUser-container">&lt;/div>
+&lt;/div>`;
   await adminUsersContent();
 };
 
@@ -567,15 +595,15 @@ const adminUsers = async () => {
  */
 const adminProducts = async () => {
   adminContent.innerHTML = '';
-  adminContent.innerHTML = `<div id="adminProducts">
-    <div id="adminProductContent">
-    <div id="products-container" class="adminContentControl"></div>
-    <div class="adminProductAdd-container">
-      <div id="productDetails-container" class="addProduct-container"></div>
-      <div id="adminIngredientsSubAdd"></div>
-    </div>
-    </div>
-    </div>`;
+  adminContent.innerHTML = `&lt;div id="adminProducts">
+    &lt;div id="adminProductContent">
+    &lt;div id="products-container" class="adminContentControl">&lt;/div>
+    &lt;div class="adminProductAdd-container">
+      &lt;div id="productDetails-container" class="addProduct-container">&lt;/div>
+      &lt;div id="adminIngredientsSubAdd">&lt;/div>
+    &lt;/div>
+    &lt;/div>
+    &lt;/div>`;
   await adminProductsContent();
 };
 
@@ -585,12 +613,12 @@ const adminProducts = async () => {
  */
 const adminIngredients = async () => {
   adminContent.innerHTML = '';
-  adminContent.innerHTML = `<div id="adminIngredients">
-    <div id="ingredientContent">
-    <div id="ingredients-container" class="adminContentControl"></div>
-    <div id="addIngredient-container" class="addIngredient-container"></div>
-    </div>
-  </div>`;
+  adminContent.innerHTML = `&lt;div id="adminIngredients">
+    &lt;div id="ingredientContent">
+    &lt;div id="ingredients-container" class="adminContentControl">&lt;/div>
+    &lt;div id="addIngredient-container" class="addIngredient-container">&lt;/div>
+    &lt;/div>
+  &lt;/div>`;
   await adminIngredientsContent();
 };
 
@@ -600,12 +628,35 @@ const adminIngredients = async () => {
  */
 const adminOrders = async () => {
   adminContent.innerHTML = '';
-  adminContent.innerHTML = `<div id="adminOrders">
-  <div id="orderContent">
-  <div id="order-container" class="adminContentControl"></div>
-  </div>
-  </div>`;
+  adminContent.innerHTML = `&lt;div id="adminOrders">
+  &lt;div id="orderContent">
+  &lt;div id="order-container" class="adminContentControl">&lt;/div>
+  &lt;/div>
+  &lt;/div>`;
   await adminOrdersContent();
 };
 
 await adminUsers();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#adminIngredients">adminIngredients</a></li><li><a href="global.html#adminIngredientsContent">adminIngredientsContent</a></li><li><a href="global.html#adminOrders">adminOrders</a></li><li><a href="global.html#adminOrdersContent">adminOrdersContent</a></li><li><a href="global.html#adminProducts">adminProducts</a></li><li><a href="global.html#adminProductsContent">adminProductsContent</a></li><li><a href="global.html#adminUsers">adminUsers</a></li><li><a href="global.html#adminUsersContent">adminUsersContent</a></li><li><a href="global.html#compareIdToIngredient">compareIdToIngredient</a></li><li><a href="global.html#compareIngredients">compareIngredients</a></li><li><a href="global.html#createHeader">createHeader</a></li><li><a href="global.html#customProduct">customProduct</a></li><li><a href="global.html#generateCart">generateCart</a></li><li><a href="global.html#generateProductKey">generateProductKey</a></li><li><a href="global.html#handleRegistration">handleRegistration</a></li><li><a href="global.html#ingredientErrors">ingredientErrors</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#productErrors">productErrors</a></li><li><a href="global.html#profile">profile</a></li><li><a href="global.html#registration">registration</a></li><li><a href="global.html#updateCart">updateCart</a></li><li><a href="global.html#updateOrderStyle">updateOrderStyle</a></li><li><a href="global.html#userErrors">userErrors</a></li><li><a href="global.html#validateEmail">validateEmail</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed May 08 2024 11:47:34 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

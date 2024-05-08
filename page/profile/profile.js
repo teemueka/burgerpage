@@ -15,15 +15,13 @@ import {
 try {
   await getCurrentUser();
 } catch (e) {
-  console.log('aaaaaaaaaaaaaaaa', e.message);
+  /* empty */
 }
 
 const currentUser = JSON.parse(localStorage.getItem('user'));
-console.log(currentUser);
 const token = localStorage.getItem('token');
-console.log('token', token);
-
 const form = document.getElementById('form');
+
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -160,6 +158,12 @@ form.addEventListener('submit', async (event) => {
   }
 });
 
+/**
+ * This method handles the user registration process.
+ * This method creates new user, logs the new user in and redirects user to main if the following are successful.
+ * @param {object} userData object consisting of user information.
+ * @return {Promise<void>}
+ */
 const handleRegistration = async (userData) => {
   try {
     await createUser(userData);
@@ -176,6 +180,9 @@ const handleRegistration = async (userData) => {
   }
 };
 
+/**
+ * This method populates the registration form
+ */
 const registration = () => {
   form.innerHTML = `
     <h1>Registration</h1>
@@ -198,6 +205,9 @@ const registration = () => {
   document.getElementById('switchToLogin').addEventListener('click', login);
 };
 
+/**
+ * This method populates the login form.
+ */
 const login = () => {
   form.innerHTML = `
     <h1>Login</h1>
@@ -222,6 +232,10 @@ const login = () => {
     .addEventListener('click', registration);
 };
 
+/**
+ * This method populates the profile form and handles avatar change.
+ * @return {Promise<void>}
+ */
 const profile = async () => {
   form.innerHTML = `<div id="mainContainer">
   <form id="updateUserForm" method="POST">

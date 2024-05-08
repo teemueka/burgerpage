@@ -1,5 +1,10 @@
 import {validateEmail, validatePassword} from './userValidator.js';
 
+/**
+ * This method validates new products admins are trying to add.
+ * @param {object} productData product object with product information.
+ * @return {boolean} boolean that determines if data should be sent to the server.
+ */
 const productErrors = (productData) => {
   const {name, price, image} = productData;
 
@@ -16,14 +21,17 @@ const productErrors = (productData) => {
   }
 
   if (hasErrors) {
-    console.log('product information invalid');
     return true;
   } else {
-    console.log('yep');
     return false;
   }
 };
 
+/**
+ * This method validates new ingredients admins are trying to add.
+ * @param {object} ingredientData ingredient object consisting of ingredient data.
+ * @return {boolean} boolean that determines if data should be sent to the server.
+ */
 const ingredientErrors = (ingredientData) => {
   const {name, cal} = ingredientData;
 
@@ -38,14 +46,17 @@ const ingredientErrors = (ingredientData) => {
   }
 
   if (hasErrors) {
-    console.log('ingredient data invalid');
     return true;
   } else {
-    console.log('yep');
     return false;
   }
 };
 
+/**
+ * This method validates new users admins are trying to add.
+ * @param {object} userData user object consisting of userdata
+ * @return {boolean} boolean that determines if data should be sent to the server.
+ */
 const userErrors = (userData) => {
   const {password, email} = userData;
 
