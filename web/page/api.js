@@ -378,7 +378,7 @@ const getCurrentUser = async () => {
 };
 
 const deleteUser = async (user, token) => {
-  const url = `http://10.120.32.57/app/api/v1/users/${user.id}`;
+  const url = `http://10.120.32.57/app/api/v1/users/${user}`;
 
   const userDeleting = await getCurrentUser(token);
 
