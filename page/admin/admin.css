@@ -7,10 +7,67 @@
   gap: 3rem;
   background-color: rgba(105, 104, 102, 0.28);
   border: 2px solid var(--secondary);
+  border-radius: 4px;
 }
 
 #productDetails-container {
   margin-left: 1rem;
+}
+
+#products-container {
+  border: 2px solid var(--secondary);
+  border-radius: 4px;
+}
+
+#singleProduct {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--bright);
+  border-radius: 6px;
+  gap: 1rem;
+}
+
+#singleUser {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--bright);
+  border-radius: 6px;
+  gap: 1rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+}
+
+.orderContainer {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--bright);
+  border-radius: 6px;
+  gap: 1rem;
+  padding: 1rem 0 1rem 1rem;
+  background-color: rgba(105, 104, 102, 0.28);
+}
+
+.order-completed {
+  background-color: rgba(211, 239, 211, 0.89);
+}
+
+.order-ongoing {
+  background-color: rgba(248, 201, 201, 0.89);
+}
+
+.orderContainer p {
+  margin: 0;
+}
+
+#singleUser img {
+  border-radius: 6px;
+  width: 50px;
+  height: 50px;
+}
+
+#adminProdBtn-control {
+  display: flex;
+  width: 8rem;
+  height: 100%;
 }
 
 #adminContainer h1 {
@@ -57,6 +114,16 @@
 
 .addUser-container h5 {
   margin-top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.addUser-container label {
+  margin-top: 0.5rem;
+}
+
+.addIngredient-container label {
+  margin-top: 0.5rem;
 }
 
 #userBox {
@@ -88,16 +155,21 @@
 #addIngredient-container {
   display: flex;
   flex-direction: column;
+  background-color: rgba(105, 104, 102, 0.28);
+  border: 2px solid var(--secondary);
+  border-radius: 4px;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+#addIngredient-container h5 {
+  margin-top: 0;
+  display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-#addIngredientBtn {
-  margin-top: 0.5rem;
-}
-
-#addUserBtn {
-  margin-top: 0.5rem;
+#order-container {
+  border: 2px solid var(--secondary);
+  border-radius: 4px;
 }
 
 #orderContent {
@@ -111,6 +183,7 @@
 }
 
 .addProduct-container {
+  border-radius: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -121,20 +194,49 @@
   margin-top: 0.5rem;
 }
 
+.addProduct-container h5 {
+  margin-top: 0;
+}
+
 .addUser-container {
   display: flex;
   flex-direction: column;
+  background-color: rgba(105, 104, 102, 0.28);
+  border: 2px solid var(--secondary);
+  border-radius: 4px;
+  padding: 2rem 2rem 1rem 2rem;
 }
 
 .adminContentControl {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 80vw;
-  max-height: 40vh;
+  max-height: 55vh;
   background-color: var(--bg);
   overflow-y: auto;
   overflow-x: hidden;
+  margin-bottom: 0;
+}
+
+#ingredients-container {
+  border: 2px solid var(--secondary);
+  border-radius: 4px;
+}
+
+#singleIngredient {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--bright);
+  border-radius: 6px;
+  gap: 1rem;
+}
+
+#singleIngredient h5 {
+  margin: 1rem 0 1rem 1rem;
+}
+
+.singleIngredientControl {
+  margin: 1rem;
 }
 
 #order-container p {
@@ -149,20 +251,11 @@
   margin-top: 0;
 }
 
-.adminContentControl {
-  margin-bottom: 0;
-}
-
 .adminContainer {
   background-color: rgba(105, 104, 102, 0.28);
 }
 
-.singleIngredientControl {
-  margin: 1rem;
-}
-
 .containerBtn {
-  width: 50%;
   border: none;
 }
 
@@ -172,14 +265,25 @@
 }
 
 #adminIngredientsSubAdd {
+  border-radius: inherit;
   background-color: rgba(84, 83, 81, 0.28);
   max-height: 40vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-#addProdBtn {
-  margin-top: 1rem;
+.adminBtn {
+  margin-top: 0.5rem;
+  background-color: #4588a8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.adminBtn:hover {
+  background-color: var(--highlight);
 }
 
 #deleteButton {
@@ -199,13 +303,78 @@
 }
 
 #singleProduct img {
+  margin: 0.5rem 0 0.5rem 0;
   width: 50px;
   height: 50px;
-  cursor: pointer;
+  border-radius: 6px;
 }
 
-#singleUser img {
-  border-radius: 4px;
-  width: 50px;
-  height: 50px;
+#singleProduct h5 {
+  margin: 1rem 0 1rem 1rem;
 }
+
+.prodTitle {
+  min-width: 5vw;
+  width: 10vw;
+}
+
+.prodImg {}
+
+.prodPriceDiv {
+  min-width: 5vw;
+  width: 5vw;
+}
+
+.prodAllergy {
+  min-width: 13vw;
+  width: 15vw;
+}
+
+.adminProdBtn-control {
+  margin: auto;
+}
+
+.adminProdBtn-control button {
+  width: 80%;
+  margin-right: 20%;
+}
+
+.userEmail {
+  min-width: 5vw;
+  width: 10vw;
+}
+
+#singleUser h5 {
+  margin: 1rem 0 1rem 1rem;
+}
+
+.userAddress {
+  min-width: 5vw;
+  width: 10vw;
+}
+
+.userRole {
+  min-width: 5vw;
+  width: 10vw;
+}
+
+#users-container {
+  border: 2px solid var(--secondary);
+  border-radius: 4px;
+}
+
+.ingNameDiv {
+  min-width: 5vw;
+  width: 10vw;
+}
+
+.ingCalDiv {
+  min-width: 5vw;
+  width: 10vw;
+}
+
+.ingAllergyDiv {
+  min-width: 5vw;
+  width: 10vw;
+}
+
