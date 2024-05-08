@@ -15,6 +15,8 @@ import {
 const token = localStorage.getItem('token');
 const form = document.getElementById('form');
 
+let valid = true;
+
 try {
   const user = await getCurrentUser();
   if (!user) {
@@ -25,7 +27,6 @@ try {
 }
 
 const currentUser = JSON.parse(localStorage.getItem('user'));
-let valid = true;
 
 /**
  * This method populates the registration form
