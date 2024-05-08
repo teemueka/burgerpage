@@ -12,6 +12,8 @@ import {
   deleteUser,
 } from '../api.js';
 
+let valid = false;
+
 /**
  * This method populates the registration form
  */
@@ -155,7 +157,7 @@ const profile = async () => {
 try {
   const user = await getCurrentUser();
   if (!user) {
-    login();
+    valid = false;
   }
 } catch (e) {
   /* empty */
@@ -323,7 +325,7 @@ const handleRegistration = async (userData) => {
   }
 };
 
-if (currentUser) {
+if (valid) {
   profile();
 } else {
   login();
