@@ -47,6 +47,25 @@ const modal = document.querySelector('.modal');
         const p = document.createElement('p');
         p.textContent = `${product.ingredients ? product.ingredients.map((ingredient) => ingredient.name).join(', ') : ''}`;
 
+        if (product.ingredients) {
+          const ingredientCounts = product.ingredients.reduce(
+            (counts, ingredient) => {
+              counts[ingredient.name] = (counts[ingredient.name] || 0) + 1;
+
+              return counts;
+            },
+            {}
+          );
+
+          p.textContent = Object.entries(ingredientCounts)
+            .map(([ingredient, count]) =>
+              count > 1 ? `${count}x ${ingredient}` : `${ingredient}`
+            )
+            .join(', ');
+        } else {
+          p.textContent = '';
+        }
+
         div.appendChild(img);
         div.appendChild(h5);
         div.appendChild(price);
