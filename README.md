@@ -1,0 +1,1 @@
+- [JSDoc](https://users.metropolia.fi/~teemueka/burgerpageJSDoc/out/global)
