@@ -395,7 +395,8 @@ const deleteUser = async (user, token) => {
     console.log(responseData);
     if (response.ok) {
       if (userDeleting.user.role !== 'admin') {
-        localStorage.clear();
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
         location.reload();
       }
       return responseData;
