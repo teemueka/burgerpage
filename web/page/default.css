@@ -196,6 +196,7 @@ main{
 }
 
 .good{
+  background-color: gainsboro;
   font-family: "Josefin Sans", sans-serif;
   font-weight: bold;
   font-size: 20px;
@@ -209,6 +210,7 @@ main{
 }
 
 .bad{
+  background-color: gainsboro;
   font-family: "Josefin Sans", sans-serif;
   font-weight: bold;
   font-size: 20px;
@@ -225,6 +227,7 @@ main{
 
 
 .verybad{
+  background-color: gainsboro;
   font-family: "Josefin Sans", sans-serif;
   font-weight: bold;
   font-size: 20px;

@@ -9,7 +9,17 @@ body {
   min-width: 250px;
   background-color: rgba(128, 126, 123, 0.28);
   width: 30vw;
-  margin: 3vh auto 0 auto;
+  margin: 30vh auto 0 auto;
+  padding: 20px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+#profileForm {
+  min-width: 250px;
+  background-color: rgba(128, 126, 123, 0.28);
+  width: 30vw;
+  margin: 15vh auto 0 auto;
   padding: 20px;
   border-radius: 4px;
   font-size: 12px;

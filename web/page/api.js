@@ -206,12 +206,13 @@ const userLogin = async (userData) => {
       console.log('login success', responseData);
       localStorage.setItem('user', JSON.stringify(responseData.user));
       localStorage.setItem('token', responseData.token);
+      window.location.href = '../../page/main/main.html';
       return responseData;
     } else {
       throw new Error(responseData.message || 'Failed to log in.');
     }
   } catch (error) {
-    console.log(error.message);
+    return false;
   }
 };
 
@@ -362,6 +363,9 @@ const getCurrentUser = async () => {
       },
     });
 
+    if (response.status === 403) {
+      localStorage.removeItem('user');
+    }
     const responseData = await response.json();
     if (response.ok) {
       localStorage.setItem('user', JSON.stringify(responseData.user));
