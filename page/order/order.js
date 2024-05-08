@@ -12,7 +12,6 @@ import {
 const currentUser = JSON.parse(localStorage.getItem('user'));
 const order = document.getElementById('info-order');
 const restaurants = await getRestaurants();
-const fromResDropdown = document.getElementById('fromRestaurant');
 
 const user = await getCurrentUser();
 console.log(user);
@@ -54,6 +53,9 @@ if (!user) {
         <div class="error" id="fromRes-error"></div>
       </div>
       <button id="orderBtn" type="submit">Order</button>`;
+  order.appendChild(orderForm);
+
+  const fromResDropdown = document.getElementById('fromRestaurant');
 
   orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
