@@ -4,65 +4,108 @@ import {generateHeader, updateCart} from '../default.js';
 import {
   getRestaurants,
   createOrder,
-  getProducts,
   getProductsById,
   getIngredients,
+  getCurrentUser,
 } from '../api.js';
 
 const currentUser = JSON.parse(localStorage.getItem('user'));
-const orderForm = document.getElementById('orderForm');
+const order = document.getElementById('info-order');
 const restaurants = await getRestaurants();
 const fromResDropdown = document.getElementById('fromRestaurant');
 
-restaurants.forEach((restaurant) => {
-  fromResDropdown.innerHTML += `<option value="${restaurant.id}">${restaurant.address}</option>`;
-});
-orderForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+const user = await getCurrentUser();
+console.log(user);
+if (!user) {
+  order.innerHTML = '';
+  const orderLog = document.createElement('button');
+  orderLog.className = 'noUser';
+  orderLog.innerText = 'Log in to order';
+  orderLog.addEventListener('click', () => {
+    window.location = '../profile/profile.html';
+  });
+  order.appendChild(orderLog);
+} else {
+  const orderForm = document.createElement('form');
+  orderForm.method = 'POST';
+  orderForm.innerHTML = `
+      <div class="input-control">
+        <label for="userAddress">address</label>
+        <input id="userAddress" type="text">
+        <div class="error" id="address-error"></div>
+      </div>
+      <div class="input-control">
+        <label for="userName">name</label>
+        <input id="userName" type="text">
+        <div class="error" id="username-error"></div>
+      </div>
+      <div class="input-control">
+        <label for="orderType">order type</label>
+        <select id="orderType">
+          <option value="pickup">pickup</option>
+          <option value="delivery">delivery</option>
+          <option value="dine-in">dine-in</option>
+        </select>
+        <div class="error" id="type-error"></div>
+      </div>
+      <div class="input-control">
+        <label for="fromRestaurant">select restaurant</label>
+        <select id="fromRestaurant"></select>
+        <div class="error" id="fromRes-error"></div>
+      </div>
+      <button id="orderBtn" type="submit">Order</button>`;
 
-  const userID = currentUser.id;
-  const userAddress = document.getElementById('userAddress').value;
-  const userName = document.getElementById('userName').value;
-  const orderType = document.getElementById('orderType').value;
-  const fromRest = document.getElementById('fromRestaurant').value;
-  const products = JSON.parse(localStorage.getItem('cart'));
+  orderForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  let hasErrors = false;
+    const userID = currentUser.id;
+    const userAddress = document.getElementById('userAddress').value;
+    const userName = document.getElementById('userName').value;
+    const orderType = document.getElementById('orderType').value;
+    const fromRest = document.getElementById('fromRestaurant').value;
+    const products = JSON.parse(localStorage.getItem('cart'));
 
-  if (!userAddress.trim()) {
-    hasErrors = true;
-    document.getElementById('address-error').innerHTML =
-      '<p>order must contain address</p>';
-  } else {
-    document.getElementById('address-error').innerHTML = '';
-  }
+    let hasErrors = false;
 
-  if (!userName.trim()) {
-    hasErrors = true;
-    document.getElementById('username-error').innerHTML =
-      '<p>order must contain name</p>';
-  } else {
-    document.getElementById('username-error').innerHTML = '';
-  }
+    if (!userAddress.trim()) {
+      hasErrors = true;
+      document.getElementById('address-error').innerHTML =
+        '<p>order must contain address</p>';
+    } else {
+      document.getElementById('address-error').innerHTML = '';
+    }
 
-  if (!products) {
-    hasErrors = true;
-  }
+    if (!userName.trim()) {
+      hasErrors = true;
+      document.getElementById('username-error').innerHTML =
+        '<p>order must contain name</p>';
+    } else {
+      document.getElementById('username-error').innerHTML = '';
+    }
 
-  if (hasErrors) {
-    return;
-  }
+    if (!products) {
+      hasErrors = true;
+    }
 
-  const orderData = {
-    user_id: userID,
-    res_id: fromRest,
-    order_type: orderType,
-    address: userAddress,
-    products: products,
-  };
+    if (hasErrors) {
+      return;
+    }
 
-  await createOrder(orderData);
-});
+    const orderData = {
+      user_id: userID,
+      res_id: fromRest,
+      order_type: orderType,
+      address: userAddress,
+      products: products,
+    };
+
+    await createOrder(orderData);
+  });
+
+  restaurants.forEach((restaurant) => {
+    fromResDropdown.innerHTML += `<option value="${restaurant.id}">${restaurant.address}</option>`;
+  });
+}
 
 const cartElement = document.getElementById('cart-items');
 const totalCostElement = document.createElement('p');
@@ -180,7 +223,10 @@ const generateCart = async () => {
     toolTip.innerText = 'modifications';
 
     const addedText = await compareIdToIngredient(entry.details.added, 'added');
-    const removedText = await compareIdToIngredient(entry.details.removed, 'removed')
+    const removedText = await compareIdToIngredient(
+      entry.details.removed,
+      'removed'
+    );
 
     if (!addedText && !removedText) {
       infoDiv.classList.add('empty');

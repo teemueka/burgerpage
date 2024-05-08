@@ -70,7 +70,6 @@ const createHeader = () => {
   if (localStorage.getItem('user')) {
     loginButton.textContent = 'Profile';
     logoutButton.classList.add('logout-buttonVisible');
-    console.log(JSON.parse(localStorage.getItem('user')).role);
     if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
       const adminButton = document.createElement('a');
       adminButton.href = '../admin/admin.html';
@@ -229,7 +228,6 @@ function updateCart() {
   } else {
     cartAmountIndicator.style.setProperty('display', 'none');
   }
-  console.log(cartAmount);
 }
 
 updateCart();

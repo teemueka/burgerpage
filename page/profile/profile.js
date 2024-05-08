@@ -12,173 +12,7 @@ import {
   deleteUser,
 } from '../api.js';
 
-try {
-  await getCurrentUser();
-} catch (e) {
-  /* empty */
-}
-
-const currentUser = JSON.parse(localStorage.getItem('user'));
-const token = localStorage.getItem('token');
-const form = document.getElementById('form');
-
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  const regEmailInput = document.getElementById('reg-email');
-  const regPasswordInput = document.getElementById('reg-password');
-
-  const loginEmailInput = document.getElementById('login-email');
-  const loginPasswordInput = document.getElementById('login-password');
-
-  const profileEmailInput = document.getElementById('profileEmail');
-  const profilePasswordInput = document.getElementById('profilePassword');
-  const profileNewPasswordInput = document.getElementById('profileNewPassword');
-  const profileNewDuplicatePasswordInput = document.getElementById(
-    'profileNewDuplicatePassword'
-  );
-
-  if (regEmailInput && regPasswordInput) {
-    const email = regEmailInput.value.trim();
-    const password = regPasswordInput.value.trim();
-
-    let hasErrors = false;
-
-    if (!validateEmail(email)) {
-      document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
-      hasErrors = true;
-    } else {
-      try {
-        const emailAvailable = await checkEmailAvailability(email);
-        document.getElementById('email-error').innerHTML = '';
-
-        if (!emailAvailable) {
-          document.getElementById('email-error').innerHTML =
-            '<p>Email already in use</p>';
-          hasErrors = true;
-        }
-      } catch (e) {
-        document.getElementById('email-error').innerHTML =
-          '<p>Error validating email</p>';
-        hasErrors = true;
-      }
-    }
-
-    if (!validatePassword(password)) {
-      document.getElementById('password-error').innerHTML =
-        '<p>Password must contain 8 characters and a number</p>';
-      hasErrors = true;
-    } else {
-      document.getElementById('password-error').innerHTML = '';
-    }
-
-    if (hasErrors) {
-      return;
-    }
-
-    const userData = {
-      email: email,
-      password: password,
-    };
-
-    try {
-      await handleRegistration(userData);
-    } catch (error) {
-      console.error('Error registering user:', error.message);
-    }
-  } else if (loginEmailInput && loginPasswordInput) {
-    const email = loginEmailInput.value;
-    const password = loginPasswordInput.value.trim();
-
-    const userData = {
-      email: email,
-      password: password,
-    };
-
-    try {
-      await userLogin(userData);
-      window.location.href = '../../page/main/main.html';
-    } catch (error) {
-      document.getElementById('password-error').innerHTML =
-        '<p>Incorrect email or password</p>';
-    }
-  } else {
-    const email = profileEmailInput.value.trim();
-    const password = profilePasswordInput.value.trim();
-    const newPassword = profileNewPasswordInput.value.trim();
-    const newPasswordAgain = profileNewDuplicatePasswordInput.value.trim();
-
-    let hasErrors = false;
-
-    const oldUser = {
-      email: email,
-      password: password,
-    };
-
-    const validUser = await userLogin(oldUser);
-    document.getElementById('password-error').innerHTML = '';
-    if (validUser === undefined) {
-      document.getElementById('password-error').innerHTML =
-        '<p>current password incorrect</p>';
-      return;
-    }
-
-    if (!validatePassword(newPassword)) {
-      document.getElementById('newPassword-error').innerHTML =
-        '<p>Password must contain 8 characters and a number</p>';
-      hasErrors = true;
-    } else {
-      document.getElementById('newPassword-error').innerHTML = '';
-    }
-
-    if (newPassword !== newPasswordAgain) {
-      document.getElementById('duplicatePassword-error').innerHTML =
-        '<p>Passwords must match</p>';
-      hasErrors = true;
-    } else {
-      document.getElementById('duplicatePassword-error').innerHTML = '';
-    }
-
-    if (hasErrors) {
-      return;
-    }
-
-    const userData = {
-      id: currentUser.id,
-      email: email,
-      password: newPassword,
-    };
-
-    try {
-      const responseData = await updateUser(userData, token);
-      console.log(responseData);
-    } catch (error) {
-      console.error('Update failed', error);
-    }
-  }
-});
-
-/**
- * This method handles the user registration process.
- * This method creates new user, logs the new user in and redirects user to main if the following are successful.
- * @param {object} userData object consisting of user information.
- * @return {Promise<void>}
- */
-const handleRegistration = async (userData) => {
-  try {
-    await createUser(userData);
-    await userLogin(userData);
-    window.location.href = '../../page/main/main.html';
-  } catch (error) {
-    console.error('Error registering user: ', error.message);
-    if (error.message.includes('email already exists')) {
-      document.getElementById('email-error').innerHTML = '<p>Email in use</p>';
-    } else {
-      document.getElementById('email-error').innerHTML = '';
-    }
-    throw new Error('Registration failed');
-  }
-};
+let valid = true;
 
 /**
  * This method populates the registration form
@@ -237,6 +71,7 @@ const login = () => {
  * @return {Promise<void>}
  */
 const profile = async () => {
+  form.id = 'profileForm';
   form.innerHTML = `<div id="mainContainer">
   <form id="updateUserForm" method="POST">
     <h2 id="profileHeader">Update profile</h2>
@@ -320,7 +155,175 @@ const profile = async () => {
     });
 };
 
-if (currentUser) {
+try {
+  const user = await getCurrentUser();
+  if (!user) {
+    valid = false;
+  }
+} catch (e) {
+  /* empty */
+}
+
+const currentUser = JSON.parse(localStorage.getItem('user'));
+const token = localStorage.getItem('token');
+const form = document.getElementById('form');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const regEmailInput = document.getElementById('reg-email');
+  const regPasswordInput = document.getElementById('reg-password');
+
+  const loginEmailInput = document.getElementById('login-email');
+  const loginPasswordInput = document.getElementById('login-password');
+
+  const profileEmailInput = document.getElementById('profileEmail');
+  const profilePasswordInput = document.getElementById('profilePassword');
+  const profileNewPasswordInput = document.getElementById('profileNewPassword');
+  const profileNewDuplicatePasswordInput = document.getElementById(
+    'profileNewDuplicatePassword'
+  );
+
+  if (regEmailInput && regPasswordInput) {
+    const email = regEmailInput.value.trim();
+    const password = regPasswordInput.value.trim();
+
+    let hasErrors = false;
+
+    if (!validateEmail(email)) {
+      document.getElementById('email-error').innerHTML = '<p>Invalid email</p>';
+      hasErrors = true;
+    } else {
+      try {
+        const emailAvailable = await checkEmailAvailability(email);
+        document.getElementById('email-error').innerHTML = '';
+
+        if (!emailAvailable) {
+          document.getElementById('email-error').innerHTML =
+            '<p>Email already in use</p>';
+          hasErrors = true;
+        }
+      } catch (e) {
+        document.getElementById('email-error').innerHTML =
+          '<p>Error validating email</p>';
+        hasErrors = true;
+      }
+    }
+
+    if (!validatePassword(password)) {
+      document.getElementById('password-error').innerHTML =
+        '<p>Password must contain 8 characters and a number</p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('password-error').innerHTML = '';
+    }
+
+    if (hasErrors) {
+      return;
+    }
+
+    const userData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      await handleRegistration(userData);
+    } catch (error) {
+      console.error('Error registering user:', error.message);
+    }
+  } else if (loginEmailInput && loginPasswordInput) {
+    const email = loginEmailInput.value;
+    const password = loginPasswordInput.value.trim();
+
+    const userData = {
+      email: email,
+      password: password,
+    };
+
+    const log = await userLogin(userData);
+    if (!log) {
+      document.getElementById('password-error').innerHTML =
+        '<p>Incorrect email or password</p>';
+    }
+  } else {
+    const email = profileEmailInput.value.trim();
+    const password = profilePasswordInput.value.trim();
+    const newPassword = profileNewPasswordInput.value.trim();
+    const newPasswordAgain = profileNewDuplicatePasswordInput.value.trim();
+
+    let hasErrors = false;
+
+    const oldUser = {
+      email: email,
+      password: password,
+    };
+
+    const validUser = await userLogin(oldUser);
+    document.getElementById('password-error').innerHTML = '';
+    if (validUser === undefined) {
+      document.getElementById('password-error').innerHTML =
+        '<p>current password incorrect</p>';
+      return;
+    }
+
+    if (!validatePassword(newPassword)) {
+      document.getElementById('newPassword-error').innerHTML =
+        '<p>Password must contain 8 characters and a number</p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('newPassword-error').innerHTML = '';
+    }
+
+    if (newPassword !== newPasswordAgain) {
+      document.getElementById('duplicatePassword-error').innerHTML =
+        '<p>Passwords must match</p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('duplicatePassword-error').innerHTML = '';
+    }
+
+    if (hasErrors) {
+      return;
+    }
+
+    const userData = {
+      id: currentUser.id,
+      email: email,
+      password: newPassword,
+    };
+
+    try {
+      const responseData = await updateUser(userData, token);
+      console.log(responseData);
+    } catch (error) {
+      console.error('Update failed', error);
+    }
+  }
+});
+
+/**
+ * This method handles the user registration process.
+ * This method creates new user, logs the new user in and redirects user to main if the following are successful.
+ * @param {object} userData object consisting of user information.
+ * @return {Promise<void>}
+ */
+const handleRegistration = async (userData) => {
+  try {
+    await createUser(userData);
+    await userLogin(userData);
+  } catch (error) {
+    console.error('Error registering user: ', error.message);
+    if (error.message.includes('email already exists')) {
+      document.getElementById('email-error').innerHTML = '<p>Email in use</p>';
+    } else {
+      document.getElementById('email-error').innerHTML = '';
+    }
+    throw new Error('Registration failed');
+  }
+};
+
+if (valid) {
   profile();
 } else {
   login();
