@@ -12,6 +12,19 @@ import {
   deleteUser,
 } from '../api.js';
 
+const token = localStorage.getItem('token');
+const form = document.getElementById('form');
+
+try {
+  const user = await getCurrentUser();
+  if (!user) {
+    valid = false;
+  }
+} catch (e) {
+  /* empty */
+}
+
+const currentUser = JSON.parse(localStorage.getItem('user'));
 let valid = true;
 
 /**
@@ -148,25 +161,12 @@ const profile = async () => {
     .addEventListener('click', async (evt) => {
       evt.preventDefault();
       try {
-        await deleteUser(currentUser, token);
+        await deleteUser(currentUser.id, token);
       } catch (e) {
         console.log('error deleting user', e.message);
       }
     });
 };
-
-try {
-  const user = await getCurrentUser();
-  if (!user) {
-    valid = false;
-  }
-} catch (e) {
-  /* empty */
-}
-
-const currentUser = JSON.parse(localStorage.getItem('user'));
-const token = localStorage.getItem('token');
-const form = document.getElementById('form');
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
