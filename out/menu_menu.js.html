@@ -1,4 +1,32 @@
-// eslint-disable-next-line no-unused-vars
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: menu/menu.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: menu/menu.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
 import {generateHeader, updateCart} from '../default.js';
 import {getIngredients, getProductsById} from '../api.js';
@@ -51,25 +79,6 @@ const modal = document.querySelector('.modal');
         const p = document.createElement('p');
         p.textContent = `${product.ingredients ? product.ingredients.map((ingredient) => ingredient.name).join(', ') : ''}`;
 
-        if (product.ingredients) {
-          const ingredientCounts = product.ingredients.reduce(
-            (counts, ingredient) => {
-              counts[ingredient.name] = (counts[ingredient.name] || 0) + 1;
-
-              return counts;
-            },
-            {}
-          );
-
-          p.textContent = Object.entries(ingredientCounts)
-            .map(([ingredient, count]) =>
-              count > 1 ? `${count}x ${ingredient}` : `${ingredient}`
-            )
-            .join(', ');
-        } else {
-          p.textContent = '';
-        }
-
         div.appendChild(img);
         div.appendChild(h5);
         div.appendChild(price);
@@ -121,9 +130,9 @@ const customProduct = async (productID) => {
     const modalMain = document.createElement('div');
     modalMain.id = 'modalMain';
     modalMain.innerHTML = `
-    <h3>${product.name}</h3>
-    <img src="http://10.120.32.57/app/uploads/${product.image}" alt="product image">
-    <p>${product.price}</p>`;
+    &lt;h3>${product.name}&lt;/h3>
+    &lt;img src="http://10.120.32.57/app/uploads/${product.image}" alt="product image">
+    &lt;p>${product.price}&lt;/p>`;
 
     const exit = document.createElement('span');
     exit.id = 'exit';
@@ -161,7 +170,7 @@ const customProduct = async (productID) => {
       increaseIngredient.className = 'good';
       increaseIngredient.addEventListener('click', () => {
         let amount = parseInt(ingredientAmount.innerText);
-        if (amount < 10) {
+        if (amount &lt; 10) {
           amount += 1;
           ingredientAmount.innerText = amount.toString();
           counts[ingredient.id].amount++;
@@ -285,13 +294,13 @@ const compareIngredients = (modified, original) => {
           if (ingredient.amount > modIngredient.amount) {
             let count = ingredient.amount;
             count -= modIngredient.amount;
-            for (let i = 0; i < count; i++) {
+            for (let i = 0; i &lt; count; i++) {
               removed.push(ingredient.id);
             }
-          } else if (ingredient.amount < modIngredient.amount) {
+          } else if (ingredient.amount &lt; modIngredient.amount) {
             let count = modIngredient.amount;
             count -= ingredient.amount;
-            for (let i = 0; i < count; i++) {
+            for (let i = 0; i &lt; count; i++) {
               added.push(ingredient.id);
             }
           }
@@ -301,3 +310,26 @@ const compareIngredients = (modified, original) => {
   });
   return {added, removed};
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#adminIngredients">adminIngredients</a></li><li><a href="global.html#adminIngredientsContent">adminIngredientsContent</a></li><li><a href="global.html#adminOrders">adminOrders</a></li><li><a href="global.html#adminOrdersContent">adminOrdersContent</a></li><li><a href="global.html#adminProducts">adminProducts</a></li><li><a href="global.html#adminProductsContent">adminProductsContent</a></li><li><a href="global.html#adminUsers">adminUsers</a></li><li><a href="global.html#adminUsersContent">adminUsersContent</a></li><li><a href="global.html#compareIdToIngredient">compareIdToIngredient</a></li><li><a href="global.html#compareIngredients">compareIngredients</a></li><li><a href="global.html#createHeader">createHeader</a></li><li><a href="global.html#customProduct">customProduct</a></li><li><a href="global.html#generateCart">generateCart</a></li><li><a href="global.html#generateProductKey">generateProductKey</a></li><li><a href="global.html#handleRegistration">handleRegistration</a></li><li><a href="global.html#ingredientErrors">ingredientErrors</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#productErrors">productErrors</a></li><li><a href="global.html#profile">profile</a></li><li><a href="global.html#registration">registration</a></li><li><a href="global.html#updateCart">updateCart</a></li><li><a href="global.html#updateOrderStyle">updateOrderStyle</a></li><li><a href="global.html#userErrors">userErrors</a></li><li><a href="global.html#validateEmail">validateEmail</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed May 08 2024 11:47:34 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

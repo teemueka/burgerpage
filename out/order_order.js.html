@@ -1,4 +1,32 @@
-// eslint-disable-next-line no-unused-vars
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: order/order.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: order/order.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// eslint-disable-next-line no-unused-vars
 // noinspection ES6UnusedImports
 import {generateHeader, updateCart} from '../default.js';
 import {
@@ -15,7 +43,7 @@ const restaurants = await getRestaurants();
 const fromResDropdown = document.getElementById('fromRestaurant');
 
 restaurants.forEach((restaurant) => {
-  fromResDropdown.innerHTML += `<option value="${restaurant.id}">${restaurant.address}</option>`;
+  fromResDropdown.innerHTML += `&lt;option value="${restaurant.id}">${restaurant.address}&lt;/option>`;
 });
 orderForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -32,7 +60,7 @@ orderForm.addEventListener('submit', async (e) => {
   if (!userAddress.trim()) {
     hasErrors = true;
     document.getElementById('address-error').innerHTML =
-      '<p>order must contain address</p>';
+      '&lt;p>order must contain address&lt;/p>';
   } else {
     document.getElementById('address-error').innerHTML = '';
   }
@@ -40,7 +68,7 @@ orderForm.addEventListener('submit', async (e) => {
   if (!userName.trim()) {
     hasErrors = true;
     document.getElementById('username-error').innerHTML =
-      '<p>order must contain name</p>';
+      '&lt;p>order must contain name&lt;/p>';
   } else {
     document.getElementById('username-error').innerHTML = '';
   }
@@ -77,12 +105,12 @@ let totalPrice = 0;
 const generateProductKey = (product) => {
   let key = `id:${product.id}`;
 
-  if (product.added && product.added.length > 0) {
+  if (product.added &amp;&amp; product.added.length > 0) {
     const additions = product.added.sort().join(',');
     key += `|added:${additions}`;
   }
 
-  if (product.removed && product.removed.length > 0) {
+  if (product.removed &amp;&amp; product.removed.length > 0) {
     const removals = product.removed.sort().join(',');
     key += `|removed:${removals}`;
   }
@@ -93,7 +121,7 @@ const generateProductKey = (product) => {
  * This method compares list of ingredient id's and finds corresponding name for it.
  * @param {array} idList array consisting of ingredient id's
  * @param {string} type determines if plus or minus signs should be added to the string.
- * @return {Promise<string>} returns string of removed or added ingredients.
+ * @return {Promise&lt;string>} returns string of removed or added ingredients.
  */
 const compareIdToIngredient = async (idList, type) => {
   let compared = '';
@@ -113,7 +141,7 @@ const compareIdToIngredient = async (idList, type) => {
 /**
  * This method handles the generation of orders displayed to user and all
  * the modifications user makes during the ordering process.
- * @return {Promise<void>}
+ * @return {Promise&lt;void>}
  */
 const generateCart = async () => {
   const cart = JSON.parse(localStorage.getItem('cart'));
@@ -129,7 +157,7 @@ const generateCart = async () => {
   const updateLocalCart = () => {
     const newCart = [];
     Object.entries(productMap).forEach(([key, {amount, details}]) => {
-      for (let i = 0; i < amount; i++) {
+      for (let i = 0; i &lt; amount; i++) {
         newCart.push(details);
       }
     });
@@ -182,7 +210,7 @@ const generateCart = async () => {
     const addedText = await compareIdToIngredient(entry.details.added, 'added');
     const removedText = await compareIdToIngredient(entry.details.removed, 'removed')
 
-    if (!addedText && !removedText) {
+    if (!addedText &amp;&amp; !removedText) {
       infoDiv.classList.add('empty');
     }
 
@@ -244,7 +272,7 @@ const generateCart = async () => {
     removeProduct.addEventListener('click', async () => {
       productElement.remove();
       const amount = productMap[key].amount;
-      for (let i = 0; i < amount; i++) {
+      for (let i = 0; i &lt; amount; i++) {
         productMap[key].amount--;
         totalPrice -= product.price;
       }
@@ -273,3 +301,26 @@ const generateCart = async () => {
 (async () => {
   await generateCart();
 })();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#adminIngredients">adminIngredients</a></li><li><a href="global.html#adminIngredientsContent">adminIngredientsContent</a></li><li><a href="global.html#adminOrders">adminOrders</a></li><li><a href="global.html#adminOrdersContent">adminOrdersContent</a></li><li><a href="global.html#adminProducts">adminProducts</a></li><li><a href="global.html#adminProductsContent">adminProductsContent</a></li><li><a href="global.html#adminUsers">adminUsers</a></li><li><a href="global.html#adminUsersContent">adminUsersContent</a></li><li><a href="global.html#compareIdToIngredient">compareIdToIngredient</a></li><li><a href="global.html#compareIngredients">compareIngredients</a></li><li><a href="global.html#createHeader">createHeader</a></li><li><a href="global.html#customProduct">customProduct</a></li><li><a href="global.html#generateCart">generateCart</a></li><li><a href="global.html#generateProductKey">generateProductKey</a></li><li><a href="global.html#handleRegistration">handleRegistration</a></li><li><a href="global.html#ingredientErrors">ingredientErrors</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#productErrors">productErrors</a></li><li><a href="global.html#profile">profile</a></li><li><a href="global.html#registration">registration</a></li><li><a href="global.html#updateCart">updateCart</a></li><li><a href="global.html#updateOrderStyle">updateOrderStyle</a></li><li><a href="global.html#userErrors">userErrors</a></li><li><a href="global.html#validateEmail">validateEmail</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed May 08 2024 11:47:34 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: profile/profile.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: profile/profile.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {generateHeader} from '../default.js';
+
+import {validatePassword, validateEmail} from '../validators/userValidator.js';
+import {
+  checkEmailAvailability,
+  createUser,
+  getAvatar,
+  updateUser,
+  uploadAvatar,
+  userLogin,
+  getCurrentUser,
+  deleteUser,
+} from '../api.js';
+
+try {
+  await getCurrentUser();
+} catch (e) {
+  /* empty */
+}
+
+const currentUser = JSON.parse(localStorage.getItem('user'));
+const token = localStorage.getItem('token');
+const form = document.getElementById('form');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const regEmailInput = document.getElementById('reg-email');
+  const regPasswordInput = document.getElementById('reg-password');
+
+  const loginEmailInput = document.getElementById('login-email');
+  const loginPasswordInput = document.getElementById('login-password');
+
+  const profileEmailInput = document.getElementById('profileEmail');
+  const profilePasswordInput = document.getElementById('profilePassword');
+  const profileNewPasswordInput = document.getElementById('profileNewPassword');
+  const profileNewDuplicatePasswordInput = document.getElementById(
+    'profileNewDuplicatePassword'
+  );
+
+  if (regEmailInput &amp;&amp; regPasswordInput) {
+    const email = regEmailInput.value.trim();
+    const password = regPasswordInput.value.trim();
+
+    let hasErrors = false;
+
+    if (!validateEmail(email)) {
+      document.getElementById('email-error').innerHTML = '&lt;p>Invalid email&lt;/p>';
+      hasErrors = true;
+    } else {
+      try {
+        const emailAvailable = await checkEmailAvailability(email);
+        document.getElementById('email-error').innerHTML = '';
+
+        if (!emailAvailable) {
+          document.getElementById('email-error').innerHTML =
+            '&lt;p>Email already in use&lt;/p>';
+          hasErrors = true;
+        }
+      } catch (e) {
+        document.getElementById('email-error').innerHTML =
+          '&lt;p>Error validating email&lt;/p>';
+        hasErrors = true;
+      }
+    }
+
+    if (!validatePassword(password)) {
+      document.getElementById('password-error').innerHTML =
+        '&lt;p>Password must contain 8 characters and a number&lt;/p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('password-error').innerHTML = '';
+    }
+
+    if (hasErrors) {
+      return;
+    }
+
+    const userData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      await handleRegistration(userData);
+    } catch (error) {
+      console.error('Error registering user:', error.message);
+    }
+  } else if (loginEmailInput &amp;&amp; loginPasswordInput) {
+    const email = loginEmailInput.value;
+    const password = loginPasswordInput.value.trim();
+
+    const userData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      await userLogin(userData);
+      window.location.href = '../../page/main/main.html';
+    } catch (error) {
+      document.getElementById('password-error').innerHTML =
+        '&lt;p>Incorrect email or password&lt;/p>';
+    }
+  } else {
+    const email = profileEmailInput.value.trim();
+    const password = profilePasswordInput.value.trim();
+    const newPassword = profileNewPasswordInput.value.trim();
+    const newPasswordAgain = profileNewDuplicatePasswordInput.value.trim();
+
+    let hasErrors = false;
+
+    const oldUser = {
+      email: email,
+      password: password,
+    };
+
+    const validUser = await userLogin(oldUser);
+    document.getElementById('password-error').innerHTML = '';
+    if (validUser === undefined) {
+      document.getElementById('password-error').innerHTML =
+        '&lt;p>current password incorrect&lt;/p>';
+      return;
+    }
+
+    if (!validatePassword(newPassword)) {
+      document.getElementById('newPassword-error').innerHTML =
+        '&lt;p>Password must contain 8 characters and a number&lt;/p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('newPassword-error').innerHTML = '';
+    }
+
+    if (newPassword !== newPasswordAgain) {
+      document.getElementById('duplicatePassword-error').innerHTML =
+        '&lt;p>Passwords must match&lt;/p>';
+      hasErrors = true;
+    } else {
+      document.getElementById('duplicatePassword-error').innerHTML = '';
+    }
+
+    if (hasErrors) {
+      return;
+    }
+
+    const userData = {
+      id: currentUser.id,
+      email: email,
+      password: newPassword,
+    };
+
+    try {
+      const responseData = await updateUser(userData, token);
+      console.log(responseData);
+    } catch (error) {
+      console.error('Update failed', error);
+    }
+  }
+});
+
+/**
+ * This method handles the user registration process.
+ * This method creates new user, logs the new user in and redirects user to main if the following are successful.
+ * @param {object} userData object consisting of user information.
+ * @return {Promise&lt;void>}
+ */
+const handleRegistration = async (userData) => {
+  try {
+    await createUser(userData);
+    await userLogin(userData);
+    window.location.href = '../../page/main/main.html';
+  } catch (error) {
+    console.error('Error registering user: ', error.message);
+    if (error.message.includes('email already exists')) {
+      document.getElementById('email-error').innerHTML = '&lt;p>Email in use&lt;/p>';
+    } else {
+      document.getElementById('email-error').innerHTML = '';
+    }
+    throw new Error('Registration failed');
+  }
+};
+
+/**
+ * This method populates the registration form
+ */
+const registration = () => {
+  form.innerHTML = `
+    &lt;h1>Registration&lt;/h1>
+    &lt;div class="input-control">
+      &lt;label for="reg-email">Email&lt;/label>
+      &lt;input id="reg-email" name="email" type="email" required />
+      &lt;div class="error" id="email-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="input-control">
+      &lt;label for="reg-password">Password&lt;/label>
+      &lt;input id="reg-password" name="password" type="password" required />
+      &lt;div class="error" id="password-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="alreadyUser">
+      &lt;p>Already have an account?&lt;/p>
+      &lt;a href="#" id="switchToLogin">Sign in&lt;/a>
+    &lt;/div>
+    &lt;button type="submit" class="defaultBtn" >Register&lt;/button>`;
+
+  document.getElementById('switchToLogin').addEventListener('click', login);
+};
+
+/**
+ * This method populates the login form.
+ */
+const login = () => {
+  form.innerHTML = `
+    &lt;h1>Login&lt;/h1>
+    &lt;div class="input-control">
+      &lt;label for="login-email">Email&lt;/label>
+      &lt;input id="login-email" name="email" type="email" required />
+      &lt;div class="error" id="email-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="input-control">
+      &lt;label for="login-password">Password&lt;/label>
+      &lt;input id="login-password" name="password" type="password" required />
+      &lt;div class="error" id="password-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="alreadyUser">
+      &lt;p>Make an account&lt;/p>
+      &lt;a href="#" id="switchToRegistration">Sign up&lt;/a>
+    &lt;/div>
+    &lt;button type="submit" class="defaultBtn">Log in&lt;/button>`;
+
+  document
+    .getElementById('switchToRegistration')
+    .addEventListener('click', registration);
+};
+
+/**
+ * This method populates the profile form and handles avatar change.
+ * @return {Promise&lt;void>}
+ */
+const profile = async () => {
+  form.innerHTML = `&lt;div id="mainContainer">
+  &lt;form id="updateUserForm" method="POST">
+    &lt;h2 id="profileHeader">Update profile&lt;/h2>
+    &lt;div class="pfp">
+      &lt;img src="https://placehold.co/400" alt="image loading failed" id="profilePicture" class="avatar">
+      &lt;label for="photo" class="custom-file-upload">Update picture&lt;/label>
+    &lt;input type="file" name="photo" id="photo" style="display: none;">
+    &lt;/div>
+    &lt;div class="profile-inputs">
+      &lt;label for="profileEmail">Email&lt;/label>
+      &lt;input id="profileEmail" name="profileEmail" type="text" readonly>
+      &lt;div class="error" id="email-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="profile-inputs">
+      &lt;label for="profilePassword">Password&lt;/label>
+      &lt;input id="profilePassword" name="profilePassword" type="password">
+      &lt;div class="error" id="password-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="profile-inputs">
+      &lt;label for="profileNewPassword">New password&lt;/label>
+      &lt;input id="profileNewPassword" name="profileNewPassword" type="password">
+      &lt;div class="error" id="newPassword-error">&lt;/div>
+    &lt;/div>
+    &lt;div class="profile-inputs">
+      &lt;label for="profileNewDuplicatePassword">Confirm new password&lt;/label>
+      &lt;input id="profileNewDuplicatePassword" name="profileNewDuplicatePassword" type="password">
+      &lt;div class="error" id="duplicatePassword-error">&lt;/div>
+    &lt;/div>
+    &lt;button type="submit" class="defaultBtn">Update&lt;/button>
+    &lt;button type="button" id="delete" class="delete">Delete account&lt;/button>
+  &lt;/form>
+  &lt;dialog class="modal">
+    &lt;h2>Are you sure?&lt;/h2>
+    &lt;button id="dontDelete" class="defaultBtn">no&lt;/button>
+    &lt;button id="deleteUser" class="delete">yes&lt;/button>
+  &lt;/dialog>
+&lt;/div>`;
+  document.getElementById('profileEmail').value = currentUser.email;
+  document.getElementById('profilePicture').src = await getAvatar(
+    currentUser.id
+  );
+  const profilePhotoInput = document.getElementById('photo');
+  const profilePicture = document.getElementById('profilePicture');
+
+  profilePhotoInput.addEventListener('change', async (evt) => {
+    const avatar = {
+      id: currentUser.id,
+      file: evt.target.files[0],
+    };
+
+    try {
+      await uploadAvatar(avatar, token);
+      const reader = new FileReader();
+      reader.onload = () => {
+        profilePicture.src = reader.result;
+      };
+      reader.readAsDataURL(evt.target.files[0]);
+    } catch (error) {
+      console.log('Error uploading avatar', error);
+    }
+  });
+
+  const modal = document.querySelector('.modal');
+
+  document.getElementById('delete').addEventListener('click', async () => {
+    modal.show();
+  });
+  document.getElementById('dontDelete').addEventListener('click', (evt) => {
+    modal.close();
+    evt.preventDefault();
+  });
+  document
+    .getElementById('deleteUser')
+    .addEventListener('click', async (evt) => {
+      evt.preventDefault();
+      try {
+        await deleteUser(currentUser, token);
+      } catch (e) {
+        console.log('error deleting user', e.message);
+      }
+    });
+};
+
+if (currentUser) {
+  profile();
+} else {
+  login();
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#adminIngredients">adminIngredients</a></li><li><a href="global.html#adminIngredientsContent">adminIngredientsContent</a></li><li><a href="global.html#adminOrders">adminOrders</a></li><li><a href="global.html#adminOrdersContent">adminOrdersContent</a></li><li><a href="global.html#adminProducts">adminProducts</a></li><li><a href="global.html#adminProductsContent">adminProductsContent</a></li><li><a href="global.html#adminUsers">adminUsers</a></li><li><a href="global.html#adminUsersContent">adminUsersContent</a></li><li><a href="global.html#compareIdToIngredient">compareIdToIngredient</a></li><li><a href="global.html#compareIngredients">compareIngredients</a></li><li><a href="global.html#createHeader">createHeader</a></li><li><a href="global.html#customProduct">customProduct</a></li><li><a href="global.html#generateCart">generateCart</a></li><li><a href="global.html#generateProductKey">generateProductKey</a></li><li><a href="global.html#handleRegistration">handleRegistration</a></li><li><a href="global.html#ingredientErrors">ingredientErrors</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#productErrors">productErrors</a></li><li><a href="global.html#profile">profile</a></li><li><a href="global.html#registration">registration</a></li><li><a href="global.html#updateCart">updateCart</a></li><li><a href="global.html#updateOrderStyle">updateOrderStyle</a></li><li><a href="global.html#userErrors">userErrors</a></li><li><a href="global.html#validateEmail">validateEmail</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed May 08 2024 11:47:34 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
