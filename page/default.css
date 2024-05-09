@@ -102,7 +102,7 @@ main{
   background-color: var(--highlight);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5rem 1rem 0.2rem 1rem;
+  padding: 0.5rem 1rem 0.3rem 1rem;
   border-radius: 10vw;
   margin: 0.1vw;
   scale: 1;
@@ -155,7 +155,7 @@ main{
 
 #cartNav span{
   z-index: 1;
-
+  top: 2px;
 
 }
 #cart-button{
