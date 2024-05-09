@@ -1,6 +1,7 @@
 // @ts-check
 const {test, expect} = require('@playwright/test');
 
+// Test that user can register
 test('Register', async ({page}) => {
   await page.goto('http://localhost:3040/page/main/main.html');
 
@@ -48,6 +49,7 @@ test('Register', async ({page}) => {
   await expect(page.getByRole('heading', {name: 'Login'})).toBeVisible();
 });
 
+// Test that user can log in
 test('Login', async ({page}) => {
   await page.goto('http://localhost:3040/page/main/main.html');
 
@@ -71,6 +73,7 @@ test('Login', async ({page}) => {
   await page.locator('text=Profile').isVisible();
 });
 
+// Test that can add item to cart
 test('add item to cart', async ({page}) => {
   await page.goto('http://localhost:3040/page/main/main.html');
 
@@ -99,4 +102,40 @@ test('add item to cart', async ({page}) => {
   await expect(
     page.getByRole('heading', {name: 'Cheese Burger'})
   ).toBeVisible();
+
+  // add another item
+  await page.locator('text=+').click();
+  await expect(page.locator('text=x2')).toBeVisible();
+
+  // click log in
+  await page.locator('text=Log in to order').click();
+
+  // Expect page to have a 'login' text
+  await expect(page.getByRole('heading', {name: 'Login'})).toBeVisible();
+
+  // Fill the form.
+  await page.locator('input[name="email"]').fill('testitesti@testi.testi');
+  await page.locator('input[name="password"]').fill('testi1234');
+
+  // Submit the form.
+  await page.locator('button:has-text("Log in")').click();
+
+  // Expect page to redirect to main page
+  await expect(page).toHaveTitle('Yeps & Burgers');
+
+  // Find the Profile button.
+  await page.locator('text=Profile').isVisible();
+
+  // Click the cart button.
+  await page.locator('#cart-button').click();
+
+  // Expect page to have a 'name' text
+  await expect(page.locator('text=name')).toBeVisible();
+
+  // fill the name and address fields
+  await page.fill('#userName', 'testi');
+  await page.fill('#userAddress', 'testi');
+
+  // click order
+  await page.getByRole('button', {name: 'Order'}).click();
 });
