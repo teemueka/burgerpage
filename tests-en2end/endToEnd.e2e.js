@@ -1,27 +1,5 @@
 // @ts-check
 const {test, expect} = require('@playwright/test');
-const {exec} = require('child_process');
-let server;
-
-test.beforeAll(async () => {
-  // Start the server before all tests
-  server = exec('node server.js', (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-  });
-});
-
-test.afterAll(async () => {
-  // Stop the server after all tests
-  server.kill();
-});
 
 // Test that user can register
 test('Register/Account deletion', async ({page}) => {
@@ -165,6 +143,9 @@ test('add item to cart', async ({page}) => {
 
   // click order
   await page.getByRole('button', {name: 'Order'}).click();
+
+  // expect order confirmation
+  await expect(page.locator('text=Order sent')).toBeVisible();
 });
 
 // Test user information update
