@@ -143,9 +143,11 @@
   justify-content: center;
   align-items: center;
   gap: 3rem;
+  margin: 0 5vw 0 5vw;
 }
 
 #ingredientContent {
+  margin: 0 5vw 0 5vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -173,12 +175,14 @@
 }
 
 #orderContent {
+  margin: 0 5vw 0 5vw;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 #userBox {
+  margin: 0 5vw 0 5vw;
   gap: 3em;
 }
 

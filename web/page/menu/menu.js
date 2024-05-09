@@ -123,7 +123,7 @@ const customProduct = async (productID) => {
     modalMain.innerHTML = `
     <h3>${product.name}</h3>
     <img src="http://10.120.32.57/app/uploads/${product.image}" alt="product image">
-    <p>${product.price}</p>`;
+    <p>${product.price}€</p>`;
 
     const exit = document.createElement('span');
     exit.id = 'exit';
