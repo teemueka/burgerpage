@@ -474,8 +474,6 @@ const deleteOrder = async (id) => {
 const createOrder = async (orderData) => {
   const url = `http://10.120.32.57/app/api/v1/orders`;
 
-  console.log(orderData);
-  console.log(JSON.stringify(orderData));
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -489,7 +487,7 @@ const createOrder = async (orderData) => {
     if (!response.ok) {
       throw new Error(`Error ${response.status}`);
     }
-    console.log(await response.json());
+    return true;
   } catch (error) {
     console.log('Error sending order', error);
   }

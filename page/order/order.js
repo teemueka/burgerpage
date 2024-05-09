@@ -52,7 +52,8 @@ if (!user) {
         <select id="fromRestaurant"></select>
         <div class="error" id="fromRes-error"></div>
       </div>
-      <button id="orderBtn" type="submit">Order</button>`;
+      <button id="orderBtn" type="submit">Order</button>
+      <div class="success"></div>`;
   order.appendChild(orderForm);
 
   const fromResDropdown = document.getElementById('fromRestaurant');
@@ -101,7 +102,13 @@ if (!user) {
       products: products,
     };
 
-    await createOrder(orderData);
+    const order = await createOrder(orderData);
+    if (order) {
+      document.querySelector('.success').innerHTML =
+        '<p>Order sent successfully!</p>';
+    } else {
+      document.querySelector('.success').innerHTML = '';
+    }
   });
 
   restaurants.forEach((restaurant) => {
