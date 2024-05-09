@@ -1,4 +1,4 @@
-import {expect, describe} from '@jest/globals';
+import {expect, describe, it} from '@jest/globals';
 import {
   checkEmailAvailability,
   getProductsById,
@@ -41,7 +41,6 @@ describe('Login', () => {
 describe('get product by id', () => {
   it('should return a product object', async () => {
     const product = await getProductsById(105);
-    console.log(product);
     expect(product).toHaveProperty('id', 105);
   });
 });
