@@ -1,5 +1,27 @@
 // @ts-check
 const {test, expect} = require('@playwright/test');
+const {exec} = require('child_process');
+let server;
+
+test.beforeAll(async () => {
+  // Start the server before all tests
+  server = exec('node server.js', (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+  });
+});
+
+test.afterAll(async () => {
+  // Stop the server after all tests
+  server.kill();
+});
 
 // Test that user can register
 test('Register/Account deletion', async ({page}) => {
@@ -196,9 +218,7 @@ test('Update user information', async ({page}) => {
   await page.locator('button:has-text("Update")').click({timeout: 5000});
 
   // Expect success message
-  await expect(
-    page.locator('text=Profile updated successfully!')
-  ).toBeVisible();
+  await expect(page.locator('text=User updated successfully!')).toBeVisible();
 
   // Expect page to redirect to main page
   // await expect(page).toHaveTitle('Yeps & Burgers');
@@ -224,8 +244,9 @@ test('Update user information', async ({page}) => {
   await expect(page).toHaveTitle('Yeps & Burgers');
 
   // Find the Profile button.
-  await page.locator('text=Profile').isVisible();
-  await page.locator('text=Me').click();
+  await page.locator('text=Profile').click();
+
+  await page.getByRole('link', {name: 'Me', exact: true}).click();
 
   // Expect page to have update profile text
   await expect(page.getByRole('heading', {name: 'Update profile'})).toBeVisible(

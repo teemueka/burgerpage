@@ -205,7 +205,7 @@ const userLogin = async (userData, type) => {
       localStorage.setItem('user', JSON.stringify(responseData.user));
       localStorage.setItem('token', responseData.token);
       if (type !== 'test') {
-        window.location.href = '../../main/main.html';
+        window.location.href = './../main/main.html';
       }
       return responseData;
     } else {
