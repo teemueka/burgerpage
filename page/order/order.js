@@ -14,7 +14,6 @@ const order = document.getElementById('info-order');
 const restaurants = await getRestaurants();
 
 const user = await getCurrentUser();
-console.log(user);
 if (!user) {
   order.innerHTML = '';
   const orderLog = document.createElement('button');
@@ -106,6 +105,10 @@ if (!user) {
     if (order) {
       document.querySelector('.success').innerHTML =
         '<p>Order sent successfully!</p>';
+      const ordered = document.getElementById('cart-items')
+      ordered.remove();
+      localStorage.removeItem('cart')
+      updateCart();
     } else {
       document.querySelector('.success').innerHTML = '';
     }
