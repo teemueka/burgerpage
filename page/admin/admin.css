@@ -42,6 +42,7 @@
   align-items: center;
   border: 2px solid var(--bright);
   border-radius: 6px;
+  color: var(--secondary);
   gap: 1rem;
   padding: 1rem 0 1rem 1rem;
   background-color: rgba(105, 104, 102, 0.28);
@@ -161,6 +162,7 @@
   background-color: rgba(105, 104, 102, 0.28);
   border: 2px solid var(--secondary);
   border-radius: 4px;
+
   padding: 2rem 2rem 1rem 2rem;
 }
 
