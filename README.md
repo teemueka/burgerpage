@@ -62,6 +62,7 @@ Hallinnon toiminnallisuudet vaativat 'admin' roolin.
 ## Käytetyt työkalut
 
 ### Rungot:
+- [Jest](https://jestjs.io/)
 - RESTful API rakennettu [Express.js](https://expressjs.com/) avulla.
 - Projektin API löytyy [tästä linkistä](https://github.com/JoelPalu/burgers_back)
 
