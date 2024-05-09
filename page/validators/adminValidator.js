@@ -20,11 +20,7 @@ const productErrors = (productData) => {
     hasErrors = true;
   }
 
-  if (hasErrors) {
-    return true;
-  } else {
-    return false;
-  }
+  return hasErrors;
 };
 
 /**
@@ -45,11 +41,7 @@ const ingredientErrors = (ingredientData) => {
     hasErrors = true;
   }
 
-  if (hasErrors) {
-    return true;
-  } else {
-    return false;
-  }
+  return hasErrors;
 };
 
 /**
@@ -69,13 +61,7 @@ const userErrors = (userData) => {
     hasErrors = true;
   }
 
-  if (hasErrors) {
-    console.log('user information invalid');
-    return true;
-  } else {
-    console.log('yep');
-    return false;
-  }
+  return hasErrors;
 };
 
 export {productErrors, userErrors, ingredientErrors};
