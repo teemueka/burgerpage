@@ -22,7 +22,9 @@ test('Register', async ({page}) => {
   await expect(page.getByRole('heading', {name: 'Registration'})).toBeVisible();
 
   // Fill the form.
-  await page.locator('input[name="email"]').fill('johnTest@test.test');
+  const uniqueEmail = `johnTest${Date.now()}@test.test`;
+
+  await page.locator('input[name="email"]').fill(uniqueEmail);
   await page.locator('input[name="password"]').fill('test1234');
 
   // Submit the form.
@@ -42,6 +44,9 @@ test('Register', async ({page}) => {
 
   // remove user
   await page.locator('text=Delete account').click();
+  await expect(page.locator('text=Are you sure?')).toBeVisible({
+    timeout: 5000,
+  });
   await page.locator('#deleteUser').click();
 
   // Expect page to redirect to main page
@@ -138,4 +143,99 @@ test('add item to cart', async ({page}) => {
 
   // click order
   await page.getByRole('button', {name: 'Order'}).click();
+});
+
+// Test user information update
+
+test('Update user information', async ({page}) => {
+  await page.goto('http://localhost:3040/page/main/main.html');
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Yeps & Burgers/);
+
+  // Click the login button.
+  await page.locator('a:has-text("Login")').click();
+
+  // Expect page to have a 'login' text
+  await expect(page.getByRole('heading', {name: 'Login'})).toBeVisible();
+
+  // Click the register button.
+  await page.locator('text=Sign up').click();
+
+  // Expect page to have a 'register' text
+
+  await expect(page.getByRole('heading', {name: 'Registration'})).toBeVisible();
+
+  // Fill the form.
+  const uniqueEmail = `johnTest${Date.now()}@test.test`;
+
+  await page.locator('input[name="email"]').fill(uniqueEmail);
+  await page.locator('input[name="password"]').fill('test1234');
+
+  // Submit the form.
+  await page.locator('button:has-text("Register")').click();
+
+  // Expect page to redirect to main page
+  await expect(page).toHaveTitle('Yeps & Burgers');
+
+  // Click the login button.
+  await page.locator('a:has-text("Profile")').click();
+  await page.locator('text="Me"').click();
+
+  // Expect page to have a 'me' text
+  await expect(
+    page.getByRole('heading', {name: 'Update profile'})
+  ).toBeVisible();
+
+  // Fill the form
+  await page.fill('#profilePassword', 'test1234');
+  await page.fill('#profileNewPassword', 'testi12345');
+  await page.fill('#profileNewDuplicatePassword', 'testi12345');
+
+  // Submit the form.
+  await page.locator('button:has-text("Update")').click();
+
+  // Expect page to redirect to main page
+  await expect(page).toHaveTitle('Yeps & Burgers');
+
+  // Click the login button.
+  await page.locator('a:has-text("Profile")').click();
+  await page.locator('text="Logout"').click();
+
+  // Click the login button.
+  await page.locator('a:has-text("Login")').click();
+
+  // Expect page to have a 'login' text
+  await expect(page.getByRole('heading', {name: 'Login'})).toBeVisible();
+
+  // Fill the form.
+  await page.locator('input[name="email"]').fill(uniqueEmail);
+  await page.locator('input[name="password"]').fill('testi12345');
+
+  // Submit the form.
+  await page.locator('button:has-text("Log in")').click();
+
+  // Expect page to redirect to main page
+  await expect(page).toHaveTitle('Yeps & Burgers');
+
+  // Find the Profile button.
+  await page.locator('text=Profile').isVisible();
+  await page.locator('text=Me').click();
+
+  // Expect page to have update profile text
+  await expect(page.getByRole('heading', {name: 'Update profile'})).toBeVisible(
+    {timeout: 5000}
+  );
+
+  // remove user
+
+  await page.locator('text=Delete account').click();
+  await expect(page.locator('text=Are you sure?')).toBeVisible({
+    timeout: 5000,
+  });
+  await page.locator('#deleteUser').click();
+
+  // Expect page to redirect to login page
+
+  await expect(page.getByRole('heading', {name: 'Login'})).toBeVisible();
 });
