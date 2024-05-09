@@ -1,7 +1,11 @@
 # Burgerpage
 
-Projekti suoritettu osana Metropolia amk tutkintoa toisella vuosikurssilla. Projektin tavoitteena oli luoda mahdollisimman käyttäjäystävällinen, dynaaminen ja monipuolinen ravintola sivu.
-Kaikki käyttäjien tekemät muutokset näkyvät sivulla reaaliajassa.
+Tämä projekti on toteutettu osana Metropolia AMK:n opintoja toisella vuosikurssilla. Projektin päätavoitteena oli luoda käyttäjäystävällinen, dynaaminen ja monipuolinen digitaalinen alusta ravintolatoiminnan tueksi. Sovellus mahdollistaa reaaliaikaiset päivitykset ja tarjoaa kaksi erillistä käyttöliittymää: yhden asiakkaille ja toisen hallinnolle.
+
+Sovellus on suunniteltu erityisesti ravintola-alan yrityksille, jotka haluavat digitalisoida ja tehostaa toimintojaan. Se sopii niin pienille kahviloille kuin suurille ravintolaketjuille, jotka pyrkivät parantamaan asiakaspalvelua ja sisäistä tehokkuutta.
+
+Linkki sovelluksen demoversioon: [Burgerpage Demo](http://10.120.32.60/burgerpage/)
+
 
 ## Esivaatimukset
 Ennen aloittamista varmista, että olet täyttänyt seuraavat vaatimukset:
@@ -65,7 +69,7 @@ Hallinnon toiminnallisuudet vaativat 'admin' roolin.
 
 ## Dokumentaatio
 - [JSDoc](https://users.metropolia.fi/~teemueka/burgerpageJSDoc/out/global)
-- [apiDoc](https://users.metropolia.fi/~kirillsa/burger_api/documentation.html)
+- [apiDoc](http://10.120.32.60/burgerpage/doc/documentation.html)
 
 ## Tekijät:
 - [Teemu Kallio](https://github.com/teemueka)
