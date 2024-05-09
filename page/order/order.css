@@ -161,6 +161,7 @@ html {
 }
 
 .toolTip {
+  cursor: default;
   position: relative;
   display: inline-block;
   vertical-align: middle;
