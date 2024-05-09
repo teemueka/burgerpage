@@ -65,7 +65,7 @@ Hallinnon toiminnallisuudet vaativat 'admin' roolin.
 
 ## Dokumentaatio
 - [JSDoc](https://users.metropolia.fi/~teemueka/burgerpageJSDoc/out/global)
-- [apiDoc](https://users.metropolia.fi/~kirillsa/burger_api/documentation.html)
+- [apiDoc](http://10.120.32.60/burgerpage/doc/documentation.html)
 
 ## Tekijät:
 - [Teemu Kallio](https://github.com/teemueka)
