@@ -341,11 +341,8 @@ const updateUser = async (userData, accessToken) => {
       body: JSON.stringify(userData),
     });
 
-    const responseData = await response.json();
-    console.log(responseData);
-    console.log(response);
     if (response.ok) {
-      return responseData;
+      return true;
     }
   } catch (error) {
     console.error('Error updating user information:', error.message);
