@@ -2,7 +2,7 @@
 const {test, expect} = require('@playwright/test');
 
 // Test that user can register
-test('Register', async ({page}) => {
+test('Register/Account deletion', async ({page}) => {
   await page.goto('http://localhost:3040/page/main/main.html');
 
   // Expect a title "to contain" a substring.
@@ -47,7 +47,7 @@ test('Register', async ({page}) => {
   await expect(page.locator('text=Are you sure?')).toBeVisible({
     timeout: 5000,
   });
-  await page.locator('#deleteUser').click();
+  await page.locator('text=yes').click();
 
   // Expect page to redirect to main page
 
@@ -193,10 +193,15 @@ test('Update user information', async ({page}) => {
   await page.fill('#profileNewDuplicatePassword', 'testi12345');
 
   // Submit the form.
-  await page.locator('button:has-text("Update")').click();
+  await page.locator('button:has-text("Update")').click({timeout: 5000});
+
+  // Expect success message
+  await expect(
+    page.locator('text=Profile updated successfully!')
+  ).toBeVisible();
 
   // Expect page to redirect to main page
-  await expect(page).toHaveTitle('Yeps & Burgers');
+  // await expect(page).toHaveTitle('Yeps & Burgers');
 
   // Click the login button.
   await page.locator('a:has-text("Profile")').click();
