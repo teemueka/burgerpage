@@ -5,10 +5,7 @@ import {
   updateProduct,
   addProduct,
   deleteProduct,
-  getProductsById,
-  userLogin,
   getUsers,
-  getUserById,
   createUser,
   updateUser,
   deleteUser,
@@ -20,6 +17,7 @@ import {
   getOrders,
   updateOrder,
   deleteOrder,
+  getAllergies,
 } from '../api.js';
 import {
   ingredientErrors,
@@ -157,7 +155,6 @@ const adminUsersContent = async () => {
         address: document.getElementById(`address-${user.id}`).innerText,
         role: document.getElementById(`userRole-${user.id}`).value,
       };
-      console.log('Updated User:', updatedUser);
       await updateUser(updatedUser, token);
     });
 
@@ -612,5 +609,4 @@ const adminOrders = async () => {
   </div>`;
   await adminOrdersContent();
 };
-
 await adminUsers();
