@@ -144,6 +144,18 @@ input {
   color: red;
 }
 
+.success p {
+  margin: 0.3rem 0 0.3rem 0;
+  color: #13be13;
+  font-size: 0.9rem;
+}
+
+.success {
+  display: flex;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
 .input-control label {
   padding-bottom: 2px;
 }

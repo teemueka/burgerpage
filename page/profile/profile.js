@@ -114,6 +114,7 @@ const profile = async () => {
       <input id="profileNewDuplicatePassword" name="profileNewDuplicatePassword" type="password">
       <div class="error" id="duplicatePassword-error"></div>
     </div>
+    <div class="success"></div>
     <button type="submit" class="defaultBtn">Update</button>
     <button type="button" id="delete" class="delete">Delete account</button>
   </form>
@@ -296,7 +297,12 @@ form.addEventListener('submit', async (event) => {
 
     try {
       const responseData = await updateUser(userData, token);
-      console.log(responseData);
+      if (responseData) {
+        document.querySelector('.success').innerHTML =
+          '<p>User updated successfully!</p>';
+      } else {
+        document.querySelector('.success').innerHTML = '';
+      }
     } catch (error) {
       console.error('Update failed', error);
     }

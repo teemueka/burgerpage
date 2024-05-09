@@ -46,6 +46,17 @@ input {
   font-size: 0.9rem;
 }
 
+.success p {
+  margin-top: 1rem;
+  color: #13be13;
+  font-size: 0.9rem;
+}
+
+.success {
+  display: flex;
+  justify-content: center;
+}
+
 main {
   display: flex;
 }
