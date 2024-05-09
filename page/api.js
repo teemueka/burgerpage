@@ -188,8 +188,7 @@ const checkEmailAvailability = async (email) => {
   }
 };
 
-const userLogin = async (userData) => {
-  console.log(userData);
+const userLogin = async (userData, type) => {
   const url = 'http://10.120.32.57/app/api/v1/auth/login';
 
   try {
@@ -203,10 +202,11 @@ const userLogin = async (userData) => {
 
     const responseData = await response.json();
     if (response.ok) {
-      console.log('login success', responseData);
       localStorage.setItem('user', JSON.stringify(responseData.user));
       localStorage.setItem('token', responseData.token);
-      window.location.href = '../../page/main/main.html';
+      if (type !== 'test') {
+        window.location.href = '../../page/main/main.html';
+      }
       return responseData;
     } else {
       throw new Error(responseData.message || 'Failed to log in.');
@@ -330,6 +330,7 @@ const getAvatar = async (id) => {
 const updateUser = async (userData, accessToken) => {
   const url = `http://10.120.32.57/app/api/v1/users/${userData.id}`;
 
+  console.log('inside up user api', userData);
   try {
     const response = await fetch(url, {
       method: 'PUT',
@@ -341,8 +342,9 @@ const updateUser = async (userData, accessToken) => {
     });
 
     const responseData = await response.json();
+    console.log(responseData);
+    console.log(response);
     if (response.ok) {
-      console.log(responseData);
       return responseData;
     }
   } catch (error) {
@@ -397,6 +399,7 @@ const deleteUser = async (user, token) => {
       if (userDeleting.user.role !== 'admin') {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
+        localStorage.removeItem('cart');
         location.reload();
       }
       return responseData;

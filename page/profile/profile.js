@@ -242,7 +242,7 @@ form.addEventListener('submit', async (event) => {
       password: password,
     };
 
-    const log = await userLogin(userData);
+    const log = await userLogin(userData, 'normal');
     if (!log) {
       document.getElementById('password-error').innerHTML =
         '<p>Incorrect email or password</p>';
@@ -260,7 +260,7 @@ form.addEventListener('submit', async (event) => {
       password: password,
     };
 
-    const validUser = await userLogin(oldUser);
+    const validUser = await userLogin(oldUser, 'test');
     document.getElementById('password-error').innerHTML = '';
     if (validUser === undefined) {
       document.getElementById('password-error').innerHTML =
@@ -312,7 +312,7 @@ form.addEventListener('submit', async (event) => {
 const handleRegistration = async (userData) => {
   try {
     await createUser(userData);
-    await userLogin(userData);
+    await userLogin(userData, 'normal');
   } catch (error) {
     console.error('Error registering user: ', error.message);
     if (error.message.includes('email already exists')) {
