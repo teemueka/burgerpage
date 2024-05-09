@@ -3,7 +3,7 @@ const {test, expect} = require('@playwright/test');
 
 // Test that user can register
 test('Register/Account deletion', async ({page}) => {
-  await page.goto('http://localhost:3040/page/main/main.html');
+  await page.goto('http://localhost:3040/main/main.html');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Yeps & Burgers/);
@@ -56,7 +56,7 @@ test('Register/Account deletion', async ({page}) => {
 
 // Test that user can log in
 test('Login', async ({page}) => {
-  await page.goto('http://localhost:3040/page/main/main.html');
+  await page.goto('http://localhost:3040/main/main.html');
 
   // Click the login button.
   await page.locator('a:has-text("Login")').click();
@@ -80,7 +80,7 @@ test('Login', async ({page}) => {
 
 // Test that can add item to cart
 test('add item to cart', async ({page}) => {
-  await page.goto('http://localhost:3040/page/main/main.html');
+  await page.goto('http://localhost:3040/main/main.html');
 
   // Click the menu.
   await page.locator('#header').getByRole('link', {name: 'Menu'}).click();
@@ -148,7 +148,7 @@ test('add item to cart', async ({page}) => {
 // Test user information update
 
 test('Update user information', async ({page}) => {
-  await page.goto('http://localhost:3040/page/main/main.html');
+  await page.goto('http://localhost:3040/main/main.html');
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Yeps & Burgers/);

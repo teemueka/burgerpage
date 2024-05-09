@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-app.use(express.static('web'));
+app.use(express.static('page'));
 app.use(express.urlencoded({extended: true}));
 app.set('view engine', 'pug');
 
