@@ -112,7 +112,7 @@ html {
 
 .cart-item{
   padding: 0.5rem;
-  background-color: rgba(228, 229, 231, 0.55);
+  background: var(--primary) ;
   border: solid 2px var(--secondary);
   border-radius: 6px;
   display: flex;
