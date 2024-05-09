@@ -6,6 +6,7 @@ Sovellus on suunniteltu erityisesti ravintola-alan yrityksille, jotka haluavat d
 
 Linkki sovelluksen demoversioon: [Burgerpage Demo](http://10.120.32.60/burgerpage/)
 
+**Huom.** Demo vaatii Metropolia VPN yhteyden. Asennus ohjeet löydät [tästä linkistä](https://tietohallinto.metropolia.fi/display/tietohallinto/VPN-yhteys+GlobalProtect-palvelun+kautta)
 
 ## Esivaatimukset
 Ennen aloittamista varmista, että olet täyttänyt seuraavat vaatimukset:
