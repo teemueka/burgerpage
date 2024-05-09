@@ -484,8 +484,13 @@ const adminOrdersContent = async () => {
        ${
          order.order_type === 'pickup'
            ? `<option value="pickup">pickup</option>
-              <option value="delivery">delivery</option>`
-           : `<option value="delivery">delivery</option>
+              <option value="delivery">delivery</option>
+              <option value="dine-in">dine-in</option>`
+           : order.order_type === 'delivery' ? `<option value="delivery">delivery</option>
+              <option value="pickup">pickup</option>
+              <option value="dine-in">dine-in</option>`
+              :  `<option value="dine-in">dine-in</option>
+              <option value="delivery">delivery</option>
               <option value="pickup">pickup</option>`
        }
         </select></p>`;
