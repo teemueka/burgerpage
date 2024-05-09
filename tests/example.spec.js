@@ -45,7 +45,7 @@ test('Register', async ({page}) => {
 
   // Expect page to redirect to main page
 
-  await expect(page).toHaveTitle('Login');
+  await expect(page.getByRole('heading', {name: 'Login'})).toBeVisible();
 });
 
 test('Login', async ({page}) => {
@@ -59,13 +59,16 @@ test('Login', async ({page}) => {
 
   // Fill the form.
   await page.locator('input[name="email"]').fill('testitesti@testi.testi');
-  await page.locator('input[name="password"]').fill('test1234');
+  await page.locator('input[name="password"]').fill('testi1234');
 
   // Submit the form.
   await page.locator('button:has-text("Log in")').click();
 
   // Expect page to redirect to main page
   await expect(page).toHaveTitle('Yeps & Burgers');
+
+  // Find the Profile button.
+  await page.locator('text=Profile').isVisible();
 });
 
 test('add item to cart', async ({page}) => {
