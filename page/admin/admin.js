@@ -453,6 +453,7 @@ const adminOrdersContent = async () => {
   const orderContainer = document.getElementById('order-container');
   orderContainer.innerHTML = '';
   const orders = await getOrders();
+  orders.sort((a, b) => b.date - a.date);
 
   orders.forEach((order) => {
     const singleOrder = document.createElement('div');
