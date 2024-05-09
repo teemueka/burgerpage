@@ -4,6 +4,10 @@ import {getCurrentUser} from './api.js';
  * This method generates global header for the restaurant.
  */
 const createHeader = () => {
+  if (!localStorage.getItem('theme')) {
+    localStorage.setItem('theme', 'light');
+  }
+
   const header = document.getElementById('header');
 
   const nav = document.createElement('nav');
