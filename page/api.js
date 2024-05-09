@@ -64,7 +64,6 @@ const addIngredient = async (ingredientData) => {
 
     const responseData = await response.json();
     if (response.ok) {
-      console.log('New ingredient created successfully:', responseData);
       return responseData;
     } else {
       console.log(`Failed to create new ingredient: ${responseData.message}`);
@@ -235,6 +234,26 @@ const getUsers = async (token) => {
     return await response.json();
   } catch (error) {
     console.log('Error fetching products', error);
+  }
+};
+
+const getAllergies = async () => {
+  const url = `http://10.120.32.57/app/api/v1/allergies`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.log('Error fetching allergies', error);
   }
 };
 
@@ -515,4 +534,5 @@ export {
   updateOrder,
   deleteOrder,
   createOrder,
+  getAllergies,
 };

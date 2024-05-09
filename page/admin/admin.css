@@ -382,3 +382,19 @@
   width: 10vw;
 }
 
+.orderAddressDiv {
+  min-width: 5vw;
+  width: 10vw;
+}
+.orderDateDiv {
+  min-width: 20vw;
+  width: 20vw;
+}
+.orderTypeDiv {
+  min-width: 5vw;
+  width: 10vw;
+}
+.orderStateDiv {
+  min-width: 5vw;
+  width: 12vw;
+}

@@ -5,10 +5,7 @@ import {
   updateProduct,
   addProduct,
   deleteProduct,
-  getProductsById,
-  userLogin,
   getUsers,
-  getUserById,
   createUser,
   updateUser,
   deleteUser,
@@ -20,6 +17,7 @@ import {
   getOrders,
   updateOrder,
   deleteOrder,
+  getAllergies,
 } from '../api.js';
 import {
   ingredientErrors,
@@ -157,7 +155,6 @@ const adminUsersContent = async () => {
         address: document.getElementById(`address-${user.id}`).innerText,
         role: document.getElementById(`userRole-${user.id}`).value,
       };
-      console.log('Updated User:', updatedUser);
       await updateUser(updatedUser, token);
     });
 
@@ -485,8 +482,13 @@ const adminOrdersContent = async () => {
        ${
          order.order_type === 'pickup'
            ? `<option value="pickup">pickup</option>
-              <option value="delivery">delivery</option>`
-           : `<option value="delivery">delivery</option>
+              <option value="delivery">delivery</option>
+              <option value="dine-in">dine-in</option>`
+           : order.order_type === 'delivery' ? `<option value="delivery">delivery</option>
+              <option value="pickup">pickup</option>
+              <option value="dine-in">dine-in</option>`
+              :  `<option value="dine-in">dine-in</option>
+              <option value="delivery">delivery</option>
               <option value="pickup">pickup</option>`
        }
         </select></p>`;
@@ -608,5 +610,4 @@ const adminOrders = async () => {
   </div>`;
   await adminOrdersContent();
 };
-
 await adminUsers();
