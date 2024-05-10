@@ -177,3 +177,23 @@ p{
 #dessert {
   margin-bottom: 5vh;
 }
+
+
+@media screen and (max-width: 550px) {
+  .menu-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 70vw));
+  }
+
+  .menu-item img {
+    width: 50vw;
+    height: 50vw;
+  }
+
+  .modal {
+    width: 80vw;
+  }
+
+  #modalMain {
+    padding-left: 0;
+  }
+}
