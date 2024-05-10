@@ -166,21 +166,19 @@ main{
 
 
 
-#cartNav{
+#cartNav, #phone-cartNav{
   font-size: 0;
   position: relative;
   display: flex;
 
 }
 
-#cartNav span{
+#cartNav span, #phone-cartNav span{
   z-index: 1;
   top: 2px;
 
 }
-#cart-button{
 
-}
 
 .cart-image{
   display: flow;
@@ -260,7 +258,7 @@ main{
   background-color: red;
 }
 
-#cart-amount {
+#cart-amount, #cart-amount-phone {
 
   position: absolute;
   background-color: #4588a8;
@@ -269,6 +267,10 @@ main{
   padding: 2px 6px;
   font-size: 0.75rem;
   font-weight: bold;
+}
+
+#cart-amount-phone{
+  scale: 1.8;
 }
 
 
@@ -315,6 +317,32 @@ main{
   display: none;
   width: 100%;
   flex-direction: column;
+  background-color: var(--primary);
+}
+
+.phone-nav-dropdown a{
+  display: block;
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--highlight);
+  color: var(--secondary);
+  font-weight: bold;
+  font-size: 20px;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+#cart-amount-phone{
+  position: absolute;
+  background-color: #4588a8;
+  color: var(--primary);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  top: 0;
+  right: 0;
+}
+#theme-box{
 }
 
 
@@ -327,6 +355,18 @@ main{
   }
   .phone-nav{
     display: flex;
+
+  }
+  .profileDropdownDiv {
+    position: relative;
+    display: block;
+  }
+  .theme-icon{
+    scale: 2;
+  }
+  #theme-icon svg{
+    overflow: visible;
+    filter: invert(1);
   }
 
 }
