@@ -47,6 +47,13 @@ Kirjautuneet käyttäjät pystyvät muokkaamaan omia tietojaan, tilaamaan ja lis
 
 ### Hallinto
 
+**Tilapäiset admin tunnukset**
+
+- email: mestari@admin.com
+- pass: mestari12345
+
+**HUOM.** Älä tee ilkivaltaa poistamalla käyttäjiä tai alkuperäisiä tuotteita testatessasi, kiitos.
+
 Admin käyttäjillä on näkyvyys kaikkeen ravintolan sisäiseen toimintaan ja kyky vaikuttamaan reaaliajassa.
 Hallinnon toiminnallisuudet vaativat 'admin' roolin.
 
