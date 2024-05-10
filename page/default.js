@@ -206,14 +206,14 @@ const createHeader = () => {
   const phoneNavDropdown = document.createElement('div');
   phoneNavDropdown.className = 'phone-nav-dropdown';
   phoneNavDropdown.style.display = 'none';
-  if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
-    const adminButton = document.createElement('a');
-    adminButton.href = '../admin/admin.html';
-    adminButton.textContent = 'Admin';
-    phoneNavDropdown.appendChild(adminButton);
-  }
 
   if (localStorage.getItem('user')) {
+    if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
+      const adminButton = document.createElement('a');
+      adminButton.href = '../admin/admin.html';
+      adminButton.textContent = 'Admin';
+      phoneNavDropdown.appendChild(adminButton);
+    }
     const profileButton = document.createElement('a');
     profileButton.href = '../profile/profile.html';
     profileButton.textContent = 'Me';
