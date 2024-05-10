@@ -190,6 +190,56 @@ const createHeader = () => {
 
   nav.appendChild(navRight);
 
+  // phone nav
+  const phoneNav = document.createElement('div');
+  phoneNav.className = 'phone-nav';
+  const phoneNavButton = document.createElement('a');
+  phoneNavButton.className = 'phone-nav-button';
+  phoneNavButton.id = 'phone-nav-button';
+  phoneNavButton.textContent = '☰';
+  phoneNavButton.addEventListener('click', () => {
+    const phoneNavDropdown = document.querySelector('.phone-nav-dropdown');
+    phoneNavDropdown.style.display =
+      phoneNavDropdown.style.display === 'none' ? 'flex' : 'none';
+  });
+
+  const phoneNavDropdown = document.createElement('div');
+  phoneNavDropdown.className = 'phone-nav-dropdown';
+  phoneNavDropdown.style.display = 'none';
+  const phoneNavHome = document.createElement('a');
+  phoneNavHome.href = '../main/main.html';
+  phoneNavHome.textContent = 'Home';
+  phoneNavDropdown.appendChild(phoneNavHome);
+  const phoneNavMenu = document.createElement('a');
+  phoneNavMenu.href = '../menu/menu.html';
+  phoneNavMenu.textContent = 'Menu';
+  phoneNavDropdown.appendChild(phoneNavMenu);
+  const phoneNavProfile = document.createElement('a');
+  phoneNavProfile.href = '../profile/profile.html';
+  phoneNavProfile.textContent = 'Profile';
+  phoneNavDropdown.appendChild(phoneNavProfile);
+  const phoneNavAdmin = document.createElement('a');
+  phoneNavAdmin.href = '../admin/admin.html';
+  phoneNavAdmin.textContent = 'Admin';
+  phoneNavDropdown.appendChild(phoneNavAdmin);
+  const phoneNavLogout = document.createElement('a');
+  phoneNavLogout.textContent = 'Logout';
+  phoneNavLogout.className = 'logout-button';
+  phoneNavLogout.addEventListener('click', () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    location.reload();
+  });
+
+  phoneNavDropdown.appendChild(phoneNavLogout);
+  phoneNavButton.appendChild(phoneNavDropdown);
+
+  phoneNav.appendChild(menuButton);
+  phoneNav.appendChild(cartDiv);
+  phoneNav.appendChild(phoneNavButton);
+
+  header.appendChild(phoneNav);
+
   header.appendChild(nav);
 };
 
