@@ -233,3 +233,43 @@ html {
 .noUser:hover {
   background-color: var(--highlight);
 }
+
+@media screen and ( max-width: 560px){
+  .cart-item {
+    width: 215px;
+    display: flex;
+    height: auto;
+    flex-direction: column;
+    margin: 0 0 15px 0;
+    align-items: center;
+  }
+
+  .cart-item img {
+    margin: 0 auto 5px auto;
+  }
+
+  .cart-item h3 {
+    width: auto;
+  }
+
+  .price {
+    width: auto;
+    margin: 10px auto 10px auto;
+  }
+
+  #productInfo-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .quantity {
+    margin: 0 auto 10px auto;
+    width: auto;
+    font-size: 22px;
+  }
+
+  .toolTip {
+    margin: 0 auto 10px auto;
+  }
+}
