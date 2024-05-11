@@ -355,10 +355,12 @@ function updateCart() {
   const cartAmount = cart.length;
 
   if (cartAmount > 0) {
+    cartAmountIndicatorPhone.style.setProperty('display', 'inline')
     cartAmountIndicator.style.setProperty('display', 'inline');
     cartAmountIndicator.innerText = cartAmount;
     cartAmountIndicatorPhone.innerText = cartAmount;
   } else {
+    cartAmountIndicatorPhone.style.setProperty('display', 'none');
     cartAmountIndicator.style.setProperty('display', 'none');
   }
 }
