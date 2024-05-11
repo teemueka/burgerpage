@@ -73,11 +73,19 @@ main{
   height: 10vh;
 }
 
-.nav a:hover{
+
+
+.nav a:hover, .phone-nav a:hover{
   background-color: var(--secondary);
   color: var(--highlight);
 }
-.nav a{
+
+#phone-nav-button{
+  padding: 0.7rem 2rem 0.7rem 2rem;
+}
+
+
+.nav a, .phone-nav a{
   color: var(--secondary);
   background-color: var(--highlight);
   text-decoration: none;
@@ -88,6 +96,18 @@ main{
   font-size: 25px;
 
   font-family: "Josefin Sans", sans-serif;
+}
+.phone-nav a{
+  padding: 1rem 2rem 0.8rem 2rem;
+}
+
+
+.phone-nav{
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2vh;
+  height: 10vh;
 }
 
 .nav-right{
@@ -146,21 +166,19 @@ main{
 
 
 
-#cartNav{
+#cartNav, #phone-cartNav{
   font-size: 0;
   position: relative;
   display: flex;
 
 }
 
-#cartNav span{
+#cartNav span, #phone-cartNav span{
   z-index: 1;
   top: 2px;
 
 }
-#cart-button{
 
-}
 
 .cart-image{
   display: flow;
@@ -240,7 +258,7 @@ main{
   background-color: red;
 }
 
-#cart-amount {
+#cart-amount, #cart-amount-phone {
 
   position: absolute;
   background-color: #4588a8;
@@ -249,6 +267,10 @@ main{
   padding: 2px 6px;
   font-size: 0.75rem;
   font-weight: bold;
+}
+
+#cart-amount-phone{
+  scale: 1.8;
 }
 
 
@@ -284,5 +306,68 @@ main{
   align-items: center;
   width: 5rem;
   margin: auto;
+
+}
+
+
+.phone-nav-dropdown{
+  position: absolute;
+  top: 10vh;
+  left: 0;
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  background-color: var(--primary);
+}
+
+.phone-nav-dropdown a{
+  display: block;
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--highlight);
+  color: var(--secondary);
+  font-weight: bold;
+  font-size: 20px;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+#cart-amount-phone{
+  position: absolute;
+  background-color: #4588a8;
+  color: var(--primary);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  top: 0;
+  right: 0;
+}
+#theme-box{
+}
+
+
+@media screen and ( max-width: 560px){
+  .header{
+    position: fixed;
+  }
+  .nav{
+    display: none;
+  }
+  .phone-nav{
+    display: flex;
+
+  }
+  .profileDropdownDiv {
+    position: relative;
+    display: block;
+  }
+  .theme-icon{
+    scale: 2;
+  }
+  #theme-icon svg{
+    overflow: visible;
+    filter: invert(1);
+  }
+
 
 }

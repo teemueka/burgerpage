@@ -190,6 +190,133 @@ const createHeader = () => {
 
   nav.appendChild(navRight);
 
+  // phone nav
+  const phoneNav = document.createElement('div');
+  phoneNav.className = 'phone-nav';
+  const phoneNavButton = document.createElement('a');
+  phoneNavButton.className = 'phone-nav-button';
+  phoneNavButton.id = 'phone-nav-button';
+  phoneNavButton.textContent = '☰';
+  phoneNavButton.addEventListener('click', () => {
+    const phoneNavDropdown = document.querySelector('.phone-nav-dropdown');
+    phoneNavDropdown.style.display =
+      phoneNavDropdown.style.display === 'none' ? 'flex' : 'none';
+  });
+
+  const phoneNavDropdown = document.createElement('div');
+  phoneNavDropdown.className = 'phone-nav-dropdown';
+  phoneNavDropdown.style.display = 'none';
+
+  if (localStorage.getItem('user')) {
+    if (JSON.parse(localStorage.getItem('user')).role === 'admin') {
+      const adminButton = document.createElement('a');
+      adminButton.href = '../admin/admin.html';
+      adminButton.textContent = 'Admin';
+      phoneNavDropdown.appendChild(adminButton);
+    }
+    const profileButton = document.createElement('a');
+    profileButton.href = '../profile/profile.html';
+    profileButton.textContent = 'Me';
+    phoneNavDropdown.appendChild(profileButton);
+    const logoutButton = document.createElement('a');
+    logoutButton.textContent = 'Logout';
+    logoutButton.className = 'logout-button';
+    logoutButton.addEventListener('click', () => {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      location.reload();
+    });
+    phoneNavDropdown.appendChild(logoutButton);
+  } else {
+    const loginButton = document.createElement('a');
+    loginButton.textContent = 'Login';
+    loginButton.className = 'login-button';
+    loginButton.addEventListener('click', () => {
+      window.location.href = '../profile/profile.html';
+    });
+    phoneNavDropdown.appendChild(loginButton);
+  }
+
+  profileDropdownDiv.style.display = 'flex';
+  const themebox = document.createElement('a');
+  themebox.id = 'theme-box';
+  themebox.textContent = 'Switch theme';
+  themebox.addEventListener('click', async () => {
+    if (localStorage.getItem('theme') === 'dark') {
+      localStorage.setItem('theme', 'light');
+      await changeTheme();
+      const body = document.querySelector('body');
+      body.style.setProperty('--primary', '#f2f4f3ff');
+      body.style.setProperty('--secondary', '#484538ff');
+      body.style.setProperty('--highlight', '#65AFD1ff');
+      body.style.setProperty('--bg', '#effafa');
+      body.style.setProperty('--text', '#171717');
+      return;
+    }
+
+    localStorage.setItem('theme', 'dark');
+    await changeTheme();
+    const body = document.querySelector('body');
+    body.style.setProperty('--primary', '#1a1a1a');
+    body.style.setProperty('--secondary', '#2d2d27');
+    body.style.setProperty('--highlight', '#65AFD1ff');
+    body.style.setProperty('--bg', '#131313');
+    body.style.setProperty('--text', '#e3e3dd');
+  });
+  phoneNavDropdown.appendChild(themebox);
+  phoneNavButton.appendChild(phoneNavDropdown);
+  phoneNav.appendChild(menuButton.cloneNode(true));
+
+  const phoneCartAmount = document.createElement('span');
+  phoneCartAmount.id = 'cart-amount-phone';
+
+  const phoneCartDiv = document.createElement('div');
+  phoneCartDiv.appendChild(phoneCartAmount);
+  phoneCartDiv.id = 'phone-cartNav';
+
+  const phoneCartButton = document.createElement('a');
+  phoneCartButton.id = 'phone-cart-button';
+  phoneCartButton.href = '../order/order.html';
+  const phoneCartImage = document.createElement('span');
+  phoneCartImage.innerHTML = `<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 456.24 357.76">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 10px;
+        stroke: currentColor;
+
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <polygon class="cls-1" stroke="currentColor" points="83.64 254.91 372.11 254.91 449.12 42.02 83.65 42.02 83.64 254.91"/>
+    <line class="cls-1" stroke="currentColor" x1="83.62" y1="116.57" x2="422.15" y2="116.57"/>
+    <line class="cls-1" stroke="currentColor" x1="83.63" y1="77.37" x2="436.33" y2="77.37"/>
+    <line class="cls-1" stroke="currentColor" x1="83.63" y1="156.11" x2="407.85" y2="156.11"/>
+    <line class="cls-1" stroke="currentColor" x1="83.62" y1="195.33" x2="394.74" y2="195.33"/>
+    <line class="cls-1" stroke="currentColor" x1="83.62" y1="225.62" x2="381.1" y2="225.62"/>
+    <circle class="cls-1" stroke="currentColor" cx="125.96" cy="320.71" r="32.05"/>
+    <circle class="cls-1" stroke="currentColor" cx="334.91" cy="320.71" r="32.05"/>
+    <polyline class="cls-1" stroke="currentColor" points="83.62 254.91 66.83 323 93.91 323"/>
+    <line class="cls-1" stroke="currentColor" x1="157.92" y1="323" x2="299.74" y2="323"/>
+    <path class="cls-1" stroke="currentColor" d="m86.43,42.02c-.11-.72-17.23-31.12-17.25-31.13-9.33-6.28-19.66-6.1-39.62-5.75-12.15.21-22.1,1.48-28.76,2.56"/>
+  </g>
+</svg>
+`;
+  phoneCartImage.alt = 'Cart';
+  phoneCartImage.className = 'cart-image';
+  phoneCartButton.appendChild(phoneCartImage);
+  phoneCartButton.appendChild(phoneCartAmount);
+
+  phoneCartDiv.appendChild(phoneCartButton);
+
+  phoneNav.appendChild(phoneCartDiv);
+  phoneNav.appendChild(phoneNavButton);
+
+  header.appendChild(phoneNav);
+
   header.appendChild(nav);
 };
 
@@ -223,12 +350,14 @@ generateHeader();
  */
 function updateCart() {
   const cartAmountIndicator = document.getElementById('cart-amount');
+  const cartAmountIndicatorPhone = document.getElementById('cart-amount-phone');
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const cartAmount = cart.length;
 
   if (cartAmount > 0) {
     cartAmountIndicator.style.setProperty('display', 'inline');
     cartAmountIndicator.innerText = cartAmount;
+    cartAmountIndicatorPhone.innerText = cartAmount;
   } else {
     cartAmountIndicator.style.setProperty('display', 'none');
   }
